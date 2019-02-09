@@ -163,7 +163,7 @@ public class ShortestPathProblem {
         ArrayList<Node> list = graph.getList();
         ArrayList<Arc> arcList = graph.getArcList();
 
-        Collections.shuffle(arcList);
+        //Collections.shuffle(arcList);
         int dist;
         boolean optCond = false;
 
@@ -185,7 +185,7 @@ public class ShortestPathProblem {
     }
 
     public static void modifiedLabelCorrecting(Graph graph) {
-
+        ArrayList<Node> list = graph.getList();
         Node s = graph.getSource();
         Node n;
         int dist;
@@ -258,7 +258,6 @@ public class ShortestPathProblem {
      */
     public static void dequeueLabelCorrecting(Graph graph) {
         ArrayList<Node> list = graph.getList();
-        ArrayList<Arc> arcList = graph.getArcList();
         Node sink = list.get(list.size() - 1);
         Node s = list.get(0);
         Node n;
