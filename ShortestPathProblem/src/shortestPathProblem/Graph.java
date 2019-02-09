@@ -38,7 +38,7 @@ public class Graph {
         this.t = list.get(list.size() - 1);
     }
 
-    public Graph() { 
+    public Graph() {
         this.list = new ArrayList<>();
         this.arcList = new ArrayList<>();
         Graph.sppGraphMaker(list, arcList);
@@ -66,8 +66,16 @@ public class Graph {
     public Node getSink() {
         return t;
     }
-    
-    
+
+    public int getC() {
+        int C = 0;
+        for (Arc a : arcList) {
+            if (C < a.cost) {
+                C = a.cost;
+            }
+        }
+        return C;
+    }
 
     /**
      * Costruzione grafo a partire dai vincoli

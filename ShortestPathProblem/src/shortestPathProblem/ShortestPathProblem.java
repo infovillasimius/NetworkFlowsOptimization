@@ -35,9 +35,10 @@ public class ShortestPathProblem {
 
         Graph graph = new Graph();
 
-        dynamic(graph);                    //esecuzione algoritmo dinamico
         dijkstra(graph);                    //esecuzione algoritmo Dijkstra
         heapDijkstra(graph);          //esecuzione algoritmo Dijkstra con heap
+        dialDijkstra(graph);          //esecuzione algoritmo Dial Dijkstra 
+        dynamic(graph);                    //esecuzione algoritmo dinamico
         labelCorrecting(graph);
         modifiedLabelCorrecting(graph);
         FifoLabelCorrecting(graph);    //Arc list has to be ordered by tail node
@@ -100,12 +101,12 @@ public class ShortestPathProblem {
     public static void dijkstra(Graph graph) {
         ArrayList<Node> list = graph.getList();
         Node n = graph.getSource();
-        int dist;
-
+        int dist, min;
+        
         long start = System.nanoTime();
 
         while (!list.isEmpty()) {
-            int min = Node.INFINITY;
+            min = Node.INFINITY;
             for (Node i : list) {
                 if (i.distance < min) {
                     min = i.distance;
@@ -123,6 +124,34 @@ public class ShortestPathProblem {
         }
         long stop = System.nanoTime() - start;
         printResults(graph.getSink(), "Algoritmo di Dijkstra ", start, stop);
+    }
+
+    public static void dialDijkstra(Graph graph) {
+        ArrayList<Node> list = graph.getList();
+        Node n = graph.getSource();
+        int C = graph.getC();
+        int dist;
+        
+        CircularQueue<Node> q = new CircularQueue<>(C + 1);
+        
+        q.store(n, n.distance);
+
+        long start = System.nanoTime();
+
+        while (!list.isEmpty()) {
+            n = q.next();
+            list.remove(n);
+            for (Arc i : n.out) {
+                dist = i.tail.distance + i.cost;
+                if (i.head.distance > dist) {
+                    i.head.distance = dist;
+                    i.head.pred = i.tail;
+                    q.store(i.head, i.head.distance);
+                }
+            }
+        }
+        long stop = System.nanoTime() - start;
+        printResults(graph.getSink(), "Algoritmo di Dial - Dijkstra ", start, stop);
     }
 
     /**
@@ -249,12 +278,12 @@ public class ShortestPathProblem {
         }
 
         long stop = System.nanoTime() - start;
-        printResults(sink, "\nAlgoritmo FIFO label correcting ", start, stop);
+        printResults(sink, "Algoritmo FIFO label correcting ", start, stop);
     }
 
     /**
-     * 
-     * @param graph 
+     *
+     * @param graph
      */
     public static void dequeueLabelCorrecting(Graph graph) {
         ArrayList<Node> list = graph.getList();
@@ -290,7 +319,7 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        printResults(sink, "\nAlgoritmo Deque label correcting ", start, stop);
+        printResults(sink, "Algoritmo Deque label correcting ", start, stop);
     }
 
 }
