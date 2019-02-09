@@ -26,8 +26,48 @@ import java.util.LinkedList;
  */
 public class Graph {
 
-    ArrayList<Node> list;
-    ArrayList<Arc> arcList;
+    private ArrayList<Node> list;
+    private ArrayList<Arc> arcList;
+    private Node s;
+    private Node t;
+
+    public Graph(ArrayList<Node> list, ArrayList<Arc> arcList) {
+        this.list = list;
+        this.arcList = arcList;
+        this.s = list.get(0);
+        this.t = list.get(list.size() - 1);
+    }
+
+    public Graph() { 
+        this.list = new ArrayList<>();
+        this.arcList = new ArrayList<>();
+        Graph.sppGraphMaker(list, arcList);
+        this.s = list.get(0);
+        this.t = list.get(list.size() - 1);
+    }
+
+    public ArrayList<Node> getList() {
+        ArrayList<Node> list2 = new ArrayList<>();
+        list2.addAll(list);
+        Graph.initialize(list2);
+        return list2;
+    }
+
+    public ArrayList<Arc> getArcList() {
+        ArrayList<Arc> arcList2 = new ArrayList<>();
+        arcList2.addAll(arcList);
+        return arcList2;
+    }
+
+    public Node getSource() {
+        return s;
+    }
+
+    public Node getSink() {
+        return t;
+    }
+    
+    
 
     /**
      * Costruzione grafo a partire dai vincoli
@@ -38,7 +78,7 @@ public class Graph {
     public static void sppGraphMaker(ArrayList<Node> list, ArrayList<Arc> arcList) {
 
         long start = System.nanoTime();
-        int n[] = {3, 4, 6, 7, 4, 6, 2, 3}; //fabbisogni del personale
+        int n[] = {30, 40, 60, 70, 40, 60, 20, 30}; //fabbisogni del personale
 
         int K = 0;          //stabilisce il max di n[i] = numero righe
         for (int i : n) {
@@ -67,7 +107,7 @@ public class Graph {
             i = c.month + 1;
             if (i < I + 1) {
                 for (int k1 = 1; k1 <= K; k1++) {
-                    if (k1 - k <= 3 && 3 * k1 >= 2 * k && 4 * k1 >= 3 * n[i]) {
+                    if (k1 - k <= 15 && 3 * k1 >= 2 * k && 4 * k1 >= 3 * n[i]) {
                         Node newNode = new Node(k1, i);
                         cost = abs(k1 - n[i]) * 200 + abs(k1 - k) * 160 - (abs(k1 - k) + (k1 - k)) * 30;
                         if (!q.contains(newNode)) {
@@ -86,7 +126,7 @@ public class Graph {
                 i = t.month;
                 int k1 = t.getValue();
                 k = c.getValue();
-                if (k1 - k <= 3 && 3 * k1 >= 2 * k && 4 * k1 >= 3 * n[i]) {
+                if (k1 - k <= 15 && 3 * k1 >= 2 * k && 4 * k1 >= 3 * n[i]) {
                     cost = abs(k1 - n[i]) * 200 + abs(k1 - k) * 160 - (abs(k1 - k) + (k1 - k)) * 30;
                     Arc newArc = new Arc(cost, c, t);
                     arcList.add(newArc);
@@ -154,7 +194,7 @@ public class Graph {
             }
         }
     }
-    
+
     /**
      * reinizializzazione nodi
      *

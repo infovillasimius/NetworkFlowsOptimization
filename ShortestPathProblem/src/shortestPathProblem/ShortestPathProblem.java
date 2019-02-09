@@ -32,42 +32,16 @@ public class ShortestPathProblem {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ArrayList<Node> list = new ArrayList<>();       //lista nodi
-        ArrayList<Arc> arcList = new ArrayList<>();     //lista archi
 
-        Graph.sppGraphMaker(list, arcList);                 //creazione grafo
-        ArrayList<Node> list2 = new ArrayList<>();      //seconda lista nodi - può essere modificata
+        Graph graph = new Graph();
 
-        //esecuzione algoritmo Dijkstra
-        list2.clear();
-        list2.addAll(list);
-        dijkstra(list2);
-
-        //esecuzione algoritmo Dijkstra con heap
-        list2.clear();
-        list2.addAll(list);
-        heapDijkstra(list2);
-
-        //esecuzione algoritmo dinamico
-        list2.clear();
-        list2.addAll(list);
-        dynamic(list2);
-
-        list2.clear();
-        list2.addAll(list);
-        labelCorrecting(list2, arcList);
-
-        list2.clear();
-        list2.addAll(list);
-        modifiedLabelCorrecting(list2, arcList);
-
-        list2.clear();
-        list2.addAll(list);
-        FifoLabelCorrecting(list2, arcList); //Arc list has to be ordered by tail node
-
-        list2.clear();
-        list2.addAll(list);
-        dequeueLabelCorrecting(list2, arcList);
+        dynamic(graph);                    //esecuzione algoritmo dinamico
+        dijkstra(graph);                    //esecuzione algoritmo Dijkstra
+        heapDijkstra(graph);          //esecuzione algoritmo Dijkstra con heap
+        labelCorrecting(graph);
+        modifiedLabelCorrecting(graph);
+        FifoLabelCorrecting(graph);    //Arc list has to be ordered by tail node
+        dequeueLabelCorrecting(graph);
     }
 
     /**
@@ -92,25 +66,48 @@ public class ShortestPathProblem {
         r.add(n.getValue());
         Collections.reverse(r);
         System.out.print(r + "\n");
-        System.out.println("Costo totale = " + cost);
+        System.out.println("Costo totale = " + cost + "\n");
+    }
+
+    /**
+     * Implementazione algoritmo Dinamico
+     *
+     * @param graph
+     */
+    public static void dynamic(Graph graph) {
+        ArrayList<Node> list = graph.getList();
+        int dist;
+
+        long start = System.nanoTime();
+        for (Node i : list) {
+            for (Arc a : i.out) {
+                dist = a.tail.distance + a.cost;
+                if (a.head.distance > dist) {
+                    a.head.distance = dist;
+                    a.head.pred = a.tail;
+                }
+            }
+        }
+        long stop = System.nanoTime() - start;
+        printResults(graph.getSink(), "Algoritmo dinamico ", start, stop);
     }
 
     /**
      * Implementazione algoritmo Dijkstra
      *
-     * @param list
+     * @param graph
      */
-    public static void dijkstra(ArrayList<Node> list) {
-        Graph.initialize(list);
-        Node sink = list.get(list.size() - 1);
-        Node n = list.get(0);
-
+    public static void dijkstra(Graph graph) {
+        ArrayList<Node> list = graph.getList();
+        Node n = graph.getSource();
         int dist;
+
         long start = System.nanoTime();
+
         while (!list.isEmpty()) {
             int min = Node.INFINITY;
             for (Node i : list) {
-                if (i.distance <= min) {
+                if (i.distance < min) {
                     min = i.distance;
                     n = i;
                 }
@@ -125,53 +122,31 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        printResults(sink, "Algoritmo di Dijkstra ", start, stop);
-    }
-
-    /**
-     * Implementazione algoritmo Dinamico
-     *
-     * @param list
-     */
-    public static void dynamic(ArrayList<Node> list) {
-        Graph.initialize(list);
-        Node sink = list.get(list.size() - 1);
-        int dist;
-
-        long start = System.nanoTime();
-        for (Node i : list) {
-            for (Arc a : i.out) {
-                dist = a.tail.distance + a.cost;
-                if (a.head.distance > dist) {
-                    a.head.distance = dist;
-                    a.head.pred = a.tail;
-                }
-            }
-        }
-        long stop = System.nanoTime() - start;
-        printResults(sink, "\nAlgoritmo dinamico ", start, stop);
+        printResults(graph.getSink(), "Algoritmo di Dijkstra ", start, stop);
     }
 
     /**
      * Implementazione algoritmo Dijkstra con heap
      *
-     * @param list
+     * @param graph
      */
-    public static void heapDijkstra(ArrayList<Node> list) {
+    public static void heapDijkstra(Graph graph) {
+        ArrayList<Node> list = graph.getList();
         PriorityQueue<Node> q = new PriorityQueue<>();
-        Graph.initialize(list);
-        Node sink = list.get(list.size() - 1);
-        Node n = list.get(0);
+
+        Node n = graph.getSource();
         q.add(n);
+        n.contained = true;
         int dist;
         long start = System.nanoTime();
         while (!list.isEmpty() && !q.isEmpty()) {
             n = q.poll();
+            n.contained = false;
             list.remove(n);
             for (Arc i : n.out) {
                 dist = i.tail.distance + i.cost;
                 if (i.head.distance > dist) {
-                    if (i.head.distance < Node.INFINITY) {
+                    if (i.head.contained) {
                         q.remove(i.head);
                     }
                     i.head.distance = dist;
@@ -181,16 +156,14 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        printResults(sink, "\nAlgoritmo di Dijkstra con heap", start, stop);
+        printResults(graph.getSink(), "Algoritmo di Dijkstra con heap", start, stop);
     }
 
-    public static void labelCorrecting(ArrayList<Node> list, ArrayList<Arc> arcList) {
-        Graph.initialize(list);
-        Node sink = list.get(list.size() - 1);
+    public static void labelCorrecting(Graph graph) {
+        ArrayList<Node> list = graph.getList();
+        ArrayList<Arc> arcList = graph.getArcList();
 
-        ArrayList<Arc> arcList2 = new ArrayList<>();
-        arcList2.addAll(arcList);
-        Collections.shuffle(arcList2);
+        Collections.shuffle(arcList);
         int dist;
         boolean optCond = false;
 
@@ -198,7 +171,7 @@ public class ShortestPathProblem {
         while (!optCond) {
             optCond = true;
 
-            for (Arc i : arcList2) {
+            for (Arc i : arcList) {
                 dist = i.tail.distance + i.cost;
                 if (i.head.distance > dist) {
                     i.head.distance = dist;
@@ -208,24 +181,19 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        printResults(sink, "\nAlgoritmo label correcting ", start, stop);
+        printResults(graph.getSink(), "Algoritmo label correcting ", start, stop);
     }
 
-    public static void modifiedLabelCorrecting(ArrayList<Node> list, ArrayList<Arc> arcList) {
-        Graph.initialize(list);
+    public static void modifiedLabelCorrecting(Graph graph) {
 
-        Node sink = list.get(list.size() - 1);
-        Node s = list.get(0);
+        Node s = graph.getSource();
         Node n;
-
-        Collections.shuffle(list);
-
+        int dist;
         LinkedList<Node> LIST = new LinkedList<>();
         LIST.add(s);
 
-        int dist;
-
         long start = System.nanoTime();
+
         while (!LIST.isEmpty()) {
             n = LIST.pollFirst();
             n.contained = false;
@@ -243,17 +211,17 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        printResults(sink, "\nAlgoritmo modified label correcting ", start, stop);
+        printResults(graph.getSink(), "Algoritmo modified label correcting ", start, stop);
     }
 
     /**
      * Need arcs ordered by tail node topological order
      *
-     * @param list
-     * @param arcList
+     * @param graph
      */
-    public static void FifoLabelCorrecting(ArrayList<Node> list, ArrayList<Arc> arcList) {
-        Graph.initialize(list);
+    public static void FifoLabelCorrecting(Graph graph) {
+        ArrayList<Node> list = graph.getList();
+        ArrayList<Arc> arcList = graph.getArcList();
         Node sink = list.get(list.size() - 1);
         int dist;
 
@@ -284,8 +252,13 @@ public class ShortestPathProblem {
         printResults(sink, "\nAlgoritmo FIFO label correcting ", start, stop);
     }
 
-    public static void dequeueLabelCorrecting(ArrayList<Node> list, ArrayList<Arc> arcList) {
-        Graph.initialize(list);
+    /**
+     * 
+     * @param graph 
+     */
+    public static void dequeueLabelCorrecting(Graph graph) {
+        ArrayList<Node> list = graph.getList();
+        ArrayList<Arc> arcList = graph.getArcList();
         Node sink = list.get(list.size() - 1);
         Node s = list.get(0);
         Node n;
