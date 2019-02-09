@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package shortestPathProblem;
+package nfo;
 
 import java.util.ArrayList;
 
