@@ -35,13 +35,14 @@ public class ShortestPathProblem {
 
         Graph graph = new Graph();
 
-        dijkstra(graph);                    //esecuzione algoritmo Dijkstra
-        heapDijkstra(graph);          //esecuzione algoritmo Dijkstra con heap
-        dialDijkstra(graph);          //esecuzione algoritmo Dial Dijkstra 
-        dynamic(graph);                    //esecuzione algoritmo dinamico
+        dijkstra(graph);
+        heapDijkstra(graph);
+        dialDijkstra(graph);
+        RadixHeapDijkstra(graph);
+        dynamic(graph);
         labelCorrecting(graph);
         modifiedLabelCorrecting(graph);
-        FifoLabelCorrecting(graph);    //Arc list has to be ordered by tail node
+        FifoLabelCorrecting(graph);
         dequeueLabelCorrecting(graph);
     }
 
@@ -102,7 +103,7 @@ public class ShortestPathProblem {
         ArrayList<Node> list = graph.getList();
         Node n = graph.getSource();
         int dist, min;
-        
+
         long start = System.nanoTime();
 
         while (!list.isEmpty()) {
@@ -131,9 +132,9 @@ public class ShortestPathProblem {
         Node n = graph.getSource();
         int C = graph.getC();
         int dist;
-        
+
         CircularQueue<Node> q = new CircularQueue<>(C + 1);
-        
+
         q.store(n, n.distance);
 
         long start = System.nanoTime();
@@ -152,6 +153,36 @@ public class ShortestPathProblem {
         }
         long stop = System.nanoTime() - start;
         printResults(graph.getSink(), "Algoritmo di Dial - Dijkstra ", start, stop);
+    }
+    
+    public static void RadixHeapDijkstra(Graph graph) {
+        ArrayList<Node> list = graph.getList();
+        Node n = graph.getSource();
+        int C = graph.getC();
+        int dist;
+
+        RadixHeap<Node> q = new RadixHeap<>(C,list.size());
+
+        q.store(n, n.distance);
+
+        long start = System.nanoTime();
+
+        while (!list.isEmpty() && n!=null) {
+            n = q.next();
+            
+            list.remove(n);
+            
+            for (Arc i : n.out) {
+                dist = i.tail.distance + i.cost;
+                if (i.head.distance > dist) {
+                    i.head.distance = dist;
+                    i.head.pred = i.tail;
+                    q.store(i.head, i.head.distance);
+                }
+            }
+        }
+        long stop = System.nanoTime() - start;
+        printResults(graph.getSink(), "Algoritmo RadixHeap - Dijkstra ", start, stop);
     }
 
     /**

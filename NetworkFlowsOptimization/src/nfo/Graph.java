@@ -26,10 +26,10 @@ import java.util.LinkedList;
  */
 public class Graph {
 
-    private ArrayList<Node> list;
-    private ArrayList<Arc> arcList;
-    private Node s;
-    private Node t;
+    final private ArrayList<Node> list;
+    final private ArrayList<Arc> arcList;
+    final private Node s;
+    final private Node t;
 
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList) {
         this.list = list;

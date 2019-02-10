@@ -19,12 +19,12 @@ package nfo;
 /**
  *
  * @author anto
- * @param <T>
+ * @param <E>
  */
-public class CircularQueue<T> {
+public class CircularQueue<E> {
 
-    private Object[] t;
-    private int C;
+    private final Object[] t;
+    private final int C;
     private int pointer;
 
     public CircularQueue(int n) {
@@ -33,43 +33,51 @@ public class CircularQueue<T> {
         this.pointer = 0;
     }
 
-    public void store(T n, int d) {
+    public void store(E n, int d) {
         if (t[d % (C)] == null) {
-            t[d % (C)] = new Nodo<T>(n);
+            t[d % (C)] = new Nodo<>(n);
         } else {
-            Nodo<T> a = (Nodo<T>) t[d % (C)];
-            Nodo<T> b = new Nodo<T>(n);
+            @SuppressWarnings("unchecked")
+            Nodo<E> a = (Nodo<E>) t[d % (C)];
+            
+            @SuppressWarnings("unchecked")
+            Nodo<E> b = new Nodo<>(n);
             b.next=a;
             t[d % (C)] = b;
         }
     }
 
-    public T next() {
+    public E next() {
         
         while (t[pointer] == null) {
             pointer = (pointer + 1) % C;
         }
-        Nodo<T> r =(Nodo<T>) t[pointer];
+        @SuppressWarnings("unchecked")
+        Nodo<E> r =(Nodo<E>) t[pointer];
         if (r.next == null) {
             t[pointer] = null;
         } else {
-            Nodo<T> next =(Nodo<T>)t[pointer];
+            @SuppressWarnings("unchecked")
+            Nodo<E> next =(Nodo<E>)t[pointer];
             next = next.next;
             t[pointer]=next;
         }
         return r.value;
     }
+    
+    private class Nodo<E> {
 
-}
+        E value;
+        Nodo<E> next;
 
-class Nodo<T> {
+        public Nodo(E value) {
+            this.next = null;
+            this.value = value;
+        }
 
-    T value;
-    Nodo<T> next;
-
-    public Nodo(T value) {
-        this.next = null;
-        this.value = value;
     }
+    
 
 }
+
+
