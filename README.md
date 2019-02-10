@@ -9,7 +9,9 @@ Shortest Path Problem Algorithms:
 
 3 Dial
 
-4 Heap-Dijkstra
+4 Heap Dijkstra
+
+5 RadixHeap Dijkstra
 
 5 Label correcting 
 
