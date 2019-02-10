@@ -26,6 +26,7 @@ public class RadixHeap<E> {
     private final int b;
     private int base;
     private final int[] w;
+    private final int[] width;
     private final int[] range;
     private final Object[] h;
     private int pointer;
@@ -34,20 +35,25 @@ public class RadixHeap<E> {
         this.base = 0;
         this.b = (int) Math.ceil(Math.log10(n) / Math.log10(2));
         this.w = new int[b];
+        this.width = new int[b];
         this.range = new int[b];
         this.h = new Object[b];
         this.pointer = 0;
         this.w[0] = 1;
         this.w[1] = 1;
+        this.width[0] = 1;
+        this.width[1] = 1;
         this.range[0] = 0;
         this.range[1] = 1;
         for (int i = 2; i < this.b; i++) {
             this.w[i] = this.w[i - 1] * 2;
+            this.width[i] = this.w[i];
             this.range[i] = this.w[i];
         }
     }
 
     public void store(E n, int d) {
+
         int bucket = index(d);
         if (h[bucket] == null) {
             h[bucket] = new Element<>(n, d);
@@ -61,7 +67,6 @@ public class RadixHeap<E> {
     }
 
     public E next() {
-
         while (h[pointer] == null) {
             pointer = (pointer + 1) % b;
         }
@@ -69,7 +74,7 @@ public class RadixHeap<E> {
         Element<E> r = (Element<E>) h[pointer];
         if (r.next == null) {
             h[pointer] = null;
-        } else if (w[pointer] == 1) {
+        } else if (w[pointer] < 2) {
             @SuppressWarnings("unchecked")
             Element<E> next = (Element<E>) h[pointer];
             next = next.next;
@@ -78,6 +83,7 @@ public class RadixHeap<E> {
             redist();
         }
         return r.value;
+
     }
 
     private class Element<T> {
@@ -95,17 +101,27 @@ public class RadixHeap<E> {
     }
 
     private int index(int d) {
-        d = d - this.base;
-        if (d == 0) {
-            return 0;
+
+        for (int i = 0; i < b; i++) {
+            if ((d >= range[i]) && (d < range[i] + w[i]) && w[i] != 0) {
+                return i;
+            }
         }
-        return (int) Math.ceil(Math.log10(d) / Math.log10(2));
+        return 0;
     }
 
     private void redist() {
-        base += range[pointer];
         @SuppressWarnings("unchecked")
         Element<E> chain = (Element<E>) h[pointer];
+        this.range[0] = findMin(chain);
+        this.range[1] = range[pointer] + 1;
+        for (int i = 2; i < pointer; i++) {
+            w[i] = width[i];
+            this.range[i] = this.range[i - 1] + this.w[i - 1];
+        }
+        this.range[pointer] += w[pointer];
+        w[pointer] = 0;
+
         while (chain.next != null) {
             @SuppressWarnings("unchecked")
             Element<E> next = (Element<E>) chain.next;
@@ -120,9 +136,10 @@ public class RadixHeap<E> {
 
     /**
      * Update Element from distance oldD to distance d
+     *
      * @param n
      * @param d
-     * @param oldD 
+     * @param oldD
      */
     public void update(E n, int d, int oldD) {
         int oldBucket = index(oldD);
@@ -145,8 +162,18 @@ public class RadixHeap<E> {
                     prev.next = chain.next;
                 }
             }
-
         }
+    }
+
+    private int findMin(Element<E> e) {
+        int min = e.d;
+        while (e.next != null) {
+            e = e.next;
+            if (min > e.d) {
+                min = e.d;
+            }
+        }
+        return min;
     }
 
 }

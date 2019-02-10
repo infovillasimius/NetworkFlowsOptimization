@@ -158,7 +158,7 @@ public class ShortestPathProblem {
     public static void RadixHeapDijkstra(Graph graph) {
         ArrayList<Node> list = graph.getList();
         Node n = graph.getSource();
-        int dist,oldD;
+        int dist, oldD;
 
         RadixHeap<Node> q = new RadixHeap<>(graph.getC() * graph.nodesNumber());
         q.store(n, n.distance);
@@ -173,13 +173,13 @@ public class ShortestPathProblem {
 
             for (Arc i : n.out) {
                 dist = i.tail.distance + i.cost;
-                oldD=i.head.distance;
+                oldD = i.head.distance;
                 if (oldD > dist) {
                     i.head.distance = dist;
                     i.head.pred = i.tail;
                     if (!i.head.contained) {
                         q.store(i.head, i.head.distance);
-                        i.head.contained=true;
+                        i.head.contained = true;
                     } else {
                         q.update(i.head, dist, oldD);
                     }
