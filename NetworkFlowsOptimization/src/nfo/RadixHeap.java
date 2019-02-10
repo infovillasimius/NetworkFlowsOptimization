@@ -25,14 +25,14 @@ public class RadixHeap<E> {
 
     private final int b;
     private int base;
-    private int[] w;
-    private int[] range;
+    private final int[] w;
+    private final int[] range;
     private final Object[] h;
     private int pointer;
 
-    public RadixHeap(int C, int n) {
+    public RadixHeap(int n) {
         this.base = 0;
-        this.b = (int) Math.ceil(Math.log10(n * C) / Math.log10(2));
+        this.b = (int) Math.ceil(Math.log10(n) / Math.log10(2));
         this.w = new int[b];
         this.range = new int[b];
         this.h = new Object[b];
@@ -50,11 +50,11 @@ public class RadixHeap<E> {
     public void store(E n, int d) {
         int bucket = index(d);
         if (h[bucket] == null) {
-            h[bucket] = new Nodo<>(n, d);
+            h[bucket] = new Element<>(n, d);
         } else {
             @SuppressWarnings("unchecked")
-            Nodo<E> a = (Nodo<E>) h[bucket];
-            Nodo<E> n1 = new Nodo<>(n, d);
+            Element<E> a = (Element<E>) h[bucket];
+            Element<E> n1 = new Element<>(n, d);
             n1.next = a;
             h[bucket] = n1;
         }
@@ -66,28 +66,27 @@ public class RadixHeap<E> {
             pointer = (pointer + 1) % b;
         }
         @SuppressWarnings("unchecked")
-        Nodo<E> r = (Nodo<E>) h[pointer];
+        Element<E> r = (Element<E>) h[pointer];
         if (r.next == null) {
             h[pointer] = null;
         } else if (w[pointer] == 1) {
             @SuppressWarnings("unchecked")
-            Nodo<E> next =(Nodo<E>)h[pointer];
+            Element<E> next = (Element<E>) h[pointer];
             next = next.next;
-            h[pointer]=next;
+            h[pointer] = next;
         } else {
             redist();
         }
-        //pointer=0;
         return r.value;
     }
 
-    class Nodo<T> {
+    private class Element<T> {
 
         T value;
-        Nodo<T> next;
+        Element<T> next;
         int d;
 
-        public Nodo(T value, int d) {
+        public Element(T value, int d) {
             this.next = null;
             this.value = value;
             this.d = d;
@@ -106,17 +105,49 @@ public class RadixHeap<E> {
     private void redist() {
         base += range[pointer];
         @SuppressWarnings("unchecked")
-        Nodo<E> chain = (Nodo<E>) h[pointer];
+        Element<E> chain = (Element<E>) h[pointer];
         while (chain.next != null) {
             @SuppressWarnings("unchecked")
-            Nodo<E> next = (Nodo<E>) chain.next;
-            chain.next = null;           
-            store(chain.value,chain.d);
-            chain=next;
+            Element<E> next = (Element<E>) chain.next;
+            chain.next = null;
+            store(chain.value, chain.d);
+            chain = next;
         }
-        store(chain.value,chain.d);
-        h[pointer]=null;
-        pointer=0;
+        store(chain.value, chain.d);
+        h[pointer] = null;
+        pointer = 0;
+    }
+
+    /**
+     * Update Element from distance oldD to distance d
+     * @param n
+     * @param d
+     * @param oldD 
+     */
+    public void update(E n, int d, int oldD) {
+        int oldBucket = index(oldD);
+        int newBucket = index(d);
+        if (oldBucket != newBucket) {
+            @SuppressWarnings("unchecked")
+            Element<E> prev = (Element<E>) h[oldBucket];
+            @SuppressWarnings("unchecked")
+            Element<E> chain = (Element<E>) h[oldBucket];
+            if (chain != null && chain.value.equals(n) && chain.next == null) {
+                store(n, d);
+                h[oldBucket] = null;
+                System.out.println("trovato" + n);
+            } else if (chain != null) {
+                while (!chain.value.equals(n) && chain.next != null) {
+                    prev = chain;
+                    chain = chain.next;
+                }
+                if (chain.value.equals(n)) {
+                    store(n, d);
+                    prev.next = chain.next;
+                }
+            }
+
+        }
     }
 
 }

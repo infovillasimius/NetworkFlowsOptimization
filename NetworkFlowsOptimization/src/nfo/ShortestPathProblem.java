@@ -154,30 +154,35 @@ public class ShortestPathProblem {
         long stop = System.nanoTime() - start;
         printResults(graph.getSink(), "Algoritmo di Dial - Dijkstra ", start, stop);
     }
-    
+
     public static void RadixHeapDijkstra(Graph graph) {
         ArrayList<Node> list = graph.getList();
         Node n = graph.getSource();
-        int C = graph.getC();
-        int dist;
+        int dist,oldD;
 
-        RadixHeap<Node> q = new RadixHeap<>(C,list.size());
-
+        RadixHeap<Node> q = new RadixHeap<>(graph.getC() * graph.nodesNumber());
         q.store(n, n.distance);
+        n.contained = true;
 
         long start = System.nanoTime();
 
-        while (!list.isEmpty() && n!=null) {
+        while (!list.isEmpty()) {
             n = q.next();
-            
+            n.contained = false;
             list.remove(n);
-            
+
             for (Arc i : n.out) {
                 dist = i.tail.distance + i.cost;
-                if (i.head.distance > dist) {
+                oldD=i.head.distance;
+                if (oldD > dist) {
                     i.head.distance = dist;
                     i.head.pred = i.tail;
-                    q.store(i.head, i.head.distance);
+                    if (!i.head.contained) {
+                        q.store(i.head, i.head.distance);
+                        i.head.contained=true;
+                    } else {
+                        q.update(i.head, dist, oldD);
+                    }
                 }
             }
         }

@@ -25,7 +25,7 @@ import java.util.LinkedList;
  * @author anto
  */
 public class Graph {
-
+    final static private int MULTIPLIER=1;
     final private ArrayList<Node> list;
     final private ArrayList<Arc> arcList;
     final private Node s;
@@ -76,6 +76,14 @@ public class Graph {
         }
         return C;
     }
+    
+    public int nodesNumber(){
+        return list.size();
+    }
+    
+        public int arcsNumber(){
+        return arcList.size();
+    }
 
     /**
      * Costruzione grafo a partire dai vincoli
@@ -117,7 +125,7 @@ public class Graph {
                 for (int k1 = 1; k1 <= K; k1++) {
                     if (k1 - k <= 3 && 3 * k1 >= 2 * k && 4 * k1 >= 3 * n[i]) {
                         Node newNode = new Node(k1, i);
-                        cost = abs(k1 - n[i]) * 200 + abs(k1 - k) * 160 - (abs(k1 - k) + (k1 - k)) * 30;
+                        cost = MULTIPLIER *(abs(k1 - n[i]) * 200 + abs(k1 - k) * 160 - (abs(k1 - k) + (k1 - k)) * 30);
                         if (!q.contains(newNode)) {
                             q.add(newNode);
                             list.add(newNode);
@@ -135,7 +143,7 @@ public class Graph {
                 int k1 = t.getValue();
                 k = c.getValue();
                 if (k1 - k <= 3 && 3 * k1 >= 2 * k && 4 * k1 >= 3 * n[i]) {
-                    cost = abs(k1 - n[i]) * 200 + abs(k1 - k) * 160 - (abs(k1 - k) + (k1 - k)) * 30;
+                    cost = MULTIPLIER *(abs(k1 - n[i]) * 200 + abs(k1 - k) * 160 - (abs(k1 - k) + (k1 - k)) * 30);
                     Arc newArc = new Arc(cost, c, t);
                     arcList.add(newArc);
                     c.out.add(newArc);
