@@ -118,6 +118,9 @@ public class RadixHeap<E> {
         return 0;
     }
 
+    /**
+     * Redistribute nodes 
+     */
     private void redist() {
         @SuppressWarnings("unchecked")
         Element<E> chain = (Element<E>) h[pointer];
@@ -127,7 +130,7 @@ public class RadixHeap<E> {
         for (int i = 2; i < pointer; i++) {
             w[i] = width[i];
             this.range[i] = this.range[i - 1] + this.w[i - 1];
-        }
+        } 
         this.range[pointer] += w[pointer];
         w[pointer] = 0;
         w[pointer-1]=range[pointer]-range[pointer-1];
