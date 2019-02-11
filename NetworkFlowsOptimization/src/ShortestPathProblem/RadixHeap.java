@@ -101,8 +101,16 @@ public class RadixHeap<E> {
     }
 
     private int index(int d) {
+        int distance = d - this.base;
+        if (distance == 0) {
+            return 0;
+        }
+        int bucket = (int) Math.ceil(Math.log10(distance) / Math.log10(2));
+        if ((d >= range[bucket]) && (d < range[bucket] + w[bucket]) && w[bucket] != 0) {
+            return bucket;
+        }
 
-        for (int i = 0; i < b; i++) {
+        for (int i = bucket; i < b; i++) {
             if ((d >= range[i]) && (d < range[i] + w[i]) && w[i] != 0) {
                 return i;
             }
@@ -114,7 +122,8 @@ public class RadixHeap<E> {
         @SuppressWarnings("unchecked")
         Element<E> chain = (Element<E>) h[pointer];
         this.range[0] = findMin(chain);
-        this.range[1] = range[pointer] + 1;
+        base = range[0];
+        this.range[1] = this.range[0] + 1;
         for (int i = 2; i < pointer; i++) {
             w[i] = width[i];
             this.range[i] = this.range[i - 1] + this.w[i - 1];
