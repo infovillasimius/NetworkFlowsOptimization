@@ -17,7 +17,7 @@
 package ShortestPathProblem;
 
 /**
- *
+ *  Radix-Heap for Dijkstra Algorithm
  * @author anto
  * @param <E>
  */
@@ -25,6 +25,7 @@ public class RadixHeap<E> {
 
     private final int b;
     private int base;
+    private final int[] min;
     private final int[] w;
     private final int[] width;
     private final int[] range;
@@ -35,6 +36,7 @@ public class RadixHeap<E> {
         this.base = 0;
         this.b = (int) Math.ceil(Math.log10(n) / Math.log10(2));
         this.w = new int[b];
+        this.min = new int[b];
         this.width = new int[b];
         this.range = new int[b];
         this.h = new Object[b];
@@ -57,12 +59,16 @@ public class RadixHeap<E> {
         int bucket = index(d);
         if (h[bucket] == null) {
             h[bucket] = new Element<>(n, d);
+            min[bucket] = d;
         } else {
             @SuppressWarnings("unchecked")
             Element<E> a = (Element<E>) h[bucket];
             Element<E> n1 = new Element<>(n, d);
             n1.next = a;
             h[bucket] = n1;
+            if (min[bucket] > d) {
+                min[bucket] = d;
+            }
         }
     }
 
@@ -86,20 +92,6 @@ public class RadixHeap<E> {
 
     }
 
-    private class Element<T> {
-
-        T value;
-        Element<T> next;
-        int d;
-
-        public Element(T value, int d) {
-            this.next = null;
-            this.value = value;
-            this.d = d;
-        }
-
-    }
-
     private int index(int d) {
         int distance = d - this.base;
         if (distance == 0) {
@@ -119,21 +111,21 @@ public class RadixHeap<E> {
     }
 
     /**
-     * Redistribute nodes 
+     * Redistribute nodes
      */
     private void redist() {
         @SuppressWarnings("unchecked")
         Element<E> chain = (Element<E>) h[pointer];
-        this.range[0] = findMin(chain);
+        this.range[0] = min[pointer];
         base = range[0];
         this.range[1] = this.range[0] + 1;
         for (int i = 2; i < pointer; i++) {
             w[i] = width[i];
             this.range[i] = this.range[i - 1] + this.w[i - 1];
-        } 
+        }
         this.range[pointer] += w[pointer];
         w[pointer] = 0;
-        w[pointer-1]=range[pointer]-range[pointer-1];
+        w[pointer - 1] = range[pointer] - range[pointer - 1];
         while (chain.next != null) {
             @SuppressWarnings("unchecked")
             Element<E> next = (Element<E>) chain.next;
@@ -177,15 +169,17 @@ public class RadixHeap<E> {
         }
     }
 
-    private int findMin(Element<E> e) {
-        int min = e.d;
-        while (e.next != null) {
-            e = e.next;
-            if (min > e.d) {
-                min = e.d;
-            }
+    private class Element<T> {
+
+        T value;
+        Element<T> next;
+        int d;
+
+        public Element(T value, int d) {
+            this.next = null;
+            this.value = value;
+            this.d = d;
         }
-        return min;
     }
 
 }
