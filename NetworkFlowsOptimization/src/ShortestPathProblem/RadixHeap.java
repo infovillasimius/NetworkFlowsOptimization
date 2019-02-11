@@ -106,12 +106,12 @@ public class RadixHeap<E> {
             return 0;
         }
         int bucket = (int) Math.ceil(Math.log10(distance) / Math.log10(2));
-        if ((d >= range[bucket]) && (d < range[bucket] + w[bucket]) && w[bucket] != 0) {
+        if ((d >= range[bucket]) && (d < range[bucket] + w[bucket]) && w[bucket] > 0) {
             return bucket;
         }
 
         for (int i = bucket; i < b; i++) {
-            if ((d >= range[i]) && (d < range[i] + w[i]) && w[i] != 0) {
+            if ((d >= range[i]) && (d < range[i] + w[i]) && w[i] > 0) {
                 return i;
             }
         }
@@ -130,7 +130,7 @@ public class RadixHeap<E> {
         }
         this.range[pointer] += w[pointer];
         w[pointer] = 0;
-
+        w[pointer-1]=range[pointer]-range[pointer-1];
         while (chain.next != null) {
             @SuppressWarnings("unchecked")
             Element<E> next = (Element<E>) chain.next;
