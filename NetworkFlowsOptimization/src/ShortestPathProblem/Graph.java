@@ -25,18 +25,28 @@ import java.util.LinkedList;
  * @author anto
  */
 public class Graph {
-    final static private int MULTIPLIER=1;
-    final static private boolean MAXIMIZER=false;
-    final private ArrayList<Node> list;
-    final private ArrayList<Arc> arcList;
-    final private Node s;
-    final private Node t;
+
+    final static private int MULTIPLIER = 1;
+    final static private boolean MAXIMIZER = false;
+    private ArrayList<Node> list;
+    private ArrayList<Arc> arcList;
+    private ArrayList<Node> ordered;
+    private Node s;
+    private Node t;
+    private boolean isOrdered;
+    private boolean negCost;
 
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList) {
         this.list = list;
         this.arcList = arcList;
         this.s = list.get(0);
         this.t = list.get(list.size() - 1);
+        for (Arc a : arcList) {
+            a.head.in.add(a);
+            a.tail.out.add(a);
+        }
+        this.isOrdered = this.order();
+        this.negCost = this.negCost();
     }
 
     public Graph() {
@@ -45,6 +55,10 @@ public class Graph {
         Graph.sppGraphMaker(list, arcList);
         this.s = list.get(0);
         this.t = list.get(list.size() - 1);
+        this.isOrdered = true;
+        this.ordered = new ArrayList<>();
+        this.ordered.addAll(list);
+        this.negCost = false;
     }
 
     public ArrayList<Node> getList() {
@@ -69,21 +83,90 @@ public class Graph {
     }
 
     public int getC() {
-        int C = 0;
+        int c = 0;
         for (Arc a : arcList) {
-            if (C < a.cost) {
-                C = a.cost;
+            if (c < Math.abs(a.cost)) {
+                c = Math.abs(a.cost);
             }
         }
-        return C;
+        return c;
     }
-    
-    public int nodesNumber(){
+
+    public int nodesNumber() {
         return list.size();
     }
-    
-        public int arcsNumber(){
+
+    public int arcsNumber() {
         return arcList.size();
+    }
+
+    public ArrayList<Node> getOrdered() {
+        if (isOrdered) {
+            ArrayList<Node> newOrdered = new ArrayList<>();
+            newOrdered.addAll(ordered);
+            Graph.initialize(newOrdered);
+            return newOrdered;
+        }
+        return null;
+    }
+
+    public boolean isIsOrdered() {
+        return isOrdered;
+    }
+
+    public boolean isNegCost() {
+        return negCost;
+    }
+
+    public void previously() {
+
+        for (Node i : list) {
+            i.previously = false;
+        }
+    }
+
+    private boolean order() {
+
+        for (Node i : list) {
+            i.indegree = 0;
+        }
+        for (Arc a : arcList) {
+            a.head.indegree++;
+        }
+
+        LinkedList<Node> LIST = new LinkedList<>();
+        int next = 0;
+        Node n;
+
+        for (Node i : list) {
+            if (i.indegree == 0) {
+                LIST.add(i);
+            }
+        }
+
+        while (!LIST.isEmpty()) {
+            n = LIST.poll();
+            n.order = ++next;
+            ordered.add(n);
+
+            for (Arc a : n.out) {
+                a.head.indegree--;
+                if (a.head.indegree == 0) {
+                    LIST.add(a.head);
+                }
+            }
+        }
+
+        return next >= list.size();
+    }
+
+    private boolean negCost() {
+        for (Arc a : arcList) {
+            if (a.cost < 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -124,9 +207,9 @@ public class Graph {
             i = c.month + 1;
             if (i < I + 1) {
                 for (int k1 = 1; k1 <= K; k1++) {
-                    if ((k1 - k <= 3 && 3 * k1 >= 2 * k && 4 * k1 >= 3 * n[i])||MAXIMIZER) {
+                    if ((k1 - k <= 3 && 3 * k1 >= 2 * k && 4 * k1 >= 3 * n[i]) || MAXIMIZER) {
                         Node newNode = new Node(k1, i);
-                        cost = MULTIPLIER *(abs(k1 - n[i]) * 200 + abs(k1 - k) * 160 - (abs(k1 - k) + (k1 - k)) * 30);
+                        cost = MULTIPLIER * (abs(k1 - n[i]) * 200 + abs(k1 - k) * 160 - (abs(k1 - k) + (k1 - k)) * 30);
                         if (!q.contains(newNode)) {
                             q.add(newNode);
                             list.add(newNode);
@@ -143,8 +226,8 @@ public class Graph {
                 i = t.month;
                 int k1 = t.getValue();
                 k = c.getValue();
-                if ((k1 - k <= 3 && 3 * k1 >= 2 * k && 4 * k1 >= 3 * n[i])||MAXIMIZER) {
-                    cost = MULTIPLIER *(abs(k1 - n[i]) * 200 + abs(k1 - k) * 160 - (abs(k1 - k) + (k1 - k)) * 30);
+                if ((k1 - k <= 3 && 3 * k1 >= 2 * k && 4 * k1 >= 3 * n[i]) || MAXIMIZER) {
+                    cost = MULTIPLIER * (abs(k1 - n[i]) * 200 + abs(k1 - k) * 160 - (abs(k1 - k) + (k1 - k)) * 30);
                     Arc newArc = new Arc(cost, c, t);
                     arcList.add(newArc);
                     c.out.add(newArc);
@@ -217,17 +300,15 @@ public class Graph {
      *
      * @param list
      */
-    public static void initialize(ArrayList<Node> list) {
+    private static void initialize(ArrayList<Node> list) {
+
         for (Node i : list) {
             i.previously = false;
             i.contained = false;
-            if (i.getId() == 0) {
-                i.distance = 0;
-            } else {
-                i.distance = Node.INFINITY;
-            }
+            i.distance = Node.INFINITY;
             i.pred = null;
         }
+        list.get(0).distance = 0;
     }
 
 }

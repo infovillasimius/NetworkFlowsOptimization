@@ -16,7 +16,7 @@
  */
 package ShortestPathProblem;
 
-public class Arc {
+public class Arc implements Comparable{
 
     int cost;           //costo associato all'arco
     Node tail;          //nodo coda
@@ -31,6 +31,12 @@ public class Arc {
     @Override
     public String toString() {
         return "Arc{" + "cost=" + cost + ", tail=" + tail + ", head=" + head + '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Arc other = (Arc) o;
+        return this.tail.getValue() - other.tail.getValue();
     }
 
 }

@@ -34,6 +34,7 @@ public class Node implements Comparable {
     boolean necessary;
     boolean previously;
     boolean contained;
+    int indegree;
 
     Node pred;                                          //nodo predecessore
 
