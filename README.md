@@ -15,10 +15,9 @@ Shortest Path Problem Algorithms:
 
 5 Label correcting 
 
-6 Modified label correcting
+6 Modified label correcting (FIFO)
 
-7 FIFO label correcting
+7 Dequeue label correcting
 
-8 Dequeue label correcting
 
 
