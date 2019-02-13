@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019
+ * Copyright (C) 2019 anto
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ public class Arc implements Comparable{
     @Override
     public int compareTo(Object o) {
         Arc other = (Arc) o;
-        return this.tail.getValue() - other.tail.getValue();
+        return this.tail.getId() - other.tail.getId();
     }
 
 }

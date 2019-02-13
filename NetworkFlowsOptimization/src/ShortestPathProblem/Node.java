@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019
+ * Copyright (C) 2019 anto
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ public class Node implements Comparable {
     private final int id;                               //identificativo univoco del nodo
     private final int value;                            //valore, corrispondente al numero di operai nel mese
     int order;
-    int month;
+    int period;
     boolean necessary;
     boolean previously;
     boolean contained;
@@ -62,7 +62,7 @@ public class Node implements Comparable {
         this.necessary = false;
         id = counter++;
         this.value = value;
-        this.month = month;
+        this.period = month;
         in = new ArrayList<>();
         out = new ArrayList<>();
         pred = null;
@@ -78,7 +78,7 @@ public class Node implements Comparable {
 
     @Override
     public String toString() {
-        return "Node{" + "i=" + month + ", k=" + value + ", order=" + order + '}';
+        return "Node{" + "i=" + period + ", k=" + value + ", order=" + order + '}';
     }
 
     @Override
@@ -92,7 +92,7 @@ public class Node implements Comparable {
     public int hashCode() {
         int hash = 7;
         hash = 41 * hash + this.value;
-        hash = 41 * hash + this.month;
+        hash = 41 * hash + this.period;
         return hash;
     }
 
@@ -111,7 +111,7 @@ public class Node implements Comparable {
         if (this.value != other.value) {
             return false;
         }
-        if (this.month != other.month) {
+        if (this.period != other.period) {
             return false;
         }
         return true;

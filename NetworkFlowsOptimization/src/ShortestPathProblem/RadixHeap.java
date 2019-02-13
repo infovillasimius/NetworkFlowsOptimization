@@ -17,7 +17,8 @@
 package ShortestPathProblem;
 
 /**
- *  Radix-Heap for Dijkstra Algorithm
+ * Radix-Heap for Dijkstra Algorithm
+ *
  * @author anto
  * @param <E>
  */
@@ -126,6 +127,8 @@ public class RadixHeap<E> {
         this.range[pointer] += w[pointer];
         w[pointer] = 0;
         w[pointer - 1] = range[pointer] - range[pointer - 1];
+        w[0]=1;
+        w[1]=1;
         while (chain.next != null) {
             @SuppressWarnings("unchecked")
             Element<E> next = (Element<E>) chain.next;
