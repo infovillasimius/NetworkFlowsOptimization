@@ -69,9 +69,9 @@ public class ShortestPathProblem {
     }
 
     private static void createAndShowGUI() {
-        //JFrame.setDefaultLookAndFeelDecorated(true);
+        JFrame.setDefaultLookAndFeelDecorated(true);
 
-        frame.setPreferredSize(new Dimension(640, 480));
+        frame.setPreferredSize(new Dimension(670, 480));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.getContentPane().add(labelPane, BorderLayout.NORTH);
@@ -210,7 +210,7 @@ public class ShortestPathProblem {
         text.setText(text.getText().concat(result));
 
         result = LabelAlgorithms.dijkstra(graph);
-        
+        text.setText(text.getText().concat(result));
         result = LabelAlgorithms.heapDijkstra(graph);
         text.setText(text.getText().concat(result));
         result = LabelAlgorithms.dialDijkstra(graph);
