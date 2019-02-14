@@ -16,7 +16,6 @@
  */
 package ShortestPathProblem;
 
-import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -46,8 +45,8 @@ public class Graph {
         this.isOrdered = this.order();
         this.negCost = this.negCost();
     }
-    
-        public Graph(ArrayList<Node> list, ArrayList<Arc> arcList,boolean spp) {
+
+    public Graph(ArrayList<Node> list, ArrayList<Arc> arcList, boolean spp) {
         this.list = list;
         this.arcList = arcList;
         this.s = list.get(0);
@@ -201,12 +200,36 @@ public class Graph {
         }
         list.get(0).distance = 0;
     }
-    
-        public static void previously(ArrayList<Node> list) {
+
+    public static void previously(ArrayList<Node> list) {
 
         for (Node i : list) {
             i.previously = false;
         }
+    }
+
+    public String adjMatrix() {
+        int n = list.size();
+        String result = "Adjacency matrix \n";
+        int[][] nad = new int[n][n];
+
+        if (n <= 100) {
+            for (Arc a : arcList) {
+                nad[list.indexOf(a.tail)][list.indexOf(a.head)] = 1;
+            }
+
+            for (int row = 0; row < n; row++) {
+                for (int col = 0; col < n; col++) {
+                    result = result.concat(nad[row][col] + " ");
+                }
+                result = result.concat("\n");
+            }
+            result = result.concat("\n");
+        } else {
+            result=result.concat("Matrix too large!!\n\n");
+        }
+
+        return result;
     }
 
 }

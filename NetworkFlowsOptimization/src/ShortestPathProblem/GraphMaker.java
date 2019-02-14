@@ -36,13 +36,12 @@ public class GraphMaker {
     /**
      * Costruzione grafo a partire dai vincoli
      *
-     * @param list
-     * @param arcList
+     * @return 
      */
     public static Graph sppGraphMaker() {
         ArrayList<Node> list = new ArrayList<>();
         ArrayList<Arc> arcList = new ArrayList<>();
-        long start = System.nanoTime();
+        //long start = System.nanoTime();
         int n[] = {3, 4, 6, 7, 4, 6, 2, 3}; //fabbisogni del personale
 
         int K = 0;          //stabilisce il max di n[i] = numero righe
@@ -119,12 +118,12 @@ public class GraphMaker {
             arcList.removeAll(x.out);
         }
 
-        long stop = System.nanoTime() - start;
-        System.out.println("Creazione Grafo\nTempo di esecuzione = " + (double) stop / 1000000 + " millisecondi");
+        //long stop = System.nanoTime() - start;
+        /*        System.out.println("Creazione Grafo\nTempo di esecuzione = " + (double) stop / 1000000 + " millisecondi");
         System.out.println("Numero massimo di nodi generabili a partire dalle \ndimensioni del problema I x K + 2 = " + ((I * K) + 2));
         System.out.println("Massimo numero di archi possibile 2 x K + (K x K x (I-1)) = " + (2 * K + (K * K * (I - 1))));
         System.out.println("Numero di nodi generati = " + list.size());
-        System.out.println("Numero di archi generati = " + arcList.size() + "\n");
+        System.out.println("Numero di archi generati = " + arcList.size() + "\n");*/
 
         return new Graph(list, arcList, true);
 
@@ -211,15 +210,15 @@ public class GraphMaker {
 
         Graph graph = new Graph(list, arcList);
 
-        System.out.println("Creazione Grafo con costo archi random con valori tra " + min + " e " + max);
+        /*        System.out.println("Creazione Grafo con costo archi random con valori tra " + min + " e " + max);
         System.out.println(list);
         System.out.println(arcList);
         System.out.println("Numero di nodi generati = " + list.size());
-        System.out.println("Numero di archi generati = " + arcList.size() + "\n");
+        System.out.println("Numero di archi generati = " + arcList.size() + "\n");*/
         return graph;
     }
 
-    public static Graph randomGraph(int n, int perc, int seed, int minCost, int maxCost, boolean cycle) {
+    public static Graph randomGraph(int n, int perc, int seed, int minCost, int maxCost, boolean cycle, String result) {
         ArrayList<Node> list = new ArrayList<>();
         ArrayList<Arc> arcList = new ArrayList<>();
         int[][] nad = new int[n][n];
@@ -241,9 +240,7 @@ public class GraphMaker {
                 arc = rand.nextInt(101);
                 if (arc <= perc && row <= col) {
                     nad[row][col] = 1;
-                } else {
-                    //nad[row][col] = 0;
-                }
+                } 
             }
         }
         if (cycle) {
@@ -260,15 +257,6 @@ public class GraphMaker {
             nad[x][x] = 0;
         }
 
-        //System.out.println("Adjacency matrix");
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < n; col++) {
-                //System.out.print(nad[row][col] + " ");
-            }
-            //System.out.println();
-        }
-
-        //System.out.println();
         int cost;
 
         for (int row = 0; row < n; row++) {
@@ -294,8 +282,6 @@ public class GraphMaker {
             }
         }
         arcList = arcList2;
-        System.out.println("Numero di nodi generati = " + ordered.size());
-        System.out.println("Numero di archi generati = " + arcList.size() + "\n");
         return new Graph(ordered, arcList, ordered.get(0), ordered.get(ordered.size() - 1));
     }
 
