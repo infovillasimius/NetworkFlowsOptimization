@@ -19,7 +19,6 @@ package ShortestPathProblem;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -39,21 +38,23 @@ import javax.swing.JTextPane;
  */
 public class ShortestPathProblem {
 
-    private static JFrame frame = new JFrame("Network Flows Optimization");
-    private static JLabel label = new JLabel("Select the Shortest Path Problem: ");
-    private static JTextPane text = new JTextPane();
-    private static JScrollPane scroll = new JScrollPane(text);
-    private static JButton b1 = new JButton("Calculate");
-    private static String[] graphType = {"Personnel planning problem (Clark and Hastings [1977])", "Fixed graph with random arc costs", "Random graph"};
+    private static final JFrame FRAME = new JFrame("Network Flows Optimization");
+    private static final JLabel LABEL = new JLabel("Select the Shortest Path Problem: ");
+    private static final JTextPane TEXT = new JTextPane();
+    private static final JScrollPane SCROLL = new JScrollPane(TEXT);
+    private static final JButton BUTTON1 = new JButton("Calculate");
+    private static final String[] GRAPHTYPES = {"Personnel planning problem (Clark and Hastings [1977])", "Fixed graph with random arc costs", "Random graph"};
     @SuppressWarnings("unchecked")
-    private static JComboBox graphList = new JComboBox(graphType);
-    private static JPanel labelPane = new JPanel(new FlowLayout());
+    private static final JComboBox GRAPHLIST = new JComboBox(GRAPHTYPES);
+    private static final JPanel FLOWPANE = new JPanel(new FlowLayout());
     private static JFormattedTextField nodes;
     private static JFormattedTextField arcPercent;
     private static JFormattedTextField min;
     private static JFormattedTextField max;
     private static JFormattedTextField seed;
     private static JCheckBox cycleCheck;
+    private static JCheckBox adjMatrix;
+    private static JCheckBox arcCosts;
 
     /**
      * @param args the command line arguments
@@ -61,6 +62,7 @@ public class ShortestPathProblem {
     public static void main(String[] args) {
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 createAndShowGUI();
             }
@@ -71,65 +73,71 @@ public class ShortestPathProblem {
     private static void createAndShowGUI() {
         JFrame.setDefaultLookAndFeelDecorated(true);
 
-        frame.setPreferredSize(new Dimension(670, 480));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.getContentPane().add(labelPane, BorderLayout.NORTH);
-        
-        frame.getContentPane().add(scroll);
-        scroll.setPreferredSize(new Dimension(640, 400));
-        labelPane.setPreferredSize(new Dimension(0, 100));
-        labelPane.add(label);
-        labelPane.add(graphList);
-        labelPane.add(new JLabel(" Number of nodes "));
-        nodes = new JFormattedTextField(100);
+        FRAME.setPreferredSize(new Dimension(820, 600));
+        FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        FRAME.setLocationRelativeTo(null);
+        FRAME.getContentPane().add(FLOWPANE, BorderLayout.NORTH);
+
+        FRAME.getContentPane().add(SCROLL);
+        SCROLL.setPreferredSize(new Dimension(640, 400));
+        FLOWPANE.setPreferredSize(new Dimension(0, 100));
+        FLOWPANE.add(LABEL);
+        FLOWPANE.add(GRAPHLIST);
+        FLOWPANE.add(new JLabel(" Number of nodes "));
+        nodes = new JFormattedTextField(20);
         nodes.setColumns(10);
         nodes.setHorizontalAlignment(JTextField.RIGHT);
-        labelPane.add(nodes);
-        labelPane.add(new JLabel(" % arcs (1 .. 100) "));
-        arcPercent = new JFormattedTextField(25);
+        FLOWPANE.add(nodes);
+        FLOWPANE.add(new JLabel(" % arcs (1 .. 100) "));
+        arcPercent = new JFormattedTextField(10);
         arcPercent.setColumns(10);
         arcPercent.setHorizontalAlignment(JTextField.RIGHT);
-        labelPane.add(arcPercent);
+        FLOWPANE.add(arcPercent);
 
-        labelPane.add(new JLabel(" min arc cost "));
+        FLOWPANE.add(new JLabel(" min arc cost "));
         min = new JFormattedTextField(0);
         min.setColumns(10);
         min.setHorizontalAlignment(JTextField.RIGHT);
-        labelPane.add(min);
+        FLOWPANE.add(min);
 
-        labelPane.add(new JLabel(" max arc cost "));
+        FLOWPANE.add(new JLabel(" max arc cost "));
         max = new JFormattedTextField(100);
         max.setColumns(10);
         max.setHorizontalAlignment(JTextField.RIGHT);
-        labelPane.add(max);
+        FLOWPANE.add(max);
 
-        labelPane.add(new JLabel(" Random seed "));
+        FLOWPANE.add(new JLabel(" Random seed "));
         seed = new JFormattedTextField(0);
         seed.setColumns(10);
         seed.setHorizontalAlignment(JTextField.RIGHT);
-        labelPane.add(seed);
+        FLOWPANE.add(seed);
 
         cycleCheck = new JCheckBox("Cycles");
-        labelPane.add(cycleCheck);
-        
+        FLOWPANE.add(cycleCheck);
 
-        labelPane.add(b1);
+        adjMatrix = new JCheckBox("Adjacency Matrix");
+        FLOWPANE.add(adjMatrix);
+        arcCosts = new JCheckBox("List arc costs");
+        FLOWPANE.add(arcCosts);
 
-        //frame.getContentPane().add(graphList, BorderLayout.SOUTH);
-        b1.addActionListener(new ActionListener() {
+        FLOWPANE.add(BUTTON1);
+
+        //frame.getContentPane().add(GRAPHLIST, BorderLayout.SOUTH);
+        BUTTON1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                text.setText("Calculating graph...\n\n");
+                TEXT.setText("Calculating graph...\n\n");
                 calculate();
+                adjMatrix.setSelected(false);
+                arcCosts.setSelected(false);
             }
         });
 
-        graphList.addActionListener(new ActionListener() {
+        GRAPHLIST.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                int n = graphList.getSelectedIndex();
+                int n = GRAPHLIST.getSelectedIndex();
                 switch (n) {
                     case 0:
                         min.setEnabled(false);
@@ -159,8 +167,8 @@ public class ShortestPathProblem {
             }
         });
 
-        text.setText("");
-        text.setEditable(false);
+        TEXT.setText("");
+        TEXT.setEditable(false);
         min.setEnabled(false);
         max.setEnabled(false);
         seed.setEnabled(false);
@@ -168,63 +176,67 @@ public class ShortestPathProblem {
         nodes.setEnabled(false);
         arcPercent.setEnabled(false);
 
-        frame.pack();
-        frame.setVisible(true);
+        FRAME.pack();
+        FRAME.setLocation(100, 100);
+        FRAME.setVisible(true);
     }
 
     private static void calculate() {
 
         String result = "";
-        Graph graph = null;
+        Graph graph;
 
-        int n = graphList.getSelectedIndex();
+        int n = GRAPHLIST.getSelectedIndex();
         @SuppressWarnings("unchecked")
-        int min = ((Number) ShortestPathProblem.min.getValue()).intValue();
+        int minLocal = ((Number) min.getValue()).intValue();
         @SuppressWarnings("unchecked")
-        int max = ((Number) ShortestPathProblem.max.getValue()).intValue();
+        int maxLocal = ((Number) max.getValue()).intValue();
         @SuppressWarnings("unchecked")
-        int seed = ((Number) ShortestPathProblem.seed.getValue()).intValue();
+        int seedLocal = ((Number) seed.getValue()).intValue();
         @SuppressWarnings("unchecked")
-        int nodes = ((Number) ShortestPathProblem.nodes.getValue()).intValue();
+        int nodesLocal = ((Number) nodes.getValue()).intValue();
         @SuppressWarnings("unchecked")
-        int arcPercent = ((Number) ShortestPathProblem.arcPercent.getValue()).intValue();
+        int arcPercentLocal = ((Number) ShortestPathProblem.arcPercent.getValue()).intValue();
         boolean cycle = cycleCheck.isSelected();
-        
-        
 
         switch (n) {
             case 2:
-                graph = GraphMaker.randomGraph(nodes, arcPercent, seed, min, max, cycle, result);
+                graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, minLocal, maxLocal, cycle, result);
                 break;
             case 1:
-                graph = GraphMaker.cycleGraphMaker(seed, min, max);
+                graph = GraphMaker.cycleGraphMaker(seedLocal, minLocal, maxLocal);
                 break;
             default:
                 graph = GraphMaker.sppGraphMaker();
                 break;
         }
-        
-        text.setText(text.getText().concat(graph.adjMatrix()));
+
+        if (adjMatrix.isSelected()) {
+            TEXT.setText(TEXT.getText().concat(graph.adjMatrix()));
+        }
+        if (arcCosts.isSelected()) {
+            TEXT.setText(TEXT.getText().concat(graph.arcCosts()));
+        }
 
         result = "Numero nodi = " + graph.nodesNumber() + " - " + "Numero archi = " + graph.arcsNumber() + "\n\n";
-        text.setText(text.getText().concat(result));
+        TEXT.setText(TEXT.getText().concat(result));
 
         result = LabelAlgorithms.dijkstra(graph);
-        text.setText(text.getText().concat(result));
+        TEXT.setText(TEXT.getText().concat(result));
         result = LabelAlgorithms.heapDijkstra(graph);
-        text.setText(text.getText().concat(result));
+        TEXT.setText(TEXT.getText().concat(result));
         result = LabelAlgorithms.dialDijkstra(graph);
-        text.setText(text.getText().concat(result));
+        TEXT.setText(TEXT.getText().concat(result));
         result = LabelAlgorithms.RadixHeapDijkstra(graph);
-        text.setText(text.getText().concat(result));
+        TEXT.setText(TEXT.getText().concat(result));
         result = LabelAlgorithms.dynamic(graph);
-        text.setText(text.getText().concat(result));
+        TEXT.setText(TEXT.getText().concat(result));
         result = LabelAlgorithms.labelCorrecting(graph);
-        text.setText(text.getText().concat(result));
+        TEXT.setText(TEXT.getText().concat(result));
         result = LabelAlgorithms.modifiedLabelCorrecting(graph);
-        text.setText(text.getText().concat(result));
+        TEXT.setText(TEXT.getText().concat(result));
         result = LabelAlgorithms.dequeueLabelCorrecting(graph);
-        text.setText(text.getText().concat(result));
+        TEXT.setText(TEXT.getText().concat(result));
 
     }
 

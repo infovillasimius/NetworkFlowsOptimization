@@ -36,7 +36,7 @@ public class Arc implements Comparable{
     @Override
     public int compareTo(Object o) {
         Arc other = (Arc) o;
-        return this.tail.getId() - other.tail.getId();
+        return (this.tail.number - other.tail.number)*100000+(this.head.number - other.head.number);
     }
 
 }

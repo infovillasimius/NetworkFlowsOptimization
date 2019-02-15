@@ -31,13 +31,12 @@ public class LabelAlgorithms {
      * Implementazione algoritmo Dinamico
      *
      * @param graph
+     * @return 
      */
     public static String dynamic(Graph graph) {
-        ArrayList<Node> list = graph.getList();
-        
-        list = graph.getOrdered();
+        ArrayList<Node> list = graph.getOrdered();
         if (list == null) {
-            return "Algoritmo dinamico (Cycle detected) \n\n";  
+            return "Dynamic Algorithm (Cycle detected) \n\n";
         }
         int dist;
         long start = System.nanoTime();
@@ -51,17 +50,18 @@ public class LabelAlgorithms {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Algoritmo dinamico ", start, stop, null);
+        return printResults(graph, "Dynamic Algorithm ", start, stop, null);
     }
 
     /**
      * Implementazione algoritmo Dijkstra
      *
      * @param graph
+     * @return 
      */
     public static String dijkstra(Graph graph) {
         if (graph.isNegCost()) {
-            return "Algoritmo di Dijkstra (Negative arc cost detected) \n";
+            return "Dijkstra Algorithm (Negative arc cost detected) \n";
         }
         ArrayList<Node> list = graph.getList();
         Node n = graph.getSource();
@@ -87,12 +87,12 @@ public class LabelAlgorithms {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Algoritmo di Dijkstra ", start, stop, null);
+        return printResults(graph, "Dijkstra Algorithm ", start, stop, null);
     }
 
     public static String dialDijkstra(Graph graph) {
         if (graph.isNegCost()) {
-            return "Algoritmo di Dial - Dijkstra (Negative arc cost detected) \n";
+            return "Dial-Dijkstra Algorithm (Negative arc cost detected) \n";
         }
         ArrayList<Node> list = graph.getList();
         Node n = graph.getSource();
@@ -118,12 +118,12 @@ public class LabelAlgorithms {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Algoritmo di Dial - Dijkstra ", start, stop, null);
+        return printResults(graph, "Dial-Dijkstra Algorithm ", start, stop, null);
     }
 
     public static String RadixHeapDijkstra(Graph graph) {
         if (graph.isNegCost()) {
-            return "Algoritmo RadixHeap - Dijkstra (Negative arc cost detected) \n";
+            return "RadixHeap-Dijkstra Algorithm (Negative arc cost detected) \n";
         }
         ArrayList<Node> list = graph.getList();
         Node n = graph.getSource();
@@ -156,7 +156,7 @@ public class LabelAlgorithms {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Algoritmo RadixHeap - Dijkstra ", start, stop, null);
+        return printResults(graph, "RadixHeap-Dijkstra Algorithm ", start, stop, null);
     }
 
     /**
@@ -166,7 +166,7 @@ public class LabelAlgorithms {
      */
     public static String heapDijkstra(Graph graph) {
         if (graph.isNegCost()) {
-            return "Algoritmo di Dijkstra con heap (Negative arc cost detected) \n";
+            return "Heap-Dijkstra Algorithm (Negative arc cost detected) \n";
         }
         ArrayList<Node> list = graph.getList();
         PriorityQueue<Node> q = new PriorityQueue<>();
@@ -193,7 +193,7 @@ public class LabelAlgorithms {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Algoritmo di Dijkstra con heap", start, stop, null);
+        return printResults(graph, "Heap-Dijkstra Algorithm ", start, stop, null);
     }
 
     public static String labelCorrecting(Graph graph) {
@@ -224,7 +224,7 @@ public class LabelAlgorithms {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Algoritmo label correcting ", start, stop, nCycle);
+        return printResults(graph, "Label Correcting Algorithm", start, stop, nCycle);
     }
 
     public static String modifiedLabelCorrecting(Graph graph) {
@@ -260,18 +260,19 @@ public class LabelAlgorithms {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Algoritmo modified label correcting (FIFO) ", start, stop, nCycle);
+        return printResults(graph, "Modified Label Correcting (FIFO) Algorithm ", start, stop, nCycle);
     }
 
     /**
      *
      * @param graph
+     * @return 
      */
     public static String dequeueLabelCorrecting(Graph graph) {
         ArrayList<Node> list = graph.getList();
         Node s = graph.getSource();
         Node nCycle = null;
-        Node n = null;
+        Node n;
         int minDist = -list.size() * graph.getC();
         int dist = 0;
         LinkedList<Node> LIST = new LinkedList<>();
@@ -304,8 +305,9 @@ public class LabelAlgorithms {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Algoritmo Deque label correcting ", start, stop, nCycle);
+        return printResults(graph, "Deque Label Correcting Algorithm ", start, stop, nCycle);
     }
+
     /**
      * Stampa risultati e verifica presenza cicli negativi
      *
@@ -315,42 +317,38 @@ public class LabelAlgorithms {
      * @param stop
      */
     public static String printResults(Graph graph, String name, long start, long stop, Node nCycle) {
-        String result=name+"\n";
-
-        //System.out.println(name);
-        //System.out.println("Tempo di esecuzione = " + (double) stop / 1000000 + " millisecondi");
-        result=result.concat("Tempo di esecuzione = " + (double) stop / 1000000 + " millisecondi\n");
+        String result = name + "\n";
+        result = result.concat("Execution time = " + (double) stop / 1000000 + " milliseconds\n");
         Node n;
         if (nCycle == null) {
             n = graph.getSink();
         } else {
             n = nCycle;
         }
-
         int cost = n.distance;
-        //System.out.print("Nodi soluzione = ");
-        result=result.concat("Nodi soluzione = ");
-        ArrayList<Integer> r = new ArrayList<>();
+        result = result.concat("Soluction nodes values = ");
+        ArrayList<Integer> values = new ArrayList<>();
+        ArrayList<Integer> order = new ArrayList<>();
         graph.previously();
         while (n.pred != null && !n.previously) {
-
-            r.add(n.getValue());
+            values.add(n.getValue());
+            order.add(n.number);
             n.previously = true;
             n = n.pred;
             if (n.previously) {
-                //System.out.print(" (Negative cycle detected) ");
-                result=result.concat(" (Negative cycle detected) ");
+                result = result.concat(" (Negative cycle detected) ");
             }
         }
-        r.add(n.getValue());
-        Collections.reverse(r);
-        //System.out.print(r + "\n");
-        result=result.concat(r + "\n");
-        //System.out.println("Costo totale = " + cost + "\n");
-        result=result.concat("Costo totale = " + cost + "\n" + "\n");
-               
-        return result=result;
-        
-        
+        values.add(n.getValue());
+        order.add(n.number);
+        Collections.reverse(values);
+        Collections.reverse(order);
+        result = result.concat(values + "\n");
+        result = result.concat("Soluction nodes = ");
+        result = result.concat(order + "\n");
+        result = result.concat("Total cost = " + cost + "\n" + "\n");
+
+        return result;
+
     }
 }

@@ -35,6 +35,7 @@ public class RadixHeap<E> {
 
     public RadixHeap(int n) {
         this.base = 0;
+        if (n<=0) n=5;
         this.b = (int) Math.ceil(Math.log10(n) / Math.log10(2));
         this.w = new int[b];
         this.min = new int[b];

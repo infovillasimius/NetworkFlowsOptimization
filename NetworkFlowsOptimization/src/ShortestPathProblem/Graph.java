@@ -17,6 +17,7 @@
 package ShortestPathProblem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 /**
@@ -25,13 +26,13 @@ import java.util.LinkedList;
  */
 public class Graph {
 
-    private ArrayList<Node> list;
-    private ArrayList<Arc> arcList;
+    private final ArrayList<Node> list;
+    private final ArrayList<Arc> arcList;
     private ArrayList<Node> ordered;
-    private Node s;
-    private Node t;
-    private boolean isOrdered;
-    private boolean negCost;
+    private final Node s;
+    private final Node t;
+    private final boolean isOrdered;
+    private final boolean negCost;
 
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList) {
         this.list = list;
@@ -142,7 +143,6 @@ public class Graph {
     }
 
     private boolean order() {
-
         for (Node i : list) {
             i.indegree = 0;
         }
@@ -191,7 +191,6 @@ public class Graph {
      * @param list
      */
     public static void initialize(ArrayList<Node> list) {
-
         for (Node i : list) {
             i.previously = false;
             i.contained = false;
@@ -202,7 +201,6 @@ public class Graph {
     }
 
     public static void previously(ArrayList<Node> list) {
-
         for (Node i : list) {
             i.previously = false;
         }
@@ -226,9 +224,27 @@ public class Graph {
             }
             result = result.concat("\n");
         } else {
-            result=result.concat("Matrix too large!!\n\n");
+            result = result.concat("Matrix too large!! (n>100)\n\n");
         }
 
+        return result;
+    }
+
+    public String arcCosts() {
+        int n = arcList.size();
+        ArrayList<Arc> ordArc = new ArrayList<>();
+        ordArc.addAll(arcList);
+        Collections.sort(ordArc);
+        String result = "Arc costs\n";
+
+        if (n <= 2000) {
+            for (Arc a : ordArc) {
+                result = result.concat("( " + a.tail.number + " , " + a.head.number + " ) =>" + a.cost + "\n");
+            }
+        } else {
+            result = result.concat("To many arcs!! (>2000)\n");
+        }
+        result = result.concat("\n");
         return result;
     }
 

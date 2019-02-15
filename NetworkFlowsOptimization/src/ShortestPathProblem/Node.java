@@ -29,6 +29,7 @@ public class Node implements Comparable {
 
     private final int id;                               //identificativo univoco del nodo
     private final int value;                            //valore, corrispondente al numero di operai nel mese
+    int number;
     int order;
     int period;
     boolean necessary;
@@ -78,7 +79,7 @@ public class Node implements Comparable {
 
     @Override
     public String toString() {
-        return "Node{" + "i=" + period + ", k=" + value + ", order=" + order + '}';
+        return "Node{" + "i=" + period + ", k=" + value + ", number=" + number + '}';
     }
 
     @Override
