@@ -35,7 +35,7 @@ public class RadixHeap<E> {
 
     public RadixHeap(int n) {
         this.base = 0;
-        if (n<=0) n=5;
+        if (n<=0) n=8;
         this.b = (int) Math.ceil(Math.log10(n) / Math.log10(2));
         this.w = new int[b];
         this.min = new int[b];
@@ -96,7 +96,7 @@ public class RadixHeap<E> {
 
     private int index(int d) {
         int distance = d - this.base;
-        if (distance == 0) {
+        if (distance <= 0) {
             return 0;
         }
         int bucket = (int) Math.ceil(Math.log10(distance) / Math.log10(2));

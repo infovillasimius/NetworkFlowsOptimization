@@ -61,7 +61,7 @@ public class LabelAlgorithms {
      */
     public static String dijkstra(Graph graph) {
         if (graph.isNegCost()) {
-            return "Dijkstra Algorithm (Negative arc cost detected) \n";
+            return "Dijkstra Algorithm (Negative arc cost detected) \n\n";
         }
         ArrayList<Node> list = graph.getList();
         Node n = graph.getSource();
@@ -92,7 +92,7 @@ public class LabelAlgorithms {
 
     public static String dialDijkstra(Graph graph) {
         if (graph.isNegCost()) {
-            return "Dial-Dijkstra Algorithm (Negative arc cost detected) \n";
+            return "Dial-Dijkstra Algorithm (Negative arc cost detected) \n\n";
         }
         ArrayList<Node> list = graph.getList();
         Node n = graph.getSource();
@@ -123,7 +123,7 @@ public class LabelAlgorithms {
 
     public static String RadixHeapDijkstra(Graph graph) {
         if (graph.isNegCost()) {
-            return "RadixHeap-Dijkstra Algorithm (Negative arc cost detected) \n";
+            return "RadixHeap-Dijkstra Algorithm (Negative arc cost detected) \n\n";
         }
         ArrayList<Node> list = graph.getList();
         Node n = graph.getSource();
@@ -166,7 +166,7 @@ public class LabelAlgorithms {
      */
     public static String heapDijkstra(Graph graph) {
         if (graph.isNegCost()) {
-            return "Heap-Dijkstra Algorithm (Negative arc cost detected) \n";
+            return "Heap-Dijkstra Algorithm (Negative arc cost detected) \n\n";
         }
         ArrayList<Node> list = graph.getList();
         PriorityQueue<Node> q = new PriorityQueue<>();
