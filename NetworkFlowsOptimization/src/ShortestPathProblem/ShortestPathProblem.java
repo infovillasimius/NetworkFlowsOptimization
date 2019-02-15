@@ -218,7 +218,7 @@ public class ShortestPathProblem {
             TEXT.setText(TEXT.getText().concat(graph.arcCosts()));
         }
 
-        result = "Numero nodi = " + graph.nodesNumber() + " - " + "Numero archi = " + graph.arcsNumber() + "\n\n";
+        result = "Number of nodes = " + graph.nodesNumber() + " - " + "Number of arcs = " + graph.arcsNumber() + "\n\n";
         TEXT.setText(TEXT.getText().concat(result));
 
         result = LabelAlgorithms.dijkstra(graph);
