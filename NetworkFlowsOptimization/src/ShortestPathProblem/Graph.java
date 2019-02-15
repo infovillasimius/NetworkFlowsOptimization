@@ -234,6 +234,7 @@ public class Graph {
         int n = arcList.size();
         ArrayList<Arc> ordArc = new ArrayList<>();
         ordArc.addAll(arcList);
+
         Collections.sort(ordArc);
         String result = "Arc costs\n";
 

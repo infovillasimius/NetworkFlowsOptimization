@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package ShortestPathProblem;
 
 import java.util.ArrayList;
 
-public class Node implements Comparable {
+public class Node implements Comparable<Node> {
 
     public static final int INFINITY = (int) 10E6;      //valore arbitrario associato a infinito
 
@@ -44,9 +43,10 @@ public class Node implements Comparable {
 
     /**
      * Constructor
-     * @param value 
+     *
+     * @param value
      */
-    public Node(int value) {                            
+    public Node(int value) {
         this.contained = false;
         this.necessary = false;
         id = counter++;
@@ -83,13 +83,6 @@ public class Node implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        Node other = (Node) o;
-        return this.distance - other.distance;
-
-    }
-
-    @Override
     public int hashCode() {
         int hash = 7;
         hash = 41 * hash + this.value;
@@ -116,6 +109,11 @@ public class Node implements Comparable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int compareTo(Node o) {
+        return this.distance - o.distance;
     }
 
 }
