@@ -17,10 +17,13 @@
 package ShortestPathProblem;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -39,14 +42,28 @@ import javax.swing.JTextPane;
 public class ShortestPathProblem {
 
     private static final JFrame FRAME = new JFrame("Network Flows Optimization");
-    private static final JLabel LABEL = new JLabel("Select the Shortest Path Problem: ");
+    private static final JLabel LABEL = new JLabel("Select the problem: ");
     private static final JTextPane TEXT = new JTextPane();
     private static final JScrollPane SCROLL = new JScrollPane(TEXT);
     private static final JButton BUTTON1 = new JButton("Calculate");
-    private static final String[] GRAPHTYPES = {"Personnel planning problem (Clark and Hastings [1977])", "Fixed graph with random arc costs", "Random graph"};
+    private static final String[] GRAPHTYPES = {"Personnel planning problem (Clark and Hastings [1977])",
+        "Fixed graph with random arc costs", "Random graph"};
     @SuppressWarnings("unchecked")
     private static final JComboBox GRAPHLIST = new JComboBox(GRAPHTYPES);
-    private static final JPanel FLOWPANE = new JPanel(new FlowLayout());
+
+    private static final JPanel GRID0 = new JPanel(new GridLayout(0, 1));
+    private static final JPanel GRID1 = new JPanel(new GridLayout(0, 1));
+    private static final JPanel FLOW0 = new JPanel(new FlowLayout());
+    private static final JPanel FLOW01 = new JPanel(new FlowLayout());
+    private static final JPanel GRID2 = new JPanel(new GridLayout(1, 2));
+    private static final JPanel LEFT_GRID = new JPanel(new GridLayout(0, 1));
+    private static final JPanel FLOW3 = new JPanel(new FlowLayout());
+    private static final JPanel FLOW31 = new JPanel(new FlowLayout());
+    private static final JPanel FLOW32 = new JPanel(new FlowLayout());
+    private static final JPanel RIGHT_GRID = new JPanel(new GridLayout(0, 1));
+    private static final JPanel FLOW4 = new JPanel(new FlowLayout());
+    private static final JPanel FLOW41 = new JPanel(new FlowLayout());
+    private static final JPanel FLOW42 = new JPanel(new FlowLayout());
     private static JFormattedTextField nodes;
     private static JFormattedTextField arcPercent;
     private static JFormattedTextField min;
@@ -73,56 +90,89 @@ public class ShortestPathProblem {
     private static void createAndShowGUI() {
         JFrame.setDefaultLookAndFeelDecorated(true);
 
-        FRAME.setPreferredSize(new Dimension(820, 600));
+        FRAME.setPreferredSize(new Dimension(800, 600));
+        FRAME.setResizable(false);
+        FLOW0.setPreferredSize(new Dimension(800, 30));
+        SCROLL.setPreferredSize(new Dimension(800, 440));
+        LEFT_GRID.setPreferredSize(new Dimension(800, 200));
         FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        FRAME.setLocationRelativeTo(null);
-        FRAME.getContentPane().add(FLOWPANE, BorderLayout.NORTH);
+        FRAME.getContentPane().add(GRID0, BorderLayout.NORTH);
+        FRAME.getContentPane().add(GRID1);
 
-        FRAME.getContentPane().add(SCROLL);
-        SCROLL.setPreferredSize(new Dimension(640, 400));
-        FLOWPANE.setPreferredSize(new Dimension(0, 100));
-        FLOWPANE.add(LABEL);
-        FLOWPANE.add(GRAPHLIST);
-        FLOWPANE.add(new JLabel(" Number of nodes "));
+        GRID0.add(FLOW0);
+        GRID0.add(FLOW01);
+        GRID1.add(GRID2);
+        GRID1.add(SCROLL);
+        GRID2.add(LEFT_GRID);
+        GRID2.add(RIGHT_GRID);
+
+        FLOW0.add(LABEL);
+        LABEL.setPreferredSize(new Dimension(200, 25));
+
+        FLOW0.add(GRAPHLIST);
+        GRAPHLIST.setPreferredSize(new Dimension(550, 25));
+
+        adjMatrix = new JCheckBox("Adjacency Matrix");
+        adjMatrix.setPreferredSize(new Dimension(250, 25));
+
+        FLOW01.add(adjMatrix);
+        arcCosts = new JCheckBox("List arc costs");
+        arcCosts.setPreferredSize(new Dimension(250, 25));
+        FLOW01.add(arcCosts);
+
+        LEFT_GRID.add(FLOW3);
+        FLOW3.add(new JLabel("Number of nodes"));
+        FLOW3.getComponent(0).setPreferredSize(new Dimension(140, 15));
         nodes = new JFormattedTextField(20);
         nodes.setColumns(10);
         nodes.setHorizontalAlignment(JTextField.RIGHT);
-        FLOWPANE.add(nodes);
-        FLOWPANE.add(new JLabel(" % arcs (1 .. 100) "));
+        FLOW3.add(nodes);
+
+        LEFT_GRID.add(FLOW4);
+        FLOW4.add(new JLabel("% arcs (1 .. 100)"));
+        FLOW4.getComponent(0).setPreferredSize(new Dimension(140, 15));
         arcPercent = new JFormattedTextField(10);
         arcPercent.setColumns(10);
         arcPercent.setHorizontalAlignment(JTextField.RIGHT);
-        FLOWPANE.add(arcPercent);
+        FLOW4.add(arcPercent);
 
-        FLOWPANE.add(new JLabel(" min arc cost "));
+        RIGHT_GRID.add(FLOW31);
+        FLOW31.add(new JLabel("Minimum arc cost"));
+        FLOW31.getComponent(0).setPreferredSize(new Dimension(140, 15));
         min = new JFormattedTextField(0);
         min.setColumns(10);
         min.setHorizontalAlignment(JTextField.RIGHT);
-        FLOWPANE.add(min);
+        FLOW31.add(min);
 
-        FLOWPANE.add(new JLabel(" max arc cost "));
+        RIGHT_GRID.add(FLOW41);
+        FLOW41.add(new JLabel("Max arc cost "));
+        FLOW41.getComponent(0).setPreferredSize(new Dimension(140, 15));
         max = new JFormattedTextField(100);
         max.setColumns(10);
         max.setHorizontalAlignment(JTextField.RIGHT);
-        FLOWPANE.add(max);
+        FLOW41.add(max);
 
-        FLOWPANE.add(new JLabel(" Random seed "));
+        RIGHT_GRID.add(FLOW32);
+        FLOW32.add(new JLabel("Random seed "));
+        FLOW32.getComponent(0).setPreferredSize(new Dimension(140, 15));
         seed = new JFormattedTextField(0);
         seed.setColumns(10);
         seed.setHorizontalAlignment(JTextField.RIGHT);
-        FLOWPANE.add(seed);
+        FLOW32.add(seed);
 
-        cycleCheck = new JCheckBox("Cycles");
-        FLOWPANE.add(cycleCheck);
+        LEFT_GRID.add(FLOW42);
+        FLOW42.add(new JLabel("Graph with cycles"));
+        FLOW42.getComponent(0).setPreferredSize(new Dimension(140, 15));
+        cycleCheck = new JCheckBox();
+        cycleCheck.setPreferredSize(new Dimension(120, 15));
+        FLOW42.add(cycleCheck);
 
-        adjMatrix = new JCheckBox("Adjacency Matrix");
-        FLOWPANE.add(adjMatrix);
-        arcCosts = new JCheckBox("List arc costs");
-        FLOWPANE.add(arcCosts);
+        LEFT_GRID.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        RIGHT_GRID.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
-        FLOWPANE.add(BUTTON1);
-
-        //frame.getContentPane().add(GRAPHLIST, BorderLayout.SOUTH);
+        FLOW01.add(BUTTON1);
+        BUTTON1.setPreferredSize(new Dimension(250, 25));
+        FRAME.getContentPane().add(SCROLL, BorderLayout.SOUTH);
         BUTTON1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
