@@ -23,11 +23,11 @@ public class Node implements Comparable<Node> {
     public static final int INFINITY = (int) 10E6;      //valore arbitrario associato a infinito
 
     private static int counter = 0;                     //contatore dei nodi generati
-
-    int distance = INFINITY;                            //distanza iniziale settata a +infinito
+     
+    int distance;                                       //distanza iniziale settata a +infinito
 
     private final int id;                               //identificativo univoco del nodo
-    private final int value;                            //valore, corrispondente al numero di operai nel mese
+    private final int value;                            //valore associato al nodo
     int number;
     int order;
     int period;
@@ -47,6 +47,7 @@ public class Node implements Comparable<Node> {
      * @param value
      */
     public Node(int value) {
+        this.distance = INFINITY;
         this.contained = false;
         this.necessary = false;
         id = counter++;
@@ -58,6 +59,7 @@ public class Node implements Comparable<Node> {
     }
 
     public Node(int value, int month) {
+        this.distance = INFINITY;
         this.contained = false;
         this.previously = false;
         this.necessary = false;

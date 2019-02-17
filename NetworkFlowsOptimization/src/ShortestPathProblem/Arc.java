@@ -18,9 +18,14 @@ package ShortestPathProblem;
 
 public class Arc implements Comparable<Arc>{
 
+    int capacity;
+    int minFlow;
+    int flow;
+    int residualFlow;
     int cost;           //costo associato all'arco
     Node tail;          //nodo coda
     Node head;          //nodo testa
+    
 
     public Arc(int cost, Node tail, Node head) {
         this.cost = cost;                           
@@ -30,12 +35,14 @@ public class Arc implements Comparable<Arc>{
 
     @Override
     public String toString() {
-        return "Arc{" + "cost=" + cost + ", tail=" + tail + ", head=" + head + '}';
+        return "Arc{" + "capacity=" + capacity + ", minFlow=" + minFlow + ", cost=" + cost + ", tail=" + tail + ", head=" + head + '}';
     }
+
+    
 
     @Override
     public int compareTo(Arc o) {
-        return (this.tail.number - o.tail.number)*100000+(this.head.number - o.head.number);
+        return (this.tail.number - o.tail.number)*1000000+(this.head.number - o.head.number);
     }
 
 }

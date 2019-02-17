@@ -81,7 +81,7 @@ public class Graph {
     public ArrayList<Node> getList() {
         ArrayList<Node> list2 = new ArrayList<>();
         list2.addAll(list);
-        Graph.initialize(list2);
+        initialize(list2);
         return list2;
     }
 
@@ -121,7 +121,7 @@ public class Graph {
         if (isOrdered) {
             ArrayList<Node> newOrdered = new ArrayList<>();
             newOrdered.addAll(ordered);
-            Graph.initialize(newOrdered);
+            initialize(newOrdered);
             return newOrdered;
         }
         return null;
@@ -190,7 +190,7 @@ public class Graph {
      *
      * @param list
      */
-    public static void initialize(ArrayList<Node> list) {
+    private void initialize(ArrayList<Node> list) {
         for (Node i : list) {
             i.previously = false;
             i.contained = false;
