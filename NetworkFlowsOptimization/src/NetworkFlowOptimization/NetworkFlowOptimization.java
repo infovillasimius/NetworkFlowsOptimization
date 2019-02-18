@@ -42,7 +42,17 @@ import javax.swing.JTextPane;
 public class NetworkFlowOptimization {
 
     private static final JFrame FRAME = new JFrame("Network Flows Optimization");
-    private static final JLabel LABEL = new JLabel("Select the problem: ");
+
+    private static final JButton SPPBUTTON = new JButton("Shortest Path Problems");
+    private static final JButton MFPBUTTON = new JButton("Max Flow Problems");
+    private static final JButton BACKSPPBUTTON = new JButton("Back");
+    private static final JButton BACKMFPBUTTON = new JButton("Back");
+
+    private static final JPanel MENU = new JPanel(new FlowLayout());
+    private static final JPanel SPP = new JPanel(new BorderLayout());
+    private static final JPanel MFP = new JPanel(new BorderLayout());
+
+    private static final JLabel LABEL = new JLabel("Select the Shortest Path problem: ");
     private static final JTextPane TEXT = new JTextPane();
     private static final JScrollPane SCROLL = new JScrollPane(TEXT);
     private static final JButton BUTTON1 = new JButton("Calculate");
@@ -52,7 +62,7 @@ public class NetworkFlowOptimization {
     private static final JComboBox GRAPHLIST = new JComboBox(GRAPHTYPES);
 
     private static final JPanel GRID0 = new JPanel(new GridLayout(0, 1));
-    private static final JPanel GRID1 = new JPanel(new GridLayout(0, 1));
+    private static final JPanel FLOW = new JPanel(new FlowLayout());
     private static final JPanel FLOW0 = new JPanel(new FlowLayout());
     private static final JPanel FLOW01 = new JPanel(new FlowLayout());
     private static final JPanel GRID2 = new JPanel(new GridLayout(1, 2));
@@ -91,33 +101,41 @@ public class NetworkFlowOptimization {
         JFrame.setDefaultLookAndFeelDecorated(true);
 
         FRAME.setPreferredSize(new Dimension(800, 600));
-        FRAME.setResizable(false);
-        FLOW0.setPreferredSize(new Dimension(800, 30));
-        SCROLL.setPreferredSize(new Dimension(800, 440));
-        LEFT_GRID.setPreferredSize(new Dimension(800, 200));
         FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        FRAME.getContentPane().add(GRID0, BorderLayout.NORTH);
-        FRAME.getContentPane().add(GRID1);
+        FRAME.getContentPane().add(MENU, BorderLayout.CENTER);
+
+        SPPBUTTON.setPreferredSize(new Dimension(250, 100));
+        MFPBUTTON.setPreferredSize(new Dimension(250, 100));
+
+        MENU.add(MFPBUTTON);
+        MENU.add(SPPBUTTON);
+        MFP.add(BACKMFPBUTTON);
+
+        BACKSPPBUTTON.setPreferredSize(new Dimension(75, 25));
+        BACKMFPBUTTON.setPreferredSize(new Dimension(75, 25));
+
+        // SPP part definition
+        SPP.add(GRID0, BorderLayout.PAGE_START);
+        SPP.add(SCROLL, BorderLayout.CENTER);
+        SPP.add(FLOW, BorderLayout.PAGE_END);
 
         GRID0.add(FLOW0);
         GRID0.add(FLOW01);
-        GRID1.add(GRID2);
-        GRID1.add(SCROLL);
+        FLOW.add(GRID2);
         GRID2.add(LEFT_GRID);
         GRID2.add(RIGHT_GRID);
 
         FLOW0.add(LABEL);
         LABEL.setPreferredSize(new Dimension(200, 25));
-
         FLOW0.add(GRAPHLIST);
-        GRAPHLIST.setPreferredSize(new Dimension(550, 25));
+        GRAPHLIST.setPreferredSize(new Dimension(350, 25));
 
         adjMatrix = new JCheckBox("Adjacency Matrix");
-        adjMatrix.setPreferredSize(new Dimension(250, 25));
+        adjMatrix.setPreferredSize(new Dimension(150, 25));
 
         FLOW01.add(adjMatrix);
         arcCosts = new JCheckBox("List arc costs");
-        arcCosts.setPreferredSize(new Dimension(250, 25));
+        arcCosts.setPreferredSize(new Dimension(150, 25));
         FLOW01.add(arcCosts);
 
         LEFT_GRID.add(FLOW3);
@@ -171,15 +189,60 @@ public class NetworkFlowOptimization {
         RIGHT_GRID.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
         FLOW01.add(BUTTON1);
-        BUTTON1.setPreferredSize(new Dimension(250, 25));
-        FRAME.getContentPane().add(SCROLL, BorderLayout.SOUTH);
+        BUTTON1.setPreferredSize(new Dimension(165, 25));
+        FLOW01.add(BACKSPPBUTTON);                                                  // end SPP part definition
+
+
         BUTTON1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TEXT.setText("Calculating graph...\n\n");
                 calculate();
-                adjMatrix.setSelected(false);
-                arcCosts.setSelected(false);
+
+            }
+        });
+
+        SPPBUTTON.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MENU.setVisible(false);
+                SPP.setVisible(true);
+                FRAME.getContentPane().remove(MENU);
+                FRAME.getContentPane().add(SPP, BorderLayout.CENTER);
+                FRAME.pack();
+            }
+        });
+
+        MFPBUTTON.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MENU.setVisible(false);
+                MFP.setVisible(true);
+                FRAME.getContentPane().remove(MENU);
+                FRAME.getContentPane().add(MFP, BorderLayout.CENTER);
+                FRAME.pack();
+            }
+        });
+
+        BACKSPPBUTTON.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SPP.setVisible(false);
+                MENU.setVisible(true);
+                FRAME.getContentPane().remove(SPP);
+                FRAME.getContentPane().add(MENU, BorderLayout.CENTER);
+                FRAME.pack();
+            }
+        });
+
+        BACKMFPBUTTON.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MFP.setVisible(false);
+                MENU.setVisible(true);
+                FRAME.getContentPane().remove(MFP);
+                FRAME.getContentPane().add(MENU, BorderLayout.CENTER);
+                FRAME.pack();
             }
         });
 
@@ -229,6 +292,7 @@ public class NetworkFlowOptimization {
         FRAME.pack();
         FRAME.setLocation(100, 100);
         FRAME.setVisible(true);
+
     }
 
     private static void calculate() {
