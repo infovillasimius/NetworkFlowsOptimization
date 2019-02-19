@@ -37,6 +37,17 @@ public class Arc implements Comparable<Arc> {
         this.tail = tail;
         this.head = head;
     }
+    
+        public Arc(int cost, Node tail, Node head, int capacity) {
+        this.capacity = capacity;
+        this.minFlow = 0;
+        this.flow = 0;
+        this.residualForwardCapacity = 0;
+        this.residualReverseCapacity = 0;
+        this.cost = cost;
+        this.tail = tail;
+        this.head = head;
+    }
 
     public Arc(Node tail, Node head) {
         this.capacity = 0;
@@ -47,6 +58,10 @@ public class Arc implements Comparable<Arc> {
         this.cost = 0;
         this.tail = tail;
         this.head = head;
+    }
+
+    public String toFlow() {
+        return "(" + tail.number + ", " + head.number + ") => flow=" + flow + ", capacity=" + capacity + "\n";
     }
 
     @Override

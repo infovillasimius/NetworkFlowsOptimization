@@ -37,6 +37,7 @@ public class Node implements Comparable<Node> {
     int indegree;
 
     Node pred;                                          //nodo predecessore
+    Arc predArc;
 
     ArrayList<Arc> in;                                  //Lista degli archi entranti
     ArrayList<Arc> out;                                 //Lista degli archi uscenti
@@ -87,8 +88,8 @@ public class Node implements Comparable<Node> {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 41 * hash + this.value;
-        hash = 41 * hash + this.period;
+        hash = 43 * hash + this.id;
+        hash = 43 * hash + this.number;
         return hash;
     }
 
@@ -104,14 +105,16 @@ public class Node implements Comparable<Node> {
             return false;
         }
         final Node other = (Node) obj;
-        if (this.value != other.value) {
+        if (this.id != other.id) {
             return false;
         }
-        if (this.period != other.period) {
-            return false;
-        }
-        return true;
+        return this.number == other.number;
     }
+
+
+
+
+    
 
     @Override
     public int compareTo(Node o) {

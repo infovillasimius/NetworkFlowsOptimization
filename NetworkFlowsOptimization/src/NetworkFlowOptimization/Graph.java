@@ -249,4 +249,44 @@ public class Graph {
         return result;
     }
 
+    public void setResidual() {
+        ArrayList<Arc> ordArc = new ArrayList<>();
+        ordArc.addAll(arcList);
+        Collections.sort(ordArc);
+        for (Arc a : ordArc) {
+            a.residualForwardCapacity = a.capacity - a.flow;
+            a.residualReverseCapacity = a.flow;
+        }
+    }
+
+    public String maxFlow() {
+        String result = "Flow out of source node \n";
+        int maxFlowS = 0;
+        int maxFlowT = 0;
+
+        for (Arc a : s.out) {
+            maxFlowS += a.flow;
+            result = result.concat(a.toFlow());
+        }
+        result = result.concat("Tot=" + maxFlowS + "\n");
+        result = result.concat("\nFlow entering sink \n");
+        for (Arc a : t.in) {
+            maxFlowT += a.flow;
+            result = result.concat(a.toFlow());
+        }
+        result = result.concat("Tot=" + maxFlowT + "\n");
+
+        ArrayList<Arc> ordArc = new ArrayList<>();
+        ordArc.addAll(arcList);
+        Collections.sort(ordArc);
+        
+        result = result.concat("\nFlow arcs\n");
+        for (Arc a : ordArc) {
+            if(a.flow>0)
+            result = result.concat(a.toFlow());
+        }
+
+        return result;
+    }
+
 }

@@ -16,9 +16,6 @@
  */
 package NetworkFlowOptimization;
 
-import NetworkFlowOptimization.Graph;
-import NetworkFlowOptimization.Arc;
-
 /**
  *
  * @author anto

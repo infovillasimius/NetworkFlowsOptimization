@@ -45,7 +45,7 @@ public class LabelAlgorithms {
                 dist = a.getTail().distance + a.getCost();
                 if (a.getHead().distance > dist) {
                     a.head.distance = dist;
-                    a.head.pred = a.getTail();
+                    a.head.pred = a.tail;
                 }
             }
         }
@@ -79,10 +79,10 @@ public class LabelAlgorithms {
             }
             list.remove(n);
             for (Arc i : n.out) {
-                dist = i.getTail().distance + i.getCost();
-                if (i.getHead().distance > dist) {
+                dist = i.tail.distance + i.getCost();
+                if (i.head.distance > dist) {
                     i.head.distance = dist;
-                    i.head.pred = i.getTail();
+                    i.head.pred = i.tail;
                 }
             }
         }
@@ -109,11 +109,11 @@ public class LabelAlgorithms {
             n = q.next();
             list.remove(n);
             for (Arc i : n.out) {
-                dist = i.getTail().distance + i.getCost();
-                if (i.getHead().distance > dist) {
+                dist = i.tail.distance + i.getCost();
+                if (i.head.distance > dist) {
                     i.head.distance = dist;
-                    i.head.pred = i.getTail();
-                    q.store(i.getHead(), i.getHead().distance);
+                    i.head.pred = i.tail;
+                    q.store(i.head, i.head.distance);
                 }
             }
         }
@@ -141,16 +141,16 @@ public class LabelAlgorithms {
             list.remove(n);
 
             for (Arc i : n.out) {
-                dist = i.getTail().distance + i.getCost();
-                oldD = i.getHead().distance;
+                dist = i.tail.distance + i.getCost();
+                oldD = i.head.distance;
                 if (oldD > dist) {
                     i.head.distance = dist;
-                    i.head.pred = i.getTail();
+                    i.head.pred = i.tail;
                     if (!i.head.contained) {
-                        q.store(i.getHead(), i.getHead().distance);
+                        q.store(i.head, i.head.distance);
                         i.head.contained = true;
                     } else {
-                        q.update(i.getHead(), dist, oldD);
+                        q.update(i.head, dist, oldD);
                     }
                 }
             }
@@ -181,14 +181,14 @@ public class LabelAlgorithms {
             n.contained = false;
             list.remove(n);
             for (Arc i : n.out) {
-                dist = i.getTail().distance + i.getCost();
-                if (i.getHead().distance > dist) {
-                    if (i.getHead().contained) {
-                        q.remove(i.getHead());
+                dist = i.tail.distance + i.getCost();
+                if (i.head.distance > dist) {
+                    if (i.head.contained) {
+                        q.remove(i.head);
                     }
                     i.head.distance = dist;
-                    i.head.pred = i.getTail();
-                    q.add(i.getHead());
+                    i.head.pred = i.tail;
+                    q.add(i.head);
                 }
             }
         }
@@ -210,12 +210,12 @@ public class LabelAlgorithms {
             optCond = true;
 
             for (Arc i : arcList) {
-                dist = i.getTail().distance + i.getCost();
-                if (i.getHead().distance > dist) {
+                dist = i.tail.distance + i.getCost();
+                if (i.head.distance > dist) {
                     i.head.distance = dist;
-                    i.head.pred = i.getTail();
+                    i.head.pred = i.tail;
                     optCond = false;
-                    n = i.getHead();
+                    n = i.head;
                 }
             }
             if (dist < minDist) {
@@ -244,12 +244,12 @@ public class LabelAlgorithms {
             n.contained = false;
 
             for (Arc i : n.out) {
-                dist = i.getTail().distance + i.getCost();
-                if (i.getHead().distance > dist) {
+                dist = i.tail.distance + i.getCost();
+                if (i.head.distance > dist) {
                     i.head.distance = dist;
-                    i.head.pred = i.getTail();
+                    i.head.pred = i.tail;
                     if (!i.head.contained) {
-                        LIST.add(i.getHead());
+                        LIST.add(i.head);
                         i.head.contained = true;
                     }
                 }
@@ -284,15 +284,15 @@ public class LabelAlgorithms {
             n.contained = false;
 
             for (Arc i : n.out) {
-                dist = i.getTail().distance + i.getCost();
-                if (i.getHead().distance > dist) {
+                dist = i.tail.distance + i.getCost();
+                if (i.head.distance > dist) {
                     i.head.distance = dist;
-                    i.head.pred = i.getTail();
+                    i.head.pred = i.tail;
                     if (!i.head.contained) {
-                        if (i.getHead().previously) {
-                            LIST.addFirst(i.getHead());
+                        if (i.head.previously) {
+                            LIST.addFirst(i.head);
                         } else {
-                            LIST.add(i.getHead());
+                            LIST.add(i.head);
                         }
                         i.head.previously = true;
                         i.head.contained = true;

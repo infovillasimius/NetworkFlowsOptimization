@@ -17,6 +17,7 @@
 package NetworkFlowOptimization;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
@@ -24,12 +25,99 @@ import java.util.ArrayList;
  */
 public class MaxFlowProblem {
 
-    public void labeling(Graph graph) {
+    public static long labeling(Graph graph) {
+        graph.setResidual();
         ArrayList<Node> list = graph.getList();
-        Node s=graph.getSource();
-        Node t=graph.getSink();
-        
-        
+        LinkedList<Node> LIST = new LinkedList<>();
+        Node s = graph.getSource();
+        Node t = graph.getSink();
+        Node i;
+        t.previously = true;
+
+        long start = System.nanoTime();
+
+        while (t.previously) {
+
+            for (Node n : list) {
+                n.previously = false;
+                n.pred = null;
+                n.predArc = null;
+            }
+
+            s.previously = true;
+            LIST.clear();
+            LIST.add(s);
+
+            while (!LIST.isEmpty() && !t.previously) {
+                i = LIST.poll();
+
+                for (Arc a : i.out) {
+                    if (a.residualForwardCapacity > 0 && !a.head.previously) {
+                        a.head.pred = i;
+                        a.head.predArc = a;
+                        a.head.previously = true;
+                        LIST.add(a.head);
+                    }
+                }
+                for (Arc a : i.in) {
+
+                    if (a.residualReverseCapacity > 0 && !a.tail.previously) {
+                        a.tail.pred = i;
+                        a.tail.predArc = a;
+                        a.tail.previously = true;
+                        LIST.add(a.tail);
+
+                    }
+                }
+
+                if (t.previously) {
+                    augment(t);
+                }
+            }
+
+        }
+
+        long stop = System.nanoTime() - start;
+
+        return stop;
+
+    }
+
+    private static void augment(Node t) {
+        Node n = t;
+        Arc a;
+        int minR = t.predArc.residualForwardCapacity;
+        int r;
+
+        while (n.pred != null) {
+            a = n.predArc;
+            if (n.pred.equals(a.tail)) {
+                r = a.residualForwardCapacity;
+            } else {
+                r = a.residualReverseCapacity;
+            }
+            if (minR > r) {
+                minR = r;
+            }
+            n = n.pred;
+
+        }
+
+        n = t;
+
+        while (n.pred != null) {
+            a = n.predArc;
+            if (n.pred.equals(a.tail)) {
+                a.flow += minR;
+                a.residualForwardCapacity -= minR;
+                a.residualReverseCapacity += minR;
+            } else {
+                a.flow -= minR;
+                a.residualForwardCapacity += minR;
+                a.residualReverseCapacity -= minR;
+            }
+            n = n.pred;
+        }
     }
 
 }

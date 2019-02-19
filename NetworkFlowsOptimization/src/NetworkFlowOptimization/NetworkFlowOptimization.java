@@ -23,7 +23,9 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -42,7 +44,8 @@ import javax.swing.JTextPane;
 public class NetworkFlowOptimization {
 
     private static final JFrame FRAME = new JFrame("Network Flows Optimization");
-
+    private static ImageIcon icon;
+    private static final JLabel IMAGE = new JLabel();
     private static final JButton SPPBUTTON = new JButton("Shortest Path Problems");
     private static final JButton MFPBUTTON = new JButton("Max Flow Problems");
     private static final JButton BACKSPPBUTTON = new JButton("Back");
@@ -92,6 +95,7 @@ public class NetworkFlowOptimization {
             @Override
             public void run() {
                 createAndShowGUI();
+                mfp();
             }
         });
 
@@ -100,16 +104,22 @@ public class NetworkFlowOptimization {
     private static void createAndShowGUI() {
         JFrame.setDefaultLookAndFeelDecorated(true);
 
-        FRAME.setPreferredSize(new Dimension(800, 600));
+        FRAME.setPreferredSize(new Dimension(300, 520));
         FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         FRAME.getContentPane().add(MENU, BorderLayout.CENTER);
 
         SPPBUTTON.setPreferredSize(new Dimension(250, 100));
         MFPBUTTON.setPreferredSize(new Dimension(250, 100));
 
-        MENU.add(MFPBUTTON);
+        URL percorso = NetworkFlowOptimization.class.getResource("Logo_UniCa2.png");
+        icon = new ImageIcon(percorso);
+        
+        IMAGE.setIcon(icon);
+        MENU.add(IMAGE);
         MENU.add(SPPBUTTON);
-        MFP.add(BACKMFPBUTTON);
+        MENU.add(MFPBUTTON);
+        
+        MFP.add(BACKMFPBUTTON, BorderLayout.PAGE_START);
 
         BACKSPPBUTTON.setPreferredSize(new Dimension(75, 25));
         BACKMFPBUTTON.setPreferredSize(new Dimension(75, 25));
@@ -192,7 +202,6 @@ public class NetworkFlowOptimization {
         BUTTON1.setPreferredSize(new Dimension(165, 25));
         FLOW01.add(BACKSPPBUTTON);                                                  // end SPP part definition
 
-
         BUTTON1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -209,6 +218,7 @@ public class NetworkFlowOptimization {
                 SPP.setVisible(true);
                 FRAME.getContentPane().remove(MENU);
                 FRAME.getContentPane().add(SPP, BorderLayout.CENTER);
+                FRAME.setPreferredSize(new Dimension(800, 600));
                 FRAME.pack();
             }
         });
@@ -220,6 +230,7 @@ public class NetworkFlowOptimization {
                 MFP.setVisible(true);
                 FRAME.getContentPane().remove(MENU);
                 FRAME.getContentPane().add(MFP, BorderLayout.CENTER);
+                FRAME.setPreferredSize(new Dimension(800, 600));
                 FRAME.pack();
             }
         });
@@ -231,6 +242,7 @@ public class NetworkFlowOptimization {
                 MENU.setVisible(true);
                 FRAME.getContentPane().remove(SPP);
                 FRAME.getContentPane().add(MENU, BorderLayout.CENTER);
+                FRAME.setPreferredSize(new Dimension(300, 520));
                 FRAME.pack();
             }
         });
@@ -242,6 +254,7 @@ public class NetworkFlowOptimization {
                 MENU.setVisible(true);
                 FRAME.getContentPane().remove(MFP);
                 FRAME.getContentPane().add(MENU, BorderLayout.CENTER);
+                FRAME.setPreferredSize(new Dimension(300, 520));
                 FRAME.pack();
             }
         });
@@ -315,7 +328,7 @@ public class NetworkFlowOptimization {
 
         switch (n) {
             case 2:
-                graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, minLocal, maxLocal, cycle, result);
+                graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, minLocal, maxLocal, 5 , cycle, result);
                 break;
             case 1:
                 graph = GraphMaker.cycleGraphMaker(seedLocal, minLocal, maxLocal);
@@ -353,5 +366,15 @@ public class NetworkFlowOptimization {
         TEXT.setText(TEXT.getText().concat(result));
 
     }
+    
+    private static void mfp(){
+        String result="";
+        Graph graph = GraphMaker.randomGraph(2000, 20, 0, 0, 100, 5 , true, result);//GraphMaker.cycleGraphMaker(0, 0, 10);
+        result = "Number of nodes = " + graph.nodesNumber() + " - " + "Number of arcs = " + graph.arcsNumber() + "\n\n".concat(result);
+        long stop=MaxFlowProblem.labeling(graph);
+        result = result.concat(graph.maxFlow());
+        System.out.println("Execution time = " + (double) stop / 1000000 + " milliseconds\n"+result);
+    }
+    
 
 }
