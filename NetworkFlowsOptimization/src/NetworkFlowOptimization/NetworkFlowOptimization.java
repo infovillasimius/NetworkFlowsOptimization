@@ -46,45 +46,76 @@ public class NetworkFlowOptimization {
     private static final JFrame FRAME = new JFrame("Network Flows Optimization");
     private static ImageIcon icon;
     private static final JLabel IMAGE = new JLabel();
-    private static final JButton SPPBUTTON = new JButton("Shortest Path Problems");
-    private static final JButton MFPBUTTON = new JButton("Max Flow Problems");
-    private static final JButton BACKSPPBUTTON = new JButton("Back");
-    private static final JButton BACKMFPBUTTON = new JButton("Back");
+    private static final JButton SPP_BUTTON = new JButton("Shortest Path Problems");
+    private static final JButton MFP_BUTTON = new JButton("Max Flow Problems");
+    private static final JButton BACK_SPP_BUTTON = new JButton("Back");
+    private static final JButton BACK_MFP_BUTTON = new JButton("Back");
 
     private static final JPanel MENU = new JPanel(new FlowLayout());
     private static final JPanel SPP = new JPanel(new BorderLayout());
     private static final JPanel MFP = new JPanel(new BorderLayout());
 
-    private static final JLabel LABEL = new JLabel("Select the Shortest Path problem: ");
-    private static final JTextPane TEXT = new JTextPane();
-    private static final JScrollPane SCROLL = new JScrollPane(TEXT);
-    private static final JButton BUTTON1 = new JButton("Calculate");
-    private static final String[] GRAPHTYPES = {"Personnel planning problem (Clark and Hastings [1977])",
+    private static final JLabel SPP_LABEL = new JLabel("Select the Shortest Path problem: ");
+    private static final JLabel MFP_LABEL = new JLabel("Select a Graph: ");
+    private static final JTextPane SPP_TEXT = new JTextPane();
+    private static final JTextPane MFP_TEXT = new JTextPane();
+    private static final JScrollPane SPP_SCROLL = new JScrollPane(SPP_TEXT);
+    private static final JScrollPane MFP_SCROLL = new JScrollPane(MFP_TEXT);
+    private static final JButton SPP_CALCULATE = new JButton("Calculate");
+    private static final JButton MFP_CALCULATE = new JButton("Calculate");
+    private static final String[] SPP_GRAPHTYPES = {"Personnel planning problem (Clark and Hastings [1977])",
         "Fixed graph with random arc costs", "Random graph"};
     @SuppressWarnings("unchecked")
-    private static final JComboBox GRAPHLIST = new JComboBox(GRAPHTYPES);
+    private static final JComboBox SPP_GRAPHLIST = new JComboBox(SPP_GRAPHTYPES);
 
-    private static final JPanel GRID0 = new JPanel(new GridLayout(0, 1));
-    private static final JPanel FLOW = new JPanel(new FlowLayout());
-    private static final JPanel FLOW0 = new JPanel(new FlowLayout());
-    private static final JPanel FLOW01 = new JPanel(new FlowLayout());
-    private static final JPanel GRID2 = new JPanel(new GridLayout(1, 2));
-    private static final JPanel LEFT_GRID = new JPanel(new GridLayout(0, 1));
-    private static final JPanel FLOW3 = new JPanel(new FlowLayout());
-    private static final JPanel FLOW31 = new JPanel(new FlowLayout());
-    private static final JPanel FLOW32 = new JPanel(new FlowLayout());
-    private static final JPanel RIGHT_GRID = new JPanel(new GridLayout(0, 1));
-    private static final JPanel FLOW4 = new JPanel(new FlowLayout());
-    private static final JPanel FLOW41 = new JPanel(new FlowLayout());
-    private static final JPanel FLOW42 = new JPanel(new FlowLayout());
-    private static JFormattedTextField nodes;
-    private static JFormattedTextField arcPercent;
-    private static JFormattedTextField min;
-    private static JFormattedTextField max;
-    private static JFormattedTextField seed;
-    private static JCheckBox cycleCheck;
-    private static JCheckBox adjMatrix;
-    private static JCheckBox arcCosts;
+    private static final String[] MFP_GRAPHTYPES = {"Example graph", "Random graph"};
+    @SuppressWarnings("unchecked")
+    private static final JComboBox MFP_GRAPHLIST = new JComboBox(MFP_GRAPHTYPES);
+
+    private static final JPanel SPP_GRID_PAGE_START = new JPanel(new GridLayout(0, 1));
+    private static final JPanel MFP_GRID_PAGE_START = new JPanel(new GridLayout(0, 1));
+    private static final JPanel SPP_FLOW_PAGE_END = new JPanel(new FlowLayout());
+    private static final JPanel MFP_FLOW_PAGE_END = new JPanel(new FlowLayout());
+    private static final JPanel SPP_UP_FLOW0 = new JPanel(new FlowLayout());
+    private static final JPanel MFP_UP_FLOW0 = new JPanel(new FlowLayout());
+    private static final JPanel SPP_UP_FLOW1 = new JPanel(new FlowLayout());
+    private static final JPanel MFP_UP_FLOW1 = new JPanel(new FlowLayout());
+    private static final JPanel SPP_GRID_PAGE_END = new JPanel(new GridLayout(1, 2));
+    private static final JPanel MFP_GRID_PAGE_END = new JPanel(new GridLayout(1, 2));
+    private static final JPanel SPP_LEFT_GRID = new JPanel(new GridLayout(0, 1));
+    private static final JPanel MFP_LEFT_GRID = new JPanel(new GridLayout(0, 1));
+    private static final JPanel SPP_LEFT_FLOW0 = new JPanel(new FlowLayout());
+    private static final JPanel SPP_RIGHT_FLOW0 = new JPanel(new FlowLayout());
+    private static final JPanel SPP_RIGHT_FLOW2 = new JPanel(new FlowLayout());
+    private static final JPanel MFP_LEFT_FLOW0 = new JPanel(new FlowLayout());
+    private static final JPanel MFP_LEFT_FLOW1 = new JPanel(new FlowLayout());
+    private static final JPanel MFP_LEFT_FLOW2 = new JPanel(new FlowLayout());
+    private static final JPanel SPP_RIGHT_GRID = new JPanel(new GridLayout(0, 1));
+    private static final JPanel MFP_RIGHT_GRID = new JPanel(new GridLayout(0, 1));
+    private static final JPanel SPP_LEFT_FLOW1 = new JPanel(new FlowLayout());
+    private static final JPanel SPP_RIGHT_FLOW1 = new JPanel(new FlowLayout());
+    private static final JPanel SPP_LEFT_FLOW2 = new JPanel(new FlowLayout());
+
+    private static final JPanel MFP_RIGHT_FLOW0 = new JPanel(new FlowLayout());
+    private static final JPanel MFP_RIGHT_FLOW1 = new JPanel(new FlowLayout());
+    private static final JPanel MFP_RIGHT_FLOW2 = new JPanel(new FlowLayout());
+    private static JFormattedTextField sppNodes;
+    private static JFormattedTextField sppArcPercent;
+    private static JFormattedTextField sppMinArcCost;
+    private static JFormattedTextField sppMaxArcCost;
+    private static JFormattedTextField sppSeed;
+    private static JCheckBox sppCycleCheck;
+    private static JCheckBox sppAdjMatrix;
+    private static JCheckBox sppArcCosts;
+
+    private static JFormattedTextField mfpNodes;
+    private static JFormattedTextField mfpArcPercent;
+    private static JFormattedTextField mfpMaxArcCapacity;
+    private static JFormattedTextField mfpSeed;
+    private static JCheckBox mfpCycleCheck;
+    private static JCheckBox mfpAllArcs;
+    private static JCheckBox mfpAdjMatrix;
+    private static JCheckBox mfpArcFlows;
 
     /**
      * @param args the command line arguments
@@ -95,7 +126,6 @@ public class NetworkFlowOptimization {
             @Override
             public void run() {
                 createAndShowGUI();
-                mfp();
             }
         });
 
@@ -104,206 +134,333 @@ public class NetworkFlowOptimization {
     private static void createAndShowGUI() {
         JFrame.setDefaultLookAndFeelDecorated(true);
 
-        FRAME.setPreferredSize(new Dimension(300, 520));
+        FRAME.setPreferredSize(new Dimension(350, 520));
         FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         FRAME.getContentPane().add(MENU, BorderLayout.CENTER);
+        FRAME.setResizable(false);
 
-        SPPBUTTON.setPreferredSize(new Dimension(250, 100));
-        MFPBUTTON.setPreferredSize(new Dimension(250, 100));
+        SPP_BUTTON.setPreferredSize(new Dimension(250, 100));
+        MFP_BUTTON.setPreferredSize(new Dimension(250, 100));
 
         URL percorso = NetworkFlowOptimization.class.getResource("Logo_UniCa2.png");
         icon = new ImageIcon(percorso);
-        
+
         IMAGE.setIcon(icon);
         MENU.add(IMAGE);
-        MENU.add(SPPBUTTON);
-        MENU.add(MFPBUTTON);
-        
-        MFP.add(BACKMFPBUTTON, BorderLayout.PAGE_START);
+        MENU.add(SPP_BUTTON);
+        MENU.add(MFP_BUTTON);
 
-        BACKSPPBUTTON.setPreferredSize(new Dimension(75, 25));
-        BACKMFPBUTTON.setPreferredSize(new Dimension(75, 25));
+        BACK_SPP_BUTTON.setPreferredSize(new Dimension(75, 25));
+        BACK_MFP_BUTTON.setPreferredSize(new Dimension(75, 25));
 
         // SPP part definition
-        SPP.add(GRID0, BorderLayout.PAGE_START);
-        SPP.add(SCROLL, BorderLayout.CENTER);
-        SPP.add(FLOW, BorderLayout.PAGE_END);
+        SPP.add(SPP_GRID_PAGE_START, BorderLayout.PAGE_START);
+        SPP.add(SPP_SCROLL, BorderLayout.CENTER);
+        SPP.add(SPP_FLOW_PAGE_END, BorderLayout.PAGE_END);
 
-        GRID0.add(FLOW0);
-        GRID0.add(FLOW01);
-        FLOW.add(GRID2);
-        GRID2.add(LEFT_GRID);
-        GRID2.add(RIGHT_GRID);
+        SPP_GRID_PAGE_START.add(SPP_UP_FLOW0);
+        SPP_GRID_PAGE_START.add(SPP_UP_FLOW1);
+        SPP_FLOW_PAGE_END.add(SPP_GRID_PAGE_END);
+        SPP_GRID_PAGE_END.add(SPP_LEFT_GRID);
+        SPP_GRID_PAGE_END.add(SPP_RIGHT_GRID);
 
-        FLOW0.add(LABEL);
-        LABEL.setPreferredSize(new Dimension(200, 25));
-        FLOW0.add(GRAPHLIST);
-        GRAPHLIST.setPreferredSize(new Dimension(350, 25));
+        SPP_UP_FLOW0.add(SPP_LABEL);
+        SPP_LABEL.setPreferredSize(new Dimension(200, 25));
+        SPP_UP_FLOW0.add(SPP_GRAPHLIST);
+        SPP_GRAPHLIST.setPreferredSize(new Dimension(350, 25));
 
-        adjMatrix = new JCheckBox("Adjacency Matrix");
-        adjMatrix.setPreferredSize(new Dimension(150, 25));
+        sppAdjMatrix = new JCheckBox("Adjacency Matrix");
+        sppAdjMatrix.setPreferredSize(new Dimension(150, 25));
+        SPP_UP_FLOW1.add(sppAdjMatrix);
 
-        FLOW01.add(adjMatrix);
-        arcCosts = new JCheckBox("List arc costs");
-        arcCosts.setPreferredSize(new Dimension(150, 25));
-        FLOW01.add(arcCosts);
+        sppArcCosts = new JCheckBox("Arc costs list");
+        sppArcCosts.setPreferredSize(new Dimension(150, 25));
+        SPP_UP_FLOW1.add(sppArcCosts);
 
-        LEFT_GRID.add(FLOW3);
-        FLOW3.add(new JLabel("Number of nodes"));
-        FLOW3.getComponent(0).setPreferredSize(new Dimension(140, 15));
-        nodes = new JFormattedTextField(20);
-        nodes.setColumns(10);
-        nodes.setHorizontalAlignment(JTextField.RIGHT);
-        FLOW3.add(nodes);
+        SPP_LEFT_GRID.add(SPP_LEFT_FLOW0);
+        SPP_LEFT_FLOW0.add(new JLabel("Number of nodes"));
+        SPP_LEFT_FLOW0.getComponent(0).setPreferredSize(new Dimension(140, 15));
+        sppNodes = new JFormattedTextField(20);
+        sppNodes.setColumns(10);
+        sppNodes.setHorizontalAlignment(JTextField.RIGHT);
+        SPP_LEFT_FLOW0.add(sppNodes);
 
-        LEFT_GRID.add(FLOW4);
-        FLOW4.add(new JLabel("% arcs (1 .. 100)"));
-        FLOW4.getComponent(0).setPreferredSize(new Dimension(140, 15));
-        arcPercent = new JFormattedTextField(10);
-        arcPercent.setColumns(10);
-        arcPercent.setHorizontalAlignment(JTextField.RIGHT);
-        FLOW4.add(arcPercent);
+        SPP_LEFT_GRID.add(SPP_LEFT_FLOW1);
+        SPP_LEFT_FLOW1.add(new JLabel("% arcs (1 .. 100)"));
+        SPP_LEFT_FLOW1.getComponent(0).setPreferredSize(new Dimension(140, 15));
+        sppArcPercent = new JFormattedTextField(10);
+        sppArcPercent.setColumns(10);
+        sppArcPercent.setHorizontalAlignment(JTextField.RIGHT);
+        SPP_LEFT_FLOW1.add(sppArcPercent);
 
-        RIGHT_GRID.add(FLOW31);
-        FLOW31.add(new JLabel("Minimum arc cost"));
-        FLOW31.getComponent(0).setPreferredSize(new Dimension(140, 15));
-        min = new JFormattedTextField(0);
-        min.setColumns(10);
-        min.setHorizontalAlignment(JTextField.RIGHT);
-        FLOW31.add(min);
+        SPP_RIGHT_GRID.add(SPP_RIGHT_FLOW0);
+        SPP_RIGHT_FLOW0.add(new JLabel("Minimum arc cost"));
+        SPP_RIGHT_FLOW0.getComponent(0).setPreferredSize(new Dimension(140, 15));
+        sppMinArcCost = new JFormattedTextField(0);
+        sppMinArcCost.setColumns(10);
+        sppMinArcCost.setHorizontalAlignment(JTextField.RIGHT);
+        SPP_RIGHT_FLOW0.add(sppMinArcCost);
 
-        RIGHT_GRID.add(FLOW41);
-        FLOW41.add(new JLabel("Max arc cost "));
-        FLOW41.getComponent(0).setPreferredSize(new Dimension(140, 15));
-        max = new JFormattedTextField(100);
-        max.setColumns(10);
-        max.setHorizontalAlignment(JTextField.RIGHT);
-        FLOW41.add(max);
+        SPP_RIGHT_GRID.add(SPP_RIGHT_FLOW1);
+        SPP_RIGHT_FLOW1.add(new JLabel("Max arc cost "));
+        SPP_RIGHT_FLOW1.getComponent(0).setPreferredSize(new Dimension(140, 15));
+        sppMaxArcCost = new JFormattedTextField(100);
+        sppMaxArcCost.setColumns(10);
+        sppMaxArcCost.setHorizontalAlignment(JTextField.RIGHT);
+        SPP_RIGHT_FLOW1.add(sppMaxArcCost);
 
-        RIGHT_GRID.add(FLOW32);
-        FLOW32.add(new JLabel("Random seed "));
-        FLOW32.getComponent(0).setPreferredSize(new Dimension(140, 15));
-        seed = new JFormattedTextField(0);
-        seed.setColumns(10);
-        seed.setHorizontalAlignment(JTextField.RIGHT);
-        FLOW32.add(seed);
+        SPP_RIGHT_GRID.add(SPP_RIGHT_FLOW2);
+        SPP_RIGHT_FLOW2.add(new JLabel("Random seed "));
+        SPP_RIGHT_FLOW2.getComponent(0).setPreferredSize(new Dimension(140, 15));
+        sppSeed = new JFormattedTextField(0);
+        sppSeed.setColumns(10);
+        sppSeed.setHorizontalAlignment(JTextField.RIGHT);
+        SPP_RIGHT_FLOW2.add(sppSeed);
 
-        LEFT_GRID.add(FLOW42);
-        FLOW42.add(new JLabel("Graph with cycles"));
-        FLOW42.getComponent(0).setPreferredSize(new Dimension(140, 15));
-        cycleCheck = new JCheckBox();
-        cycleCheck.setPreferredSize(new Dimension(120, 15));
-        FLOW42.add(cycleCheck);
+        SPP_LEFT_GRID.add(SPP_LEFT_FLOW2);
+        sppCycleCheck = new JCheckBox("Graph with cycles");
+        sppCycleCheck.setPreferredSize(new Dimension(260, 15));
+        SPP_LEFT_FLOW2.add(sppCycleCheck);
 
-        LEFT_GRID.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        RIGHT_GRID.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        SPP_LEFT_GRID.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        SPP_RIGHT_GRID.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
-        FLOW01.add(BUTTON1);
-        BUTTON1.setPreferredSize(new Dimension(165, 25));
-        FLOW01.add(BACKSPPBUTTON);                                                  // end SPP part definition
+        SPP_UP_FLOW1.add(SPP_CALCULATE);
+        SPP_CALCULATE.setPreferredSize(new Dimension(165, 25));
+        SPP_UP_FLOW1.add(BACK_SPP_BUTTON);                                                  // end SPP part definition
 
-        BUTTON1.addActionListener(new ActionListener() {
+        MFP.add(MFP_GRID_PAGE_START, BorderLayout.PAGE_START);
+        MFP.add(MFP_SCROLL, BorderLayout.CENTER);
+        MFP.add(MFP_FLOW_PAGE_END, BorderLayout.PAGE_END);
+        MFP_FLOW_PAGE_END.add(MFP_GRID_PAGE_END);
+
+        MFP_GRID_PAGE_START.add(MFP_UP_FLOW0);
+        MFP_GRID_PAGE_START.add(MFP_UP_FLOW1);
+
+        mfpAdjMatrix = new JCheckBox("Adjacency Matrix");
+        mfpAdjMatrix.setPreferredSize(new Dimension(150, 25));
+        MFP_UP_FLOW1.add(mfpAdjMatrix);
+
+        mfpAllArcs = new JCheckBox("Arc List");
+        mfpAllArcs.setPreferredSize(new Dimension(150, 25));
+        MFP_UP_FLOW1.add(mfpAllArcs);
+
+        MFP_UP_FLOW1.add(MFP_CALCULATE);
+        MFP_UP_FLOW1.add(BACK_MFP_BUTTON);
+        MFP_CALCULATE.setPreferredSize(new Dimension(165, 25));
+        MFP_UP_FLOW0.add(MFP_LABEL);
+        MFP_LABEL.setPreferredSize(new Dimension(200, 25));
+        MFP_UP_FLOW0.add(MFP_GRAPHLIST);
+        MFP_GRAPHLIST.setPreferredSize(new Dimension(350, 25));
+
+        MFP_GRID_PAGE_END.add(MFP_LEFT_GRID);
+        MFP_GRID_PAGE_END.add(MFP_RIGHT_GRID);
+
+        MFP_LEFT_GRID.add(MFP_LEFT_FLOW0);
+        MFP_LEFT_FLOW0.add(new JLabel("Number of nodes"));
+        MFP_LEFT_FLOW0.getComponent(0).setPreferredSize(new Dimension(140, 15));
+        mfpNodes = new JFormattedTextField(20);
+        mfpNodes.setColumns(10);
+        mfpNodes.setHorizontalAlignment(JTextField.RIGHT);
+        MFP_LEFT_FLOW0.add(mfpNodes);
+
+        MFP_LEFT_GRID.add(MFP_LEFT_FLOW1);
+        MFP_LEFT_FLOW1.add(new JLabel("% arcs (1 .. 100)"));
+        MFP_LEFT_FLOW1.getComponent(0).setPreferredSize(new Dimension(140, 15));
+        mfpArcPercent = new JFormattedTextField(10);
+        mfpArcPercent.setColumns(10);
+        mfpArcPercent.setHorizontalAlignment(JTextField.RIGHT);
+        MFP_LEFT_FLOW1.add(mfpArcPercent);
+
+        MFP_LEFT_GRID.add(MFP_LEFT_FLOW2);
+        mfpCycleCheck = new JCheckBox("Graph with cycles");
+        mfpCycleCheck.setPreferredSize(new Dimension(260, 15));
+        MFP_LEFT_FLOW2.add(mfpCycleCheck);
+
+        MFP_RIGHT_GRID.add(MFP_RIGHT_FLOW0);
+        MFP_RIGHT_FLOW0.add(new JLabel("Maximum arc capacity"));
+        MFP_RIGHT_FLOW0.getComponent(0).setPreferredSize(new Dimension(140, 15));
+        mfpMaxArcCapacity = new JFormattedTextField(10);
+        mfpMaxArcCapacity.setColumns(10);
+        mfpMaxArcCapacity.setHorizontalAlignment(JTextField.RIGHT);
+        MFP_RIGHT_FLOW0.add(mfpMaxArcCapacity);
+
+        MFP_RIGHT_GRID.add(MFP_RIGHT_FLOW1);
+        MFP_RIGHT_FLOW1.add(new JLabel("Random seed "));
+        MFP_RIGHT_FLOW1.getComponent(0).setPreferredSize(new Dimension(140, 15));
+        mfpSeed = new JFormattedTextField(0);
+        mfpSeed.setColumns(10);
+        mfpSeed.setHorizontalAlignment(JTextField.RIGHT);
+        MFP_RIGHT_FLOW1.add(mfpSeed);
+
+        MFP_RIGHT_GRID.add(MFP_RIGHT_FLOW2);
+        mfpArcFlows = new JCheckBox("List of flow arcs");
+        mfpArcFlows.setPreferredSize(new Dimension(260, 15));
+        MFP_RIGHT_FLOW2.add(mfpArcFlows);
+
+        MFP_LEFT_GRID.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        MFP_RIGHT_GRID.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+
+        SPP_CALCULATE.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TEXT.setText("Calculating graph...\n\n");
+                SPP_TEXT.setText("Calculating graph...\n\n");
                 calculate();
 
             }
         });
 
-        SPPBUTTON.addActionListener(new ActionListener() {
+        MFP_CALCULATE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SPP_TEXT.setText("Calculating graph...\n\n");
+                mfp();
+            }
+        });
+
+        SPP_BUTTON.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MENU.setVisible(false);
                 SPP.setVisible(true);
+                SPP_TEXT.setText("");
+                FRAME.setTitle("Network Flows Optimization - Shortest Path Problems");
                 FRAME.getContentPane().remove(MENU);
                 FRAME.getContentPane().add(SPP, BorderLayout.CENTER);
                 FRAME.setPreferredSize(new Dimension(800, 600));
+                FRAME.setResizable(true);
                 FRAME.pack();
             }
         });
 
-        MFPBUTTON.addActionListener(new ActionListener() {
+        MFP_BUTTON.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MENU.setVisible(false);
                 MFP.setVisible(true);
+                MFP_TEXT.setText("");
+                FRAME.setTitle("Network Flows Optimization - Max Flow Problems");
                 FRAME.getContentPane().remove(MENU);
                 FRAME.getContentPane().add(MFP, BorderLayout.CENTER);
                 FRAME.setPreferredSize(new Dimension(800, 600));
+                FRAME.setResizable(true);
                 FRAME.pack();
             }
         });
 
-        BACKSPPBUTTON.addActionListener(new ActionListener() {
+        BACK_SPP_BUTTON.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SPP.setVisible(false);
                 MENU.setVisible(true);
+                FRAME.setTitle("Network Flows Optimization");
                 FRAME.getContentPane().remove(SPP);
                 FRAME.getContentPane().add(MENU, BorderLayout.CENTER);
-                FRAME.setPreferredSize(new Dimension(300, 520));
+                FRAME.setPreferredSize(new Dimension(350, 520));
+                FRAME.setResizable(false);
                 FRAME.pack();
             }
         });
 
-        BACKMFPBUTTON.addActionListener(new ActionListener() {
+        BACK_MFP_BUTTON.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MFP.setVisible(false);
                 MENU.setVisible(true);
+                FRAME.setTitle("Network Flows Optimization");
                 FRAME.getContentPane().remove(MFP);
                 FRAME.getContentPane().add(MENU, BorderLayout.CENTER);
-                FRAME.setPreferredSize(new Dimension(300, 520));
+                FRAME.setPreferredSize(new Dimension(350, 520));
+                FRAME.setResizable(false);
                 FRAME.pack();
             }
         });
 
-        GRAPHLIST.addActionListener(new ActionListener() {
+        SPP_GRAPHLIST.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                int n = GRAPHLIST.getSelectedIndex();
+                int n = SPP_GRAPHLIST.getSelectedIndex();
                 switch (n) {
                     case 0:
-                        min.setEnabled(false);
-                        max.setEnabled(false);
-                        seed.setEnabled(false);
-                        cycleCheck.setEnabled(false);
-                        nodes.setEnabled(false);
-                        arcPercent.setEnabled(false);
+                        sppMinArcCost.setEnabled(false);
+                        sppMaxArcCost.setEnabled(false);
+                        sppSeed.setEnabled(false);
+                        sppCycleCheck.setEnabled(false);
+                        sppNodes.setEnabled(false);
+                        sppArcPercent.setEnabled(false);
                         break;
                     case 1:
-                        min.setEnabled(true);
-                        max.setEnabled(true);
-                        seed.setEnabled(true);
-                        cycleCheck.setEnabled(false);
-                        nodes.setEnabled(false);
-                        arcPercent.setEnabled(false);
+                        sppMinArcCost.setEnabled(true);
+                        sppMaxArcCost.setEnabled(true);
+                        sppSeed.setEnabled(true);
+                        sppCycleCheck.setEnabled(false);
+                        sppNodes.setEnabled(false);
+                        sppArcPercent.setEnabled(false);
                         break;
                     case 2:
-                        min.setEnabled(true);
-                        max.setEnabled(true);
-                        seed.setEnabled(true);
-                        cycleCheck.setEnabled(true);
-                        nodes.setEnabled(true);
-                        arcPercent.setEnabled(true);
+                        sppMinArcCost.setEnabled(true);
+                        sppMaxArcCost.setEnabled(true);
+                        sppSeed.setEnabled(true);
+                        sppCycleCheck.setEnabled(true);
+                        sppNodes.setEnabled(true);
+                        sppArcPercent.setEnabled(true);
                         break;
                 }
             }
         });
 
-        TEXT.setText("");
-        TEXT.setEditable(false);
-        min.setEnabled(false);
-        max.setEnabled(false);
-        seed.setEnabled(false);
-        cycleCheck.setEnabled(false);
-        nodes.setEnabled(false);
-        arcPercent.setEnabled(false);
+        MFP_GRAPHLIST.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int n = MFP_GRAPHLIST.getSelectedIndex();
+                switch (n) {
+                    case 0:
+                        mfpMaxArcCapacity.setEnabled(false);
+                        mfpSeed.setEnabled(false);
+                        mfpCycleCheck.setEnabled(false);
+                        mfpNodes.setEnabled(false);
+                        mfpArcPercent.setEnabled(false);
+                        break;
+                    case 1:
+                        mfpMaxArcCapacity.setEnabled(true);
+                        mfpSeed.setEnabled(true);
+                        mfpCycleCheck.setEnabled(true);
+                        mfpNodes.setEnabled(true);
+                        mfpArcPercent.setEnabled(true);
+                        break;
+                    case 2:
+                        mfpMaxArcCapacity.setEnabled(true);
+                        mfpSeed.setEnabled(true);
+                        mfpCycleCheck.setEnabled(true);
+                        mfpNodes.setEnabled(true);
+                        mfpArcPercent.setEnabled(true);
+                        break;
+                }
+            }
+        });
+
+        SPP_TEXT.setText("");
+        SPP_TEXT.setEditable(false);
+        sppMinArcCost.setEnabled(false);
+        sppMaxArcCost.setEnabled(false);
+        sppSeed.setEnabled(false);
+        sppCycleCheck.setEnabled(false);
+        sppNodes.setEnabled(false);
+        sppArcPercent.setEnabled(false);
+
+        MFP_TEXT.setText("");
+        MFP_TEXT.setEditable(false);
+
+        mfpSeed.setEnabled(false);
+        mfpCycleCheck.setEnabled(false);
+        mfpNodes.setEnabled(false);
+        mfpArcPercent.setEnabled(false);
+        mfpMaxArcCapacity.setEnabled(false);
 
         FRAME.pack();
-        FRAME.setLocation(100, 100);
+        FRAME.setLocation(200, 100);
         FRAME.setVisible(true);
 
     }
@@ -313,22 +470,22 @@ public class NetworkFlowOptimization {
         String result = "";
         Graph graph;
 
-        int n = GRAPHLIST.getSelectedIndex();
+        int n = SPP_GRAPHLIST.getSelectedIndex();
         @SuppressWarnings("unchecked")
-        int minLocal = ((Number) min.getValue()).intValue();
+        int minLocal = ((Number) sppMinArcCost.getValue()).intValue();
         @SuppressWarnings("unchecked")
-        int maxLocal = ((Number) max.getValue()).intValue();
+        int maxLocal = ((Number) sppMaxArcCost.getValue()).intValue();
         @SuppressWarnings("unchecked")
-        int seedLocal = ((Number) seed.getValue()).intValue();
+        int seedLocal = ((Number) sppSeed.getValue()).intValue();
         @SuppressWarnings("unchecked")
-        int nodesLocal = ((Number) nodes.getValue()).intValue();
+        int nodesLocal = ((Number) sppNodes.getValue()).intValue();
         @SuppressWarnings("unchecked")
-        int arcPercentLocal = ((Number) NetworkFlowOptimization.arcPercent.getValue()).intValue();
-        boolean cycle = cycleCheck.isSelected();
+        int arcPercentLocal = ((Number) NetworkFlowOptimization.sppArcPercent.getValue()).intValue();
+        boolean cycle = sppCycleCheck.isSelected();
 
         switch (n) {
             case 2:
-                graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, minLocal, maxLocal, 5 , cycle, result);
+                graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, minLocal, maxLocal, 5, cycle, result);
                 break;
             case 1:
                 graph = GraphMaker.cycleGraphMaker(seedLocal, minLocal, maxLocal);
@@ -338,43 +495,79 @@ public class NetworkFlowOptimization {
                 break;
         }
 
-        if (adjMatrix.isSelected()) {
-            TEXT.setText(TEXT.getText().concat(graph.adjMatrix()));
+        if (sppAdjMatrix.isSelected()) {
+            SPP_TEXT.setText(SPP_TEXT.getText().concat(graph.adjMatrix()));
         }
-        if (arcCosts.isSelected()) {
-            TEXT.setText(TEXT.getText().concat(graph.arcCosts()));
+        if (sppArcCosts.isSelected()) {
+            SPP_TEXT.setText(SPP_TEXT.getText().concat(graph.arcCosts()));
         }
 
         result = "Number of nodes = " + graph.nodesNumber() + " - " + "Number of arcs = " + graph.arcsNumber() + "\n\n";
-        TEXT.setText(TEXT.getText().concat(result));
+        SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
 
         result = LabelAlgorithms.dijkstra(graph);
-        TEXT.setText(TEXT.getText().concat(result));
+        SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
         result = LabelAlgorithms.heapDijkstra(graph);
-        TEXT.setText(TEXT.getText().concat(result));
+        SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
         result = LabelAlgorithms.dialDijkstra(graph);
-        TEXT.setText(TEXT.getText().concat(result));
+        SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
         result = LabelAlgorithms.RadixHeapDijkstra(graph);
-        TEXT.setText(TEXT.getText().concat(result));
+        SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
         result = LabelAlgorithms.dynamic(graph);
-        TEXT.setText(TEXT.getText().concat(result));
+        SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
         result = LabelAlgorithms.labelCorrecting(graph);
-        TEXT.setText(TEXT.getText().concat(result));
+        SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
         result = LabelAlgorithms.modifiedLabelCorrecting(graph);
-        TEXT.setText(TEXT.getText().concat(result));
+        SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
         result = LabelAlgorithms.dequeueLabelCorrecting(graph);
-        TEXT.setText(TEXT.getText().concat(result));
+        SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
 
     }
-    
-    private static void mfp(){
-        String result="";
-        Graph graph = GraphMaker.randomGraph(2000, 20, 0, 0, 100, 5 , true, result);//GraphMaker.cycleGraphMaker(0, 0, 10);
+
+    private static void mfp() {
+        MFP_TEXT.setText("");
+        int n = MFP_GRAPHLIST.getSelectedIndex();
+        @SuppressWarnings("unchecked")
+        int maxCap = ((Number) mfpMaxArcCapacity.getValue()).intValue();
+        if (maxCap <= 0) {
+            maxCap = 1;
+        }
+
+        @SuppressWarnings("unchecked")
+        int seedLocal = ((Number) mfpSeed.getValue()).intValue();
+        @SuppressWarnings("unchecked")
+        int nodesLocal = ((Number) mfpNodes.getValue()).intValue();
+        @SuppressWarnings("unchecked")
+        int arcPercentLocal = ((Number) NetworkFlowOptimization.mfpArcPercent.getValue()).intValue();
+        boolean cycle = mfpCycleCheck.isSelected();
+        Graph graph;
+        String result = "";
+        switch (n) {
+            case 1:
+                graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, 0, 1, maxCap, cycle, result);
+                break;
+            default:
+                graph = GraphMaker.cycleGraphMaker(0, 0, 10);//GraphMaker.cycleGraphMaker(seedLocal, minLocal, maxLocal);
+                break;
+        }
+
         result = "Number of nodes = " + graph.nodesNumber() + " - " + "Number of arcs = " + graph.arcsNumber() + "\n\n".concat(result);
-        long stop=MaxFlowProblem.labeling(graph);
-        result = result.concat(graph.maxFlow());
-        System.out.println("Execution time = " + (double) stop / 1000000 + " milliseconds\n"+result);
+        long stop = MaxFlowProblem.labeling(graph);
+
+        if (mfpAdjMatrix.isSelected()) {
+            MFP_TEXT.setText(MFP_TEXT.getText().concat(graph.adjMatrix()));
+        }
+        if (mfpAllArcs.isSelected()) {
+            MFP_TEXT.setText(MFP_TEXT.getText().concat(graph.maxFlowAllArcs()));
+        }
+
+        if (mfpArcFlows.isSelected()) {
+            result = result.concat(graph.maxFlowArcs());
+        } else {
+            result = result.concat(graph.maxFlow());
+        }
+        result = "LABELING ALGORITHM\nExecution time = " + (double) stop / 1000000 + " milliseconds\n".concat(result);
+        MFP_TEXT.setText(MFP_TEXT.getText().concat(result));
     }
-    
 
 }

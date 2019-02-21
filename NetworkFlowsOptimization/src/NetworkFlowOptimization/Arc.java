@@ -61,7 +61,7 @@ public class Arc implements Comparable<Arc> {
     }
 
     public String toFlow() {
-        return "(" + tail.number + ", " + head.number + ") => flow=" + flow + ", capacity=" + capacity + "\n";
+        return "(" + tail.number + ", " + head.number + ") => \tflow=" + flow + ", \tcapacity=" + capacity + "\n";
     }
 
     @Override
