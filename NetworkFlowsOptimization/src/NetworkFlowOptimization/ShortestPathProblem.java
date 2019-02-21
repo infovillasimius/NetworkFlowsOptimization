@@ -25,7 +25,7 @@ import java.util.PriorityQueue;
  *
  * @author anto
  */
-public class LabelAlgorithms {
+public class ShortestPathProblem {
 
     /**
      * Implementazione algoritmo Dinamico
@@ -326,7 +326,7 @@ public class LabelAlgorithms {
             n = nCycle;
         }
         int cost = n.distance;
-        result = result.concat("Soluction nodes values = ");
+        result = result.concat("Values ​​of the solution nodes = ");
         ArrayList<Integer> values = new ArrayList<>();
         ArrayList<Integer> order = new ArrayList<>();
         graph.previously();
@@ -344,7 +344,7 @@ public class LabelAlgorithms {
         Collections.reverse(values);
         Collections.reverse(order);
         result = result.concat(values + "\n");
-        result = result.concat("Soluction nodes = ");
+        result = result.concat("Solution nodes = ");
         result = result.concat(order + "\n");
         result = result.concat("Total cost = " + cost + "\n" + "\n");
 

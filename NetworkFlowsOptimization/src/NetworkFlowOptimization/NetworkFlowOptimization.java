@@ -505,21 +505,21 @@ public class NetworkFlowOptimization {
         result = "Number of nodes = " + graph.nodesNumber() + " - " + "Number of arcs = " + graph.arcsNumber() + "\n\n";
         SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
 
-        result = LabelAlgorithms.dijkstra(graph);
+        result = ShortestPathProblem.dijkstra(graph);
         SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
-        result = LabelAlgorithms.heapDijkstra(graph);
+        result = ShortestPathProblem.heapDijkstra(graph);
         SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
-        result = LabelAlgorithms.dialDijkstra(graph);
+        result = ShortestPathProblem.dialDijkstra(graph);
         SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
-        result = LabelAlgorithms.RadixHeapDijkstra(graph);
+        result = ShortestPathProblem.RadixHeapDijkstra(graph);
         SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
-        result = LabelAlgorithms.dynamic(graph);
+        result = ShortestPathProblem.dynamic(graph);
         SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
-        result = LabelAlgorithms.labelCorrecting(graph);
+        result = ShortestPathProblem.labelCorrecting(graph);
         SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
-        result = LabelAlgorithms.modifiedLabelCorrecting(graph);
+        result = ShortestPathProblem.modifiedLabelCorrecting(graph);
         SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
-        result = LabelAlgorithms.dequeueLabelCorrecting(graph);
+        result = ShortestPathProblem.dequeueLabelCorrecting(graph);
         SPP_TEXT.setText(SPP_TEXT.getText().concat(result));
 
     }

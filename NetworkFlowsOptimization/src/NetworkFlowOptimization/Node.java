@@ -23,7 +23,7 @@ public class Node implements Comparable<Node> {
     public static final int INFINITY = (int) 10E6;      //valore arbitrario associato a infinito
 
     private static int counter = 0;                     //contatore dei nodi generati
-     
+
     int distance;                                       //distanza iniziale settata a +infinito
 
     private final int id;                               //identificativo univoco del nodo
@@ -105,16 +105,18 @@ public class Node implements Comparable<Node> {
             return false;
         }
         final Node other = (Node) obj;
-        if (this.id != other.id) {
+
+        if (this.number == other.number && this.number>0) {
+            return true;
+        }
+        if (this.value != other.value) {
             return false;
         }
-        return this.number == other.number;
+        if (this.period != other.period) {
+            return false;
+        }
+        return true;
     }
-
-
-
-
-    
 
     @Override
     public int compareTo(Node o) {
