@@ -551,8 +551,6 @@ public class NetworkFlowOptimization {
                 break;
         }
 
-        result = "Number of nodes = " + graph.nodesNumber() + " - " + "Number of arcs = " + graph.arcsNumber() + "\n\n".concat(result);
-
         if (mfpAdjMatrix.isSelected()) {
             MFP_TEXT.setText(MFP_TEXT.getText().concat(graph.adjMatrix()));
         }
@@ -560,7 +558,9 @@ public class NetworkFlowOptimization {
             MFP_TEXT.setText(MFP_TEXT.getText().concat(graph.maxFlowAllArcs()));
         }
 
+        result = "Number of nodes = " + graph.nodesNumber() + " - " + "Number of arcs = " + graph.arcsNumber() + "\n\n";
         long stop = MaxFlowProblem.labeling(graph);
+        result = result.concat("LABELING ALGORITHM\nExecution time = " + (double) stop / 1000000 + " milliseconds\n");
 
         if (mfpArcFlows.isSelected()) {
             result = result.concat(graph.maxFlowArcs());
@@ -568,7 +568,6 @@ public class NetworkFlowOptimization {
             result = result.concat(graph.maxFlow());
         }
 
-        result = "LABELING ALGORITHM\nExecution time = " + (double) stop / 1000000 + " milliseconds\n".concat(result);
         MFP_TEXT.setText(MFP_TEXT.getText().concat(result));
 
         stop = MaxFlowProblem.preflowPush(graph);
@@ -583,7 +582,7 @@ public class NetworkFlowOptimization {
 
         MFP_TEXT.setText(MFP_TEXT.getText().concat(result));
         //MFP_TEXT.setText(MFP_TEXT.getText().concat(graph.massBalance()));
-        
+
     }
 
 }
