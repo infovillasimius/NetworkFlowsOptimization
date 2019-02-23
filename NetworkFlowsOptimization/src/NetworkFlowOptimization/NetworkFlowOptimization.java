@@ -278,7 +278,7 @@ public class NetworkFlowOptimization {
         MFP_LEFT_FLOW2.add(mfpCycleCheck);
 
         MFP_RIGHT_GRID.add(MFP_RIGHT_FLOW0);
-        MFP_RIGHT_FLOW0.add(new JLabel("Maximum arc capacity"));
+        MFP_RIGHT_FLOW0.add(new JLabel("Max arc capacity"));
         MFP_RIGHT_FLOW0.getComponent(0).setPreferredSize(new Dimension(140, 15));
         mfpMaxArcCapacity = new JFormattedTextField(10);
         mfpMaxArcCapacity.setColumns(10);
