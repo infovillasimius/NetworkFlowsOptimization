@@ -547,12 +547,11 @@ public class NetworkFlowOptimization {
                 graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, 0, 1, maxCap, cycle, result);
                 break;
             default:
-                graph = GraphMaker.cycleGraphMaker(0, 0, 10);//GraphMaker.cycleGraphMaker(seedLocal, minLocal, maxLocal);
+                graph = GraphMaker.cycleGraphMaker(seedLocal, 0, 10);//GraphMaker.cycleGraphMaker(seedLocal, minLocal, maxLocal);
                 break;
         }
 
         result = "Number of nodes = " + graph.nodesNumber() + " - " + "Number of arcs = " + graph.arcsNumber() + "\n\n".concat(result);
-        long stop = MaxFlowProblem.labeling(graph);
 
         if (mfpAdjMatrix.isSelected()) {
             MFP_TEXT.setText(MFP_TEXT.getText().concat(graph.adjMatrix()));
@@ -561,13 +560,30 @@ public class NetworkFlowOptimization {
             MFP_TEXT.setText(MFP_TEXT.getText().concat(graph.maxFlowAllArcs()));
         }
 
+        long stop = MaxFlowProblem.labeling(graph);
+
         if (mfpArcFlows.isSelected()) {
             result = result.concat(graph.maxFlowArcs());
         } else {
             result = result.concat(graph.maxFlow());
         }
+
         result = "LABELING ALGORITHM\nExecution time = " + (double) stop / 1000000 + " milliseconds\n".concat(result);
         MFP_TEXT.setText(MFP_TEXT.getText().concat(result));
+
+        stop = MaxFlowProblem.preflowPush(graph);
+
+        result = "\nPREFLOW-PUSH ALGORITHM\nExecution time = " + (double) stop / 1000000 + " milliseconds\n";
+
+        if (mfpArcFlows.isSelected()) {
+            result = result.concat(graph.maxFlowArcs());
+        } else {
+            result = result.concat(graph.maxFlow());
+        }
+
+        MFP_TEXT.setText(MFP_TEXT.getText().concat(result));
+        //MFP_TEXT.setText(MFP_TEXT.getText().concat(graph.massBalance()));
+        
     }
 
 }

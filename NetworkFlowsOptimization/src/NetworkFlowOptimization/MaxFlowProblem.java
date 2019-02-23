@@ -120,4 +120,100 @@ public class MaxFlowProblem {
         }
     }
 
+    public static long preflowPush(Graph graph) {
+        //ArrayList<Node> list = graph.getList();
+        Node t=graph.getSink();
+        Node n;
+        graph.activeNodesList.clear();
+        preprocess(graph);
+        long start = System.nanoTime();
+        while (!graph.activeNodesList.isEmpty()) {
+            n = graph.activeNodesList.poll();
+            if (n.massBalance > 0 && !n.equals(t)) {
+                pushRelabel(n, graph);
+            }
+        }
+        long stop = System.nanoTime() - start;
+        return stop;
+    }
+
+    private static void preprocess(Graph graph) {
+        graph.resetFlows();
+        graph.reverseBreadthFirstSearch();
+        Node s = graph.getSource();
+        for (Arc a : s.out) {
+            a.setFlow(a.capacity);
+            graph.activeNodesList.add(a.head);
+        }
+        s.distance = graph.nodesNumber();
+
+    }
+
+    private static void pushRelabel(Node i, Graph graph) {
+        Arc a;
+        Node s=graph.getSource();
+        Node t=graph.getSink();
+        int d = Node.INFINITY;
+        int counter;
+        int inSize=i.in.size();
+        int outSize=i.out.size();
+        while (i.massBalance > 0) {
+            while (i.massBalance > 0 && i.activeForwardArc < outSize) {
+                a = i.out.get(i.activeForwardArc);
+                if (a.head.distance < a.tail.distance && a.residualForwardCapacity > 0 && !a.head.equals(s)) {
+                    a.setFlow(a.flow + Math.min(a.residualForwardCapacity, i.massBalance));
+                    if (a.head.massBalance > 0 && !a.head.equals(t)) {
+                        graph.activeNodesList.add(a.head);
+                    }
+                } else {
+                    i.activeForwardArc++;
+                }
+            }
+
+            if (i.activeForwardArc >= outSize) {
+                i.activeForwardArc = 0;
+            }
+            if (i.massBalance <= 0) {
+                return;
+            }
+            while (i.massBalance > 0 && i.activeReverseArc < inSize) {
+                a = i.in.get(i.activeReverseArc);
+                if (a.residualReverseCapacity > 0 && a.tail.distance < a.head.distance) {
+                    a.setFlow(a.flow - Math.min(a.residualReverseCapacity, i.massBalance)); 
+                    if (a.tail.massBalance > 0) {
+                        graph.activeNodesList.add(a.tail);
+                    }
+                } else {
+                    i.activeReverseArc++;
+                }
+            }
+            if (i.activeReverseArc >= inSize) {
+                i.activeReverseArc = 0;
+            }
+            if (i.massBalance <= 0) {
+                return;
+            }
+            counter=0;
+            for (Arc aa : i.out) {
+                if (aa.residualForwardCapacity > 0 && d > aa.head.distance && !aa.head.equals(s)) {
+                    d = aa.head.distance;
+                    i.activeForwardArc=counter;
+                }
+                counter++;
+            }
+            counter=0;
+            for (Arc aa : i.in) {
+                if (aa.residualReverseCapacity > 0 && d > aa.tail.distance) {
+                    d = aa.tail.distance;
+                    i.activeReverseArc=counter;
+                    i.activeForwardArc=outSize;
+                }
+            }
+
+            i.distance = d + 1;
+            d = Node.INFINITY;
+
+        }
+    }
+
 }

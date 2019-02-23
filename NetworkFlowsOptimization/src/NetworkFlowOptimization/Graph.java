@@ -18,7 +18,9 @@ package NetworkFlowOptimization;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 /**
  *
@@ -33,8 +35,11 @@ public class Graph {
     private final Node t;
     private final boolean isOrdered;
     private final boolean negCost;
+    PriorityQueue<Node> activeNodesList;;
 
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList) {
+        this.activeNodesList = new PriorityQueue<>(10, (Node o1, Node o2) -> o2.distance - o1.distance);
+
         this.list = list;
         this.arcList = arcList;
         this.s = list.get(0);
@@ -48,6 +53,7 @@ public class Graph {
     }
 
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList, boolean spp) {
+        this.activeNodesList = new PriorityQueue<>(10, (Node o1, Node o2) -> o2.distance - o1.distance);
         this.list = list;
         this.arcList = arcList;
         this.s = list.get(0);
@@ -59,7 +65,7 @@ public class Graph {
     }
 
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList, Node source, Node sink) {
-
+        this.activeNodesList = new PriorityQueue<>(10, (Node o1, Node o2) -> o2.distance - o1.distance);
         if (list.get(0) != source || list.get(list.size() - 1) != sink) {
             list.remove(source);
             list.remove(sink);
@@ -136,7 +142,6 @@ public class Graph {
     }
 
     public void previously() {
-
         for (Node i : list) {
             i.previously = false;
         }
@@ -250,10 +255,7 @@ public class Graph {
     }
 
     public void setResidual() {
-        ArrayList<Arc> ordArc = new ArrayList<>();
-        ordArc.addAll(arcList);
-        Collections.sort(ordArc);
-        for (Arc a : ordArc) {
+        for (Arc a : arcList) {
             a.residualForwardCapacity = a.capacity - a.flow;
             a.residualReverseCapacity = a.flow;
         }
@@ -295,14 +297,14 @@ public class Graph {
     }
 
     public String maxFlow() {
-        String result = "Flow exiting the source = \t";
+        String result = "Flow exiting the source = \t\t";
         int maxFlowS = 0;
         int maxFlowT = 0;
 
         for (Arc a : s.out) {
             maxFlowS += a.flow;
         }
-        result = result.concat(maxFlowS + "\nFlow entering the sink = \t");
+        result = result.concat(maxFlowS + "\nFlow entering the sink = \t\t");
         for (Arc a : t.in) {
             maxFlowT += a.flow;
         }
@@ -320,6 +322,48 @@ public class Graph {
             result = result.concat(a.toFlow());
         }
         result = result.concat("\n");
+        return result;
+    }
+
+    public void resetFlows() {
+        for (Node n : list) {
+            n.massBalance = 0;
+            n.activeForwardArc = 0;
+        }
+
+        for (Arc a : arcList) {
+            a.flow = 0;
+        }
+        this.setResidual();
+    }
+
+    public void reverseBreadthFirstSearch() {
+        this.previously();
+        LinkedList<Node> q = new LinkedList<>();
+        Node n;
+
+        q.add(t);
+        t.previously = true;
+        t.distance = 0;
+
+        while (!q.isEmpty()) {
+            n = q.poll();
+            for (Arc a : n.in) {
+                if (!a.tail.previously) {
+                    a.tail.previously = true;
+                    a.tail.distance = n.distance + 1;
+                    q.add(a.tail);
+                }
+            }
+        }
+    }
+    
+    public String massBalance(){
+        String result="";
+        
+        for (Node n:list){
+            result=result+"\nNodo n. "+n.number+" - mass balance = "+n.massBalance;
+        }
         return result;
     }
 

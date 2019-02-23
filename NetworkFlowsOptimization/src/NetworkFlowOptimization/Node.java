@@ -35,6 +35,9 @@ public class Node implements Comparable<Node> {
     boolean previously;
     boolean contained;
     int indegree;
+    int massBalance;
+    int activeForwardArc;
+    int activeReverseArc;
 
     Node pred;                                          //nodo predecessore
     Arc predArc;
@@ -48,6 +51,9 @@ public class Node implements Comparable<Node> {
      * @param value
      */
     public Node(int value) {
+        this.activeReverseArc = 0;
+        this.activeForwardArc = 0;
+        this.massBalance = 0;
         this.distance = INFINITY;
         this.contained = false;
         this.necessary = false;
@@ -60,6 +66,9 @@ public class Node implements Comparable<Node> {
     }
 
     public Node(int value, int month) {
+        this.activeReverseArc = 0;
+        this.activeForwardArc = 0;
+        this.massBalance = 0;
         this.distance = INFINITY;
         this.contained = false;
         this.previously = false;
@@ -106,7 +115,7 @@ public class Node implements Comparable<Node> {
         }
         final Node other = (Node) obj;
 
-        if (this.number == other.number && this.number>0) {
+        if (this.number == other.number && this.number > 0) {
             return true;
         }
         if (this.value != other.value) {
@@ -121,6 +130,17 @@ public class Node implements Comparable<Node> {
     @Override
     public int compareTo(Node o) {
         return this.distance - o.distance;
+    }
+
+    public void balanceMass() {
+        int balance = 0;
+        for (Arc a : in) {
+            balance += a.flow;
+        }
+        for (Arc a : out) {
+            balance -= a.flow;
+        }
+        massBalance=balance;
     }
 
 }

@@ -208,14 +208,24 @@ public class GraphMaker {
     public static Graph randomGraph(int n, int perc, int seed, int minCost, int maxCost, int maxCapacity, boolean cycle, String result) {
         ArrayList<Node> list = new ArrayList<>();
         ArrayList<Arc> arcList = new ArrayList<>();
-        int[][] nad = new int[n][n];
-        int arc;
 
-        if (perc <= 0) {
-            perc = 5;
+        if (n < 2) {
+            n = 2;
+        }
+        if (n < 4) {
+            perc = 100;
+        }
+        if (n < 20 && perc < 10) {
+            perc = 10;
+        }
+        if (perc < 10) {
+            perc = 10;
         } else if (perc > 100) {
             perc = 100;
         }
+
+        int[][] nad = new int[n][n];
+        int arc;
 
         for (int i = 1; i <= n; i++) {
             list.add(new Node(i));
@@ -263,6 +273,15 @@ public class GraphMaker {
         }
         arcList = arcList2;
 
+        for (Node i : ordered) {
+            ArrayList<Arc> newList = new ArrayList<>();
+            for (Arc a : i.in) {
+                if (a.tail.number != 0) {
+                    newList.add(a);
+                }
+            }
+            i.in = newList;
+        }
         return new Graph(ordered, arcList, ordered.get(0), ordered.get(ordered.size() - 1));
     }
 
