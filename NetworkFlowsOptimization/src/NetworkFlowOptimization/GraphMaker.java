@@ -353,10 +353,16 @@ public class GraphMaker {
         if (n < 2) {
             return null;
         }
-
+        int[] val = new int[n];
         int[][] nad = new int[n][n];
         int[][] cost = new int[n][n];
         int[][] cap = new int[n][n];
+
+        for (int i = 0; i < n; ++i) {
+            if (scanner.hasNextInt()) {
+                val[i] = scanner.nextInt();
+            }
+        }
 
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
@@ -382,8 +388,8 @@ public class GraphMaker {
             }
         }
 
-        for (int i = 1; i <= n; i++) {
-            list.add(new Node(i));
+        for (int i = 0; i < n; i++) {
+            list.add(new Node(val[i]));
         }
 
         for (int row = 0; row < n; row++) {
@@ -398,7 +404,7 @@ public class GraphMaker {
             a.getHead().in.add(a);
             a.getTail().out.add(a);
         }
-        
+
         number(list);
         return new Graph(list, arcList, list.get(0), list.get(list.size() - 1));
     }
