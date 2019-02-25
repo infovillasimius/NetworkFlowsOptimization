@@ -26,7 +26,7 @@ Maximum Flow Problem Algorithms:
 2 Preflow Push (Heap implementation)
 
 
-#Example graph: exampleGraph.txt
+Example graph: exampleGraph.txt
 
 In the file:
 First numer = matrix dimension
