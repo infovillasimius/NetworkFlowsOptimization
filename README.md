@@ -26,18 +26,6 @@ Maximum Flow Problem Algorithms:
 2 Preflow Push (Heap implementation)
 
 
-
 Example graph: exampleGraph.txt
 
-
-In the file:
-
-First numer = matrix dimension
-
-Adjacency Matrix
-
-Cost Matrix
-
-Capacity Matrix
-
-
+In the file: matrix dimension, Adjacency Matrix, Cost Matrix, Capacity Matrix
