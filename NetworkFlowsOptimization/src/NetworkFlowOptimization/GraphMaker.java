@@ -16,10 +16,14 @@
  */
 package NetworkFlowOptimization;
 
+import java.io.File;
+import java.io.IOException;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Scanner;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -165,40 +169,40 @@ public class GraphMaker {
 
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(0), list.get(1), 6));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(0), list.get(3), 5));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(7), list.get(0), 3));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(7), list.get(8), 2));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(7), list.get(12), 7));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(14), list.get(7), 8));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(13), list.get(14), 7));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(13), list.get(9), 7));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(13), list.get(15), 5));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(12), list.get(8), 1));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(5), list.get(7), 9));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(3), list.get(5), 9));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(2), list.get(4), 3));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(4), list.get(3), 1));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(4), list.get(1), 1));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(1), list.get(2), 7));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(9), list.get(1), 3));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(2), list.get(9), 2));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(9), list.get(5), 5));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(2), list.get(4), 3));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(2), list.get(5), 3));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(8), list.get(6), 4));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(2), list.get(9), 2));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(3), list.get(5), 9));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(4), list.get(1), 1));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(4), list.get(3), 1));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(5), list.get(7), 9));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(5), list.get(6), 5));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(5), list.get(8), 3));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(6), list.get(12), 2));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(6), list.get(9), 4));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(6), list.get(15), 5));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(6), list.get(10), 2));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(7), list.get(0), 3));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(7), list.get(8), 2));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(7), list.get(12), 7));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(8), list.get(6), 4));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(9), list.get(1), 3));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(9), list.get(5), 5));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(10), list.get(11), 2));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(10), list.get(15), 7));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(15), list.get(9), 2));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(15), list.get(11), 1));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(12), list.get(10), 3));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(5), list.get(6), 5));
-        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(5), list.get(8), 3));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(11), list.get(12), 1));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(11), list.get(13), 2));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(12), list.get(8), 1));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(12), list.get(10), 3));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(12), list.get(13), 3));
         arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(12), list.get(14), 2));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(13), list.get(14), 7));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(13), list.get(9), 7));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(13), list.get(15), 5));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(14), list.get(7), 8));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(15), list.get(9), 2));
+        arcList.add(new Arc(rand.nextInt((max - min) + 1) + min, list.get(15), list.get(11), 1));
 
         number(list);
         Graph graph = new Graph(list, arcList);
@@ -329,5 +333,73 @@ public class GraphMaker {
         for (Node n : list) {
             n.number = ++next;
         }
+    }
+
+    public static Graph loadGraph() throws IOException {
+        ArrayList<Node> list = new ArrayList<>();
+        ArrayList<Arc> arcList = new ArrayList<>();
+        File selectedFile;
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue != JFileChooser.APPROVE_OPTION) {
+            return null;
+        }
+
+        selectedFile = fileChooser.getSelectedFile();
+        //java.awt.Desktop.getDesktop().open(selectedFile);//<-- here
+        Scanner scanner = new Scanner(selectedFile);
+        int n = scanner.nextInt();
+
+        if (n < 2) {
+            return null;
+        }
+
+        int[][] nad = new int[n][n];
+        int[][] cost = new int[n][n];
+        int[][] cap = new int[n][n];
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (scanner.hasNextInt()) {
+                    nad[i][j] = scanner.nextInt();
+                }
+            }
+        }
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (scanner.hasNextInt()) {
+                    cost[i][j] = scanner.nextInt();
+                }
+            }
+        }
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (scanner.hasNextInt()) {
+                    cap[i][j] = scanner.nextInt();
+                }
+            }
+        }
+
+        for (int i = 1; i <= n; i++) {
+            list.add(new Node(i));
+        }
+
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                if (nad[row][col] == 1) {
+                    arcList.add(new Arc(cost[row][col], list.get(row), list.get(col), cap[row][col]));
+                }
+            }
+        }
+
+        for (Arc a : arcList) {
+            a.getHead().in.add(a);
+            a.getTail().out.add(a);
+        }
+        
+        number(list);
+        return new Graph(list, arcList, list.get(0), list.get(list.size() - 1));
     }
 }

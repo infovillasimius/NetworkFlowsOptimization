@@ -23,7 +23,10 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -64,11 +67,11 @@ public class NetworkFlowOptimization {
     private static final JButton SPP_CALCULATE = new JButton("Calculate");
     private static final JButton MFP_CALCULATE = new JButton("Calculate");
     private static final String[] SPP_GRAPHTYPES = {"Personnel planning problem (Clark and Hastings [1977])",
-        "Fixed graph with random arc costs", "Random graph"};
+        "Fixed graph with random arc costs", "Random graph", "Load graph"};
     @SuppressWarnings("unchecked")
     private static final JComboBox SPP_GRAPHLIST = new JComboBox(SPP_GRAPHTYPES);
 
-    private static final String[] MFP_GRAPHTYPES = {"Example graph", "Random graph"};
+    private static final String[] MFP_GRAPHTYPES = {"Example graph", "Random graph", "Load graph"};
     @SuppressWarnings("unchecked")
     private static final JComboBox MFP_GRAPHLIST = new JComboBox(MFP_GRAPHTYPES);
 
@@ -468,7 +471,7 @@ public class NetworkFlowOptimization {
     private static void calculate() {
 
         String result = "";
-        Graph graph;
+        Graph graph = null;
 
         int n = SPP_GRAPHLIST.getSelectedIndex();
         @SuppressWarnings("unchecked")
@@ -484,6 +487,19 @@ public class NetworkFlowOptimization {
         boolean cycle = sppCycleCheck.isSelected();
 
         switch (n) {
+            case 3: {
+                try {
+                    graph = GraphMaker.loadGraph();
+                    if (graph == null) {
+                        return;
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(NetworkFlowOptimization.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            break;
+
             case 2:
                 graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, minLocal, maxLocal, 5, cycle, result);
                 break;
@@ -540,9 +556,21 @@ public class NetworkFlowOptimization {
         @SuppressWarnings("unchecked")
         int arcPercentLocal = ((Number) NetworkFlowOptimization.mfpArcPercent.getValue()).intValue();
         boolean cycle = mfpCycleCheck.isSelected();
-        Graph graph;
+        Graph graph = null;
         String result = "";
         switch (n) {
+            case 2: {
+                try {
+                    graph = GraphMaker.loadGraph();
+                    if (graph == null) {
+                        return;
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(NetworkFlowOptimization.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            break;
             case 1:
                 graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, 0, 1, maxCap, cycle, result);
                 break;
@@ -581,7 +609,6 @@ public class NetworkFlowOptimization {
         }
 
         MFP_TEXT.setText(MFP_TEXT.getText().concat(result));
-        //MFP_TEXT.setText(MFP_TEXT.getText().concat(graph.massBalance()));
 
     }
 
