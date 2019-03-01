@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class Node implements Comparable<Node> {
 
-    public static final int INFINITY = (int) 10E6;      //valore arbitrario associato a infinito
+    public static final int INFINITY = Integer.MAX_VALUE;      //valore arbitrario associato a infinito
 
     private static int counter = 0;                     //contatore dei nodi generati
 

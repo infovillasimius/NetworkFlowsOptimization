@@ -27,6 +27,9 @@ import java.util.PriorityQueue;
  */
 public class ShortestPathProblem {
 
+    private ShortestPathProblem() {
+    }
+    
     /**
      * Implementazione algoritmo Dinamico
      *

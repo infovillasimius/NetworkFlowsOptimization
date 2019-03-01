@@ -18,7 +18,6 @@ package NetworkFlowOptimization;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
@@ -215,10 +214,16 @@ public class Graph {
         int n = list.size();
         String result = "Adjacency matrix \n";
         int[][] nad = new int[n][n];
+        int x,y;
 
         if (n <= 100) {
             for (Arc a : arcList) {
-                nad[list.indexOf(a.getTail())][list.indexOf(a.getHead())] = 1;
+                x=a.getTail().number-1;
+                y=a.getHead().number-1;
+                nad[x][y] = 1;
+                System.out.println("x="+x+" y="+y);
+                System.out.println(a.getTail());
+                System.out.println(a.getHead());
             }
 
             for (int row = 0; row < n; row++) {

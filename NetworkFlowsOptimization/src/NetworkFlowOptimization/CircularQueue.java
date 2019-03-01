@@ -35,13 +35,13 @@ public class CircularQueue<E> {
 
     public void store(E n, int d) {
         if (t[d % (C)] == null) {
-            t[d % (C)] = new Nodo<>(n);
+            t[d % (C)] = new Element<>(n);
         } else {
             @SuppressWarnings("unchecked")
-            Nodo<E> a = (Nodo<E>) t[d % (C)];
+            Element<E> a = (Element<E>) t[d % (C)];
             
             @SuppressWarnings("unchecked")
-            Nodo<E> b = new Nodo<>(n);
+            Element<E> b = new Element<>(n);
             b.next=a;
             t[d % (C)] = b;
         }
@@ -53,24 +53,24 @@ public class CircularQueue<E> {
             pointer = (pointer + 1) % C;
         }
         @SuppressWarnings("unchecked")
-        Nodo<E> r =(Nodo<E>) t[pointer];
+        Element<E> r =(Element<E>) t[pointer];
         if (r.next == null) {
             t[pointer] = null;
         } else {
             @SuppressWarnings("unchecked")
-            Nodo<E> next =(Nodo<E>)t[pointer];
+            Element<E> next =(Element<E>)t[pointer];
             next = next.next;
             t[pointer]=next;
         }
         return r.value;
     }
     
-    private class Nodo<E> {
+    private class Element<E> {
 
         E value;
-        Nodo<E> next;
+        Element<E> next;
 
-        public Nodo(E value) {
+        public Element(E value) {
             this.next = null;
             this.value = value;
         }

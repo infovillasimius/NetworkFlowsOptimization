@@ -25,6 +25,9 @@ import java.util.LinkedList;
  */
 public class MaxFlowProblem {
 
+    private MaxFlowProblem() {
+    }
+
     public static long labeling(Graph graph) {
         graph.setResidual();
         ArrayList<Node> list = graph.getList();

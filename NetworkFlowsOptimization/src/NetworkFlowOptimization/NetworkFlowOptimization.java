@@ -110,6 +110,7 @@ public class NetworkFlowOptimization {
     private static JCheckBox sppCycleCheck;
     private static JCheckBox sppAdjMatrix;
     private static JCheckBox sppArcCosts;
+    private static JCheckBox sppReloadGraph;
 
     private static JFormattedTextField mfpNodes;
     private static JFormattedTextField mfpArcPercent;
@@ -119,6 +120,9 @@ public class NetworkFlowOptimization {
     private static JCheckBox mfpAllArcs;
     private static JCheckBox mfpAdjMatrix;
     private static JCheckBox mfpArcFlows;
+    private static JCheckBox mfpReloadGraph;
+
+    private static Graph graph = null;
 
     /**
      * @param args the command line arguments
@@ -168,17 +172,22 @@ public class NetworkFlowOptimization {
         SPP_GRID_PAGE_END.add(SPP_RIGHT_GRID);
 
         SPP_UP_FLOW0.add(SPP_LABEL);
-        SPP_LABEL.setPreferredSize(new Dimension(200, 25));
+        SPP_LABEL.setPreferredSize(new Dimension(250, 25));
         SPP_UP_FLOW0.add(SPP_GRAPHLIST);
-        SPP_GRAPHLIST.setPreferredSize(new Dimension(350, 25));
+        SPP_GRAPHLIST.setPreferredSize(new Dimension(400, 25));
 
         sppAdjMatrix = new JCheckBox("Adjacency Matrix");
         sppAdjMatrix.setPreferredSize(new Dimension(150, 25));
         SPP_UP_FLOW1.add(sppAdjMatrix);
 
-        sppArcCosts = new JCheckBox("Arc costs list");
-        sppArcCosts.setPreferredSize(new Dimension(150, 25));
+        sppArcCosts = new JCheckBox("Arcs List");
+        sppArcCosts.setPreferredSize(new Dimension(110, 25));
         SPP_UP_FLOW1.add(sppArcCosts);
+
+        sppReloadGraph = new JCheckBox("Reload Graph");
+        sppReloadGraph.setPreferredSize(new Dimension(140, 25));
+        SPP_UP_FLOW1.add(sppReloadGraph);
+        sppReloadGraph.setEnabled(false);
 
         SPP_LEFT_GRID.add(SPP_LEFT_FLOW0);
         SPP_LEFT_FLOW0.add(new JLabel("Number of nodes"));
@@ -244,17 +253,22 @@ public class NetworkFlowOptimization {
         mfpAdjMatrix.setPreferredSize(new Dimension(150, 25));
         MFP_UP_FLOW1.add(mfpAdjMatrix);
 
-        mfpAllArcs = new JCheckBox("Arc List");
-        mfpAllArcs.setPreferredSize(new Dimension(150, 25));
+        mfpAllArcs = new JCheckBox("Arcs List");
+        mfpAllArcs.setPreferredSize(new Dimension(110, 25));
         MFP_UP_FLOW1.add(mfpAllArcs);
+
+        mfpReloadGraph = new JCheckBox("Reload Graph");
+        mfpReloadGraph.setPreferredSize(new Dimension(140, 25));
+        MFP_UP_FLOW1.add(mfpReloadGraph);
+        mfpReloadGraph.setEnabled(false);
 
         MFP_UP_FLOW1.add(MFP_CALCULATE);
         MFP_UP_FLOW1.add(BACK_MFP_BUTTON);
         MFP_CALCULATE.setPreferredSize(new Dimension(165, 25));
         MFP_UP_FLOW0.add(MFP_LABEL);
-        MFP_LABEL.setPreferredSize(new Dimension(200, 25));
+        MFP_LABEL.setPreferredSize(new Dimension(250, 25));
         MFP_UP_FLOW0.add(MFP_GRAPHLIST);
-        MFP_GRAPHLIST.setPreferredSize(new Dimension(350, 25));
+        MFP_GRAPHLIST.setPreferredSize(new Dimension(400, 25));
 
         MFP_GRID_PAGE_END.add(MFP_LEFT_GRID);
         MFP_GRID_PAGE_END.add(MFP_RIGHT_GRID);
@@ -392,6 +406,7 @@ public class NetworkFlowOptimization {
                         sppCycleCheck.setEnabled(false);
                         sppNodes.setEnabled(false);
                         sppArcPercent.setEnabled(false);
+                        sppReloadGraph.setEnabled(false);
                         break;
                     case 1:
                         sppMinArcCost.setEnabled(true);
@@ -400,6 +415,7 @@ public class NetworkFlowOptimization {
                         sppCycleCheck.setEnabled(false);
                         sppNodes.setEnabled(false);
                         sppArcPercent.setEnabled(false);
+                        sppReloadGraph.setEnabled(false);
                         break;
                     case 2:
                         sppMinArcCost.setEnabled(true);
@@ -408,7 +424,16 @@ public class NetworkFlowOptimization {
                         sppCycleCheck.setEnabled(true);
                         sppNodes.setEnabled(true);
                         sppArcPercent.setEnabled(true);
+                        sppReloadGraph.setEnabled(false);
                         break;
+                    case 3:
+                        sppMinArcCost.setEnabled(false);
+                        sppMaxArcCost.setEnabled(false);
+                        sppSeed.setEnabled(false);
+                        sppCycleCheck.setEnabled(false);
+                        sppNodes.setEnabled(false);
+                        sppArcPercent.setEnabled(false);
+                        sppReloadGraph.setEnabled(true);
                 }
             }
         });
@@ -425,6 +450,7 @@ public class NetworkFlowOptimization {
                         mfpCycleCheck.setEnabled(false);
                         mfpNodes.setEnabled(false);
                         mfpArcPercent.setEnabled(false);
+                        mfpReloadGraph.setEnabled(false);
                         break;
                     case 1:
                         mfpMaxArcCapacity.setEnabled(true);
@@ -432,13 +458,15 @@ public class NetworkFlowOptimization {
                         mfpCycleCheck.setEnabled(true);
                         mfpNodes.setEnabled(true);
                         mfpArcPercent.setEnabled(true);
+                        mfpReloadGraph.setEnabled(false);
                         break;
                     case 2:
-                        mfpMaxArcCapacity.setEnabled(true);
-                        mfpSeed.setEnabled(true);
-                        mfpCycleCheck.setEnabled(true);
-                        mfpNodes.setEnabled(true);
-                        mfpArcPercent.setEnabled(true);
+                        mfpMaxArcCapacity.setEnabled(false);
+                        mfpSeed.setEnabled(false);
+                        mfpCycleCheck.setEnabled(false);
+                        mfpNodes.setEnabled(false);
+                        mfpArcPercent.setEnabled(false);
+                        mfpReloadGraph.setEnabled(true);
                         break;
                 }
             }
@@ -487,18 +515,23 @@ public class NetworkFlowOptimization {
         boolean cycle = sppCycleCheck.isSelected();
 
         switch (n) {
-            case 3: {
-                try {
-                    graph = GraphMaker.loadGraph();
-                    if (graph == null) {
-                        return;
+            case 3:
+                if (NetworkFlowOptimization.graph == null || sppReloadGraph.isSelected()) {
+                    try {
+                        graph = GraphMaker.loadGraph();
+                        if (graph == null) {
+                            return;
+                        }
+                        NetworkFlowOptimization.graph = graph;
+                    } catch (IOException ex) {
+                        Logger.getLogger(NetworkFlowOptimization.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (IOException ex) {
-                    Logger.getLogger(NetworkFlowOptimization.class.getName()).log(Level.SEVERE, null, ex);
-                }
 
-            }
-            break;
+                } else {
+                    graph = NetworkFlowOptimization.graph;
+                    graph.resetFlows();
+                }
+                break;
 
             case 2:
                 graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, minLocal, maxLocal, 5, cycle, result);
@@ -559,18 +592,23 @@ public class NetworkFlowOptimization {
         Graph graph = null;
         String result = "";
         switch (n) {
-            case 2: {
-                try {
-                    graph = GraphMaker.loadGraph();
-                    if (graph == null) {
-                        return;
+            case 2:
+                if (NetworkFlowOptimization.graph == null || mfpReloadGraph.isSelected()) {
+                    try {
+                        graph = GraphMaker.loadGraph();
+                        if (graph == null) {
+                            return;
+                        }
+                        NetworkFlowOptimization.graph = graph;
+                    } catch (IOException ex) {
+                        Logger.getLogger(NetworkFlowOptimization.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (IOException ex) {
-                    Logger.getLogger(NetworkFlowOptimization.class.getName()).log(Level.SEVERE, null, ex);
-                }
 
-            }
-            break;
+                } else {
+                    graph = NetworkFlowOptimization.graph;
+                    graph.resetFlows();
+                }
+                break;
             case 1:
                 graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, 0, 1, maxCap, cycle, result);
                 break;
