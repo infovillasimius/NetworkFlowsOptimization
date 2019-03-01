@@ -221,9 +221,6 @@ public class Graph {
                 x=a.getTail().number-1;
                 y=a.getHead().number-1;
                 nad[x][y] = 1;
-                System.out.println("x="+x+" y="+y);
-                System.out.println(a.getTail());
-                System.out.println(a.getHead());
             }
 
             for (int row = 0; row < n; row++) {
