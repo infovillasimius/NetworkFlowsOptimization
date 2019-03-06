@@ -26,6 +26,8 @@ import java.util.logging.Logger;
  */
 public class ShortestPathProblems extends javax.swing.JPanel {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Creates new form MinCostFlowProblems
      */
@@ -165,8 +167,10 @@ public class ShortestPathProblems extends javax.swing.JPanel {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, scroll)
                     .add(layout.createSequentialGroup()
-                        .add(icon)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(title)
+                            .add(icon))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 99, Short.MAX_VALUE)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -201,30 +205,26 @@ public class ShortestPathProblems extends javax.swing.JPanel {
                                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                                             .add(maxArcCost, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                                             .add(minArcCost)))))
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                                .add(title)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 63, Short.MAX_VALUE)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                    .add(layout.createSequentialGroup()
-                                        .add(12, 12, 12)
-                                        .add(arcsList)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .add(reloadGraph)
-                                        .add(211, 211, 211))
-                                    .add(graphType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 450, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))))
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                .add(layout.createSequentialGroup()
+                                    .add(12, 12, 12)
+                                    .add(arcsList)
+                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .add(reloadGraph)
+                                    .add(211, 211, 211))
+                                .add(graphType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 450, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(graphType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(title))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(icon)
                     .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(title)
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, graphType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(reloadGraph)
                             .add(calculate)
@@ -245,9 +245,10 @@ public class ShortestPathProblems extends javax.swing.JPanel {
                             .add(randomSeed, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(randomSeedLabel)
                             .add(maxArcCost, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(maxArcCostLabel))))
+                            .add(maxArcCostLabel)))
+                    .add(icon))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(scroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
+                .add(scroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -291,10 +292,10 @@ public class ShortestPathProblems extends javax.swing.JPanel {
                 break;
 
             case 2:
-                graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, minLocal, maxLocal, 5, cycle, result);
+                graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, minLocal, maxLocal, 5, cycle, 10);
                 break;
             case 1:
-                graph = GraphMaker.cycleGraphMaker(seedLocal, minLocal, maxLocal);
+                graph = GraphMaker.exampleGraph(seedLocal, minLocal, maxLocal);
                 break;
             default:
                 graph = GraphMaker.sppGraphMaker();

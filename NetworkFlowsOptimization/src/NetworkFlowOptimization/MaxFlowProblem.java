@@ -132,7 +132,7 @@ public class MaxFlowProblem {
         long start = System.nanoTime();
         while (!graph.activeNodesList.isEmpty()) {
             n = graph.activeNodesList.poll();
-            if (n.massBalance > 0 && !n.equals(t)) {
+            if (n.massBalance > 0 && !n.equals2(t)) {
                 pushRelabel(n, graph);
             }
         }
@@ -163,9 +163,9 @@ public class MaxFlowProblem {
         while (i.massBalance > 0) {
             while (i.massBalance > 0 && i.activeForwardArc < outSize) {
                 a = i.out.get(i.activeForwardArc);
-                if (a.head.distance < a.tail.distance && a.residualForwardCapacity > 0 && !a.head.equals(s)) {
+                if (a.head.distance < a.tail.distance && a.residualForwardCapacity > 0 && !a.head.equals2(s)) {
                     a.setFlow(a.flow + Math.min(a.residualForwardCapacity, i.massBalance));
-                    if (a.head.massBalance > 0 && !a.head.equals(t)) {
+                    if (a.head.massBalance > 0 && !a.head.equals2(t)) {
                         graph.activeNodesList.add(a.head);
                     }
                 } else {
@@ -198,7 +198,7 @@ public class MaxFlowProblem {
             }
             counter=0;
             for (Arc aa : i.out) {
-                if (aa.residualForwardCapacity > 0 && d > aa.head.distance && !aa.head.equals(s)) {
+                if (aa.residualForwardCapacity > 0 && d > aa.head.distance && !aa.head.equals2(s)) {
                     d = aa.head.distance;
                     i.activeForwardArc=counter;
                 }

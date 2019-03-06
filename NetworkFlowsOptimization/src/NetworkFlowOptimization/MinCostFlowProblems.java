@@ -16,11 +16,17 @@
  */
 package NetworkFlowOptimization;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author anto
  */
 public class MinCostFlowProblems extends javax.swing.JPanel {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates new form MinCostFlowProblems
@@ -45,16 +51,36 @@ public class MinCostFlowProblems extends javax.swing.JPanel {
         reloadGraph = new javax.swing.JCheckBox();
         back = new javax.swing.JButton();
         calculate = new javax.swing.JButton();
+        arcsList = new javax.swing.JCheckBox();
+        adjMatrix = new javax.swing.JCheckBox();
+        graphType = new javax.swing.JComboBox<>();
+        nodes = new javax.swing.JFormattedTextField();
+        nodesLabel = new javax.swing.JLabel();
+        percArcs = new javax.swing.JFormattedTextField();
+        percArcsLabel = new javax.swing.JLabel();
+        cycles = new javax.swing.JCheckBox();
+        maxArcCapacity = new javax.swing.JFormattedTextField();
+        maxArcCapacityLabel = new javax.swing.JLabel();
+        randomSeed = new javax.swing.JFormattedTextField();
+        randomSeedLabel = new javax.swing.JLabel();
+        flowArcs = new javax.swing.JCheckBox();
+        massLabel = new javax.swing.JLabel();
+        mass = new javax.swing.JFormattedTextField();
+
+        setName(""); // NOI18N
+        setPreferredSize(new java.awt.Dimension(800, 600));
 
         text.setEditable(false);
         text.setVerifyInputWhenFocusTarget(false);
         scroll.setViewportView(text);
 
+        title.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         title.setText("Min Cost Flow Problems");
 
         icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/NetworkFlowOptimization/Logo_UniCa_64.png"))); // NOI18N
 
         reloadGraph.setText("Reload graph");
+        reloadGraph.setEnabled(false);
 
         back.setInheritsPopupMenu(true);
         back.setLabel("Back");
@@ -71,6 +97,67 @@ public class MinCostFlowProblems extends javax.swing.JPanel {
             }
         });
 
+        arcsList.setText("Arcs List");
+
+        adjMatrix.setText("Adjacency Matrix");
+
+        graphType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Example graph", "Random graph", "Load graph" }));
+        graphType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                graphTypeActionPerformed(evt);
+            }
+        });
+
+        nodes.setColumns(5);
+        nodes.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        nodes.setText("20");
+        nodes.setToolTipText("Preferred number of nodes desired in the random graph");
+        nodes.setEnabled(false);
+
+        nodesLabel.setLabelFor(nodes);
+        nodesLabel.setText("Number of nodes");
+        nodesLabel.setToolTipText("");
+        nodesLabel.setEnabled(false);
+        nodesLabel.setPreferredSize(new java.awt.Dimension(80, 20));
+
+        percArcs.setColumns(5);
+        percArcs.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        percArcs.setText("10");
+        percArcs.setEnabled(false);
+
+        percArcsLabel.setText("% arcs (1..100)");
+        percArcsLabel.setEnabled(false);
+        percArcsLabel.setPreferredSize(new java.awt.Dimension(80, 20));
+
+        cycles.setText("Graph with cycles");
+        cycles.setEnabled(false);
+
+        maxArcCapacity.setColumns(5);
+        maxArcCapacity.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        maxArcCapacity.setText("10");
+        maxArcCapacity.setToolTipText("");
+        maxArcCapacity.setEnabled(false);
+
+        maxArcCapacityLabel.setText("Max arc capacity");
+        maxArcCapacityLabel.setEnabled(false);
+
+        randomSeed.setColumns(5);
+        randomSeed.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        randomSeed.setText("0");
+
+        randomSeedLabel.setText("Random seed");
+
+        flowArcs.setText("Result arcs");
+
+        massLabel.setLabelFor(mass);
+        massLabel.setText("e(s)");
+        massLabel.setEnabled(false);
+
+        mass.setColumns(5);
+        mass.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        mass.setText("10");
+        mass.setEnabled(false);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -78,37 +165,87 @@ public class MinCostFlowProblems extends javax.swing.JPanel {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, scroll)
+                    .add(scroll)
                     .add(layout.createSequentialGroup()
-                        .add(icon)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createSequentialGroup()
-                                .add(0, 399, Short.MAX_VALUE)
-                                .add(reloadGraph)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                            .add(icon)
+                            .add(title))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 138, Short.MAX_VALUE)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                                .add(graphType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 230, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(calculate)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(back))
                             .add(layout.createSequentialGroup()
-                                .add(title)
-                                .add(0, 0, Short.MAX_VALUE)))))
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(flowArcs)
+                                    .add(cycles)
+                                    .add(adjMatrix))
+                                .add(37, 37, 37)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(arcsList)
+                                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                        .add(nodesLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 92, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .add(percArcsLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 92, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                        .add(nodes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .add(percArcs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                    .add(reloadGraph))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                                        .add(massLabel)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                        .add(mass, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                            .add(maxArcCapacityLabel)
+                                            .add(randomSeedLabel))
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                            .add(maxArcCapacity)
+                                            .add(randomSeed, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(graphType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(back)
+                    .add(calculate)
+                    .add(title))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(title)
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(reloadGraph)
-                            .add(calculate)
-                            .add(back))
-                        .add(icon)))
+                            .add(arcsList)
+                            .add(adjMatrix)
+                            .add(mass, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(massLabel))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(nodes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(nodesLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(maxArcCapacity, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(maxArcCapacityLabel)
+                            .add(cycles))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(percArcs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(percArcsLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(randomSeed, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(randomSeedLabel)
+                            .add(flowArcs)))
+                    .add(icon))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(scroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 506, Short.MAX_VALUE)
+                .add(scroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -118,14 +255,152 @@ public class MinCostFlowProblems extends javax.swing.JPanel {
     }//GEN-LAST:event_backActionPerformed
 
     private void calculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateActionPerformed
-        // TODO add your handling code here:
+        text.setText("");
+        int n = graphType.getSelectedIndex();
+
+        int maxCap = Integer.parseInt(maxArcCapacity.getText());
+        if (maxCap <= 0) {
+            maxCap = 1;
+        }
+
+        int seedLocal = Integer.parseInt(randomSeed.getText());
+        int nodesLocal = Integer.parseInt(nodes.getText());
+        int arcPercentLocal = Integer.parseInt(percArcs.getText());
+        int flow = Integer.parseInt(mass.getText());
+        if (flow < 1) {
+            flow = 1;
+        }
+        boolean cycle = cycles.isSelected();
+        Graph graph = null;
+        String result = "";
+        switch (n) {
+            case 2:
+                if (NetworkFlowOptimization.graph == null || reloadGraph.isSelected()) {
+                    try {
+                        graph = GraphMaker.loadGraph();
+                        if (graph == null) {
+                            return;
+                        }
+                        NetworkFlowOptimization.graph = graph;
+                    } catch (IOException ex) {
+                        Logger.getLogger(NetworkFlowOptimization.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                } else {
+                    graph = NetworkFlowOptimization.graph;
+                    graph.resetFlows();
+                }
+                break;
+            case 1:
+                graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, 1, 100, maxCap, cycle, flow);
+                break;
+            default:
+                graph = GraphMaker.exampleGraph(seedLocal, 1, 100);
+                break;
+        }
+
+        if (adjMatrix.isSelected()) {
+            text.setText(text.getText().concat(graph.adjMatrix()));
+        }
+        if (arcsList.isSelected()) {
+            text.setText(text.getText().concat(graph.minCostFlowAllArcs()));
+        }
+
+        text.setText(text.getText().concat("\nNumber of nodes = " + graph.nodesNumber() + ";  Number of arcs = " + graph.arcsNumber()));
+        text.setText(text.getText().concat(graph.excessInNodes() + "\n"));
+
+        long stop = MinCostFlowProblem.successiveShortestPath(graph);
+        graph.renumber();
+
+        if (stop > 0) {
+            text.setText(text.getText().concat("\nSuccessive Shortest Paths Algorithms\nExecution time = " + (double) stop / 1000000 + " milliseconds\n"));
+            text.setText(text.getText().concat(graph.totalCost()));
+            text.setText(text.getText().concat("\nSuccessive paths = " + graph.times + "\n"));
+        } else {
+            text.setText(text.getText().concat("\nThere is no feasible solution\n"));
+            text.setText(text.getText().concat(result));
+            return;
+        }
+
+        if (flowArcs.isSelected()) {
+            result = result.concat(graph.minCostFlowArcsResult());
+        } else {
+            result = result.concat(graph.minCostFlowResults());
+        }
+
+        text.setText(text.getText().concat(result));
+
+
     }//GEN-LAST:event_calculateActionPerformed
+
+    private void graphTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphTypeActionPerformed
+        int n = graphType.getSelectedIndex();
+        switch (n) {
+            case 0:
+                maxArcCapacity.setEnabled(false);
+                maxArcCapacityLabel.setEnabled(false);
+                randomSeed.setEnabled(true);
+                randomSeedLabel.setEnabled(true);
+                cycles.setEnabled(false);
+                nodes.setEnabled(false);
+                nodesLabel.setEnabled(false);
+                percArcs.setEnabled(false);
+                percArcsLabel.setEnabled(false);
+                mass.setEnabled(false);
+                massLabel.setEnabled(false);
+                reloadGraph.setEnabled(false);
+                break;
+            case 1:
+                maxArcCapacity.setEnabled(true);
+                maxArcCapacityLabel.setEnabled(true);
+                randomSeed.setEnabled(true);
+                randomSeedLabel.setEnabled(true);
+                cycles.setEnabled(true);
+                nodes.setEnabled(true);
+                nodesLabel.setEnabled(true);
+                percArcs.setEnabled(true);
+                percArcsLabel.setEnabled(true);
+                mass.setEnabled(true);
+                massLabel.setEnabled(true);
+                reloadGraph.setEnabled(false);
+                break;
+            case 2:
+                maxArcCapacity.setEnabled(false);
+                maxArcCapacityLabel.setEnabled(false);
+                randomSeed.setEnabled(false);
+                randomSeedLabel.setEnabled(false);
+                cycles.setEnabled(false);
+                nodes.setEnabled(false);
+                nodesLabel.setEnabled(false);
+                percArcs.setEnabled(false);
+                percArcsLabel.setEnabled(false);
+                reloadGraph.setEnabled(true);
+                mass.setEnabled(false);
+                massLabel.setEnabled(false);
+                break;
+        }
+    }//GEN-LAST:event_graphTypeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox adjMatrix;
+    private javax.swing.JCheckBox arcsList;
     private javax.swing.JButton back;
     private javax.swing.JButton calculate;
+    private javax.swing.JCheckBox cycles;
+    private javax.swing.JCheckBox flowArcs;
+    private javax.swing.JComboBox<String> graphType;
     private javax.swing.JLabel icon;
+    private javax.swing.JFormattedTextField mass;
+    private javax.swing.JLabel massLabel;
+    private javax.swing.JFormattedTextField maxArcCapacity;
+    private javax.swing.JLabel maxArcCapacityLabel;
+    private javax.swing.JFormattedTextField nodes;
+    private javax.swing.JLabel nodesLabel;
+    private javax.swing.JFormattedTextField percArcs;
+    private javax.swing.JLabel percArcsLabel;
+    private javax.swing.JFormattedTextField randomSeed;
+    private javax.swing.JLabel randomSeedLabel;
     private javax.swing.JCheckBox reloadGraph;
     private javax.swing.JScrollPane scroll;
     private javax.swing.JTextPane text;

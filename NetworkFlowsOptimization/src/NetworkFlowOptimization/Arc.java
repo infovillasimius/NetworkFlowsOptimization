@@ -64,6 +64,14 @@ public class Arc implements Comparable<Arc> {
         return "(" + tail.number + ", " + head.number + ") => flow=" + flow + ", capacity=" + capacity + "\n";
     }
 
+    public String toMinCostFlow() {
+        return "(" + tail.number + ", " + head.number + ") => flow=" + flow + ", cost per unit=" + cost + ", capacity=" + capacity + "\n";
+    }
+
+    public String toEmptyMinCostFlow() {
+        return "(" + tail.number + ", " + head.number + ") => cost per unit=" + cost + ", capacity=" + capacity + "\n";
+    }
+
     @Override
     public String toString() {
         return "Arc{" + "tail=" + tail + ", head=" + head + '}';
@@ -118,7 +126,7 @@ public class Arc implements Comparable<Arc> {
         if (flow < 0) {
             return;
         }
-        int delta = 0;
+        int delta;
         if (flow <= this.capacity) {
             delta = flow - this.flow;
             this.flow = flow;
@@ -130,8 +138,6 @@ public class Arc implements Comparable<Arc> {
         this.residualReverseCapacity = this.flow;
         this.tail.massBalance -= delta;
         this.head.massBalance += delta;
-        //this.tail.balanceMass();
-        //this.head.balanceMass();
     }
 
     public void setResidualForwardCapacity(int residualForwardCapacity) {

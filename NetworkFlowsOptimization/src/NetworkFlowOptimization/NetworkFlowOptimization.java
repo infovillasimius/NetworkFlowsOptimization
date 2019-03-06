@@ -97,15 +97,12 @@ public class NetworkFlowOptimization {
         sppButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 childFrame = new JFrame("Network Flows Optimization");
-
                 JPanel childPane = new ShortestPathProblems();
                 childFrame.add(childPane);
                 childFrame.setLocation(200, 100);
                 childFrame.setVisible(true);
                 childFrame.pack();
-
                 childFrame.addWindowListener(new WindowListenerImpl());
             }
         });

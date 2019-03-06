@@ -131,8 +131,8 @@ public class RadixHeap<E> {
         w[0]=1;
         w[1]=1;
         while (chain.next != null) {
-            @SuppressWarnings("unchecked")
-            Element<E> next = (Element<E>) chain.next;
+            
+            Element<E> next =  chain.next;
             chain.next = null;
             store(chain.value, chain.d);
             chain = next;

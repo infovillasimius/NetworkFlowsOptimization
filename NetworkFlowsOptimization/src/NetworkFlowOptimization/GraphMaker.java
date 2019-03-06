@@ -31,6 +31,8 @@ import javax.swing.JFileChooser;
  */
 public class GraphMaker {
 
+    private static File selectedFile = null;
+
     private GraphMaker() {
     }
 
@@ -157,13 +159,25 @@ public class GraphMaker {
         }
     }
 
-    public static Graph cycleGraphMaker(int seed, int min, int max) {
-
+    public static Graph exampleGraph(int seed, int min, int max) {
+        if (max < 0) {
+            max = -max;
+        }
+        
+        if (max < min) {
+            int swap=max;
+            max = min;
+            min=swap;
+        }
+        
+        
+        
+        int[] v = {11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -11};
         ArrayList<Node> list = new ArrayList<>();
         ArrayList<Arc> arcList = new ArrayList<>();
 
-        for (int i = 1; i < 17; i++) {
-            list.add(new Node(i));
+        for (int i = 0; i < 16; i++) {
+            list.add(new Node(v[i],i));
         }
         Random rand = new Random(seed);
 
@@ -209,7 +223,7 @@ public class GraphMaker {
         return graph;
     }
 
-    public static Graph randomGraph(int n, int perc, int seed, int minCost, int maxCost, int maxCapacity, boolean cycle, String result) {
+    public static Graph randomGraph(int n, int perc, int seed, int minCost, int maxCost, int maxCapacity, boolean cycle, int flow) {
         ArrayList<Node> list = new ArrayList<>();
         ArrayList<Arc> arcList = new ArrayList<>();
 
@@ -232,7 +246,7 @@ public class GraphMaker {
         int arc;
 
         for (int i = 1; i <= n; i++) {
-            list.add(new Node(i));
+            list.add(new Node(0,i));
         }
         Random rand = new Random(seed);
 
@@ -286,6 +300,9 @@ public class GraphMaker {
             }
             i.in = newList;
         }
+        
+        ordered.get(0).setValue(flow);
+        ordered.get(ordered.size()-1).setValue(-flow);
         return new Graph(ordered, arcList, ordered.get(0), ordered.get(ordered.size() - 1));
     }
 
@@ -328,7 +345,7 @@ public class GraphMaker {
         return ordered;
     }
 
-    private static void number(ArrayList<Node> list) {
+    static void number(ArrayList<Node> list) {
         int next = 0;
         for (Node n : list) {
             n.number = ++next;
@@ -338,17 +355,21 @@ public class GraphMaker {
     public static Graph loadGraph() throws IOException {
         ArrayList<Node> list = new ArrayList<>();
         ArrayList<Arc> arcList = new ArrayList<>();
-        File selectedFile;
-        JFileChooser fileChooser = new JFileChooser();
+
+        JFileChooser fileChooser = new JFileChooser(selectedFile);
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue != JFileChooser.APPROVE_OPTION) {
             return null;
         }
 
         selectedFile = fileChooser.getSelectedFile();
-        //java.awt.Desktop.getDesktop().open(selectedFile);//<-- here
+
         Scanner scanner = new Scanner(selectedFile);
-        int n = scanner.nextInt();
+        int n = 0;
+
+        if (scanner.hasNextInt()) {
+            n = scanner.nextInt();
+        }
 
         if (n < 2) {
             return null;
@@ -389,7 +410,7 @@ public class GraphMaker {
         }
 
         for (int i = 0; i < n; i++) {
-            list.add(new Node(val[i]));
+            list.add(new Node(val[i],i));
         }
 
         for (int row = 0; row < n; row++) {

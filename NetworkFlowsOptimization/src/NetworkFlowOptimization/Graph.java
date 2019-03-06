@@ -34,9 +34,18 @@ public class Graph {
     private final Node t;
     private final boolean isOrdered;
     private final boolean negCost;
-    PriorityQueue<Node> activeNodesList;;
+    private boolean negCycle;
+    PriorityQueue<Node> activeNodesList;
+    int sourceFlow;
+    int times;
+    ArrayList<Path> paths;
+
+    ;
 
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList) {
+        this.paths = new ArrayList<>();
+        this.sourceFlow = 0;
+        this.negCycle = false;
         this.activeNodesList = new PriorityQueue<>(10, (Node o1, Node o2) -> o2.distance - o1.distance);
 
         this.list = list;
@@ -52,6 +61,9 @@ public class Graph {
     }
 
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList, boolean spp) {
+        this.paths = new ArrayList<>();
+        this.sourceFlow = 0;
+        this.negCycle = false;
         this.activeNodesList = new PriorityQueue<>(10, (Node o1, Node o2) -> o2.distance - o1.distance);
         this.list = list;
         this.arcList = arcList;
@@ -64,8 +76,11 @@ public class Graph {
     }
 
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList, Node source, Node sink) {
+        this.paths = new ArrayList<>();
+        this.sourceFlow = 0;
+        this.negCycle = false;
         this.activeNodesList = new PriorityQueue<>(10, (Node o1, Node o2) -> o2.distance - o1.distance);
-        if (list.get(0) != source || list.get(list.size() - 1) != sink) {
+        if (!list.get(0).equals2(source) || !list.get(list.size() - 1).equals2(sink)) {
             list.remove(source);
             list.remove(sink);
             this.list = new ArrayList<>();
@@ -200,6 +215,7 @@ public class Graph {
             i.contained = false;
             i.distance = Node.INFINITY;
             i.pred = null;
+            i.predArc = null;
         }
         list.get(0).distance = 0;
     }
@@ -212,14 +228,15 @@ public class Graph {
 
     public String adjMatrix() {
         int n = list.size();
+        renumber();
         String result = "Adjacency matrix \n";
         int[][] nad = new int[n][n];
-        int x,y;
+        int x, y;
 
         if (n <= 100) {
             for (Arc a : arcList) {
-                x=a.getTail().number-1;
-                y=a.getHead().number-1;
+                x = a.getTail().number - 1;
+                y = a.getHead().number - 1;
                 nad[x][y] = 1;
             }
 
@@ -263,7 +280,7 @@ public class Graph {
         }
     }
 
-    public String maxFlowArcs() {
+    public String maxFlowArcsResults() {
         String result = "Flow out of source node \n";
         int maxFlowS = 0;
         int maxFlowT = 0;
@@ -298,7 +315,7 @@ public class Graph {
         return result;
     }
 
-    public String maxFlow() {
+    public String maxFlowResults() {
         String result = "Flow exiting the source = \t\t";
         int maxFlowS = 0;
         int maxFlowT = 0;
@@ -315,13 +332,59 @@ public class Graph {
     }
 
     public String maxFlowAllArcs() {
+        int n = arcList.size();
         String result = "List of arcs\n";
+        if (n > 2000) {
+            result = result.concat("To many arcs!! (>2000)\n");
+            return result;
+        }
+
         ArrayList<Arc> ordArc = new ArrayList<>();
         ordArc.addAll(arcList);
         Collections.sort(ordArc);
 
         for (Arc a : ordArc) {
             result = result.concat(a.toFlow());
+        }
+        result = result.concat("\n");
+        return result;
+    }
+
+    public String minCostFlowArcsResult() {
+        int n = arcList.size();
+        String result = "List of arcs\n";
+        if (n > 1000000) {
+            result = result.concat("To many arcs!! (>1.000.000)\n");
+            return result;
+        }
+
+        ArrayList<Arc> ordArc = new ArrayList<>();
+        ordArc.addAll(arcList);
+        Collections.sort(ordArc);
+
+        for (Arc a : ordArc) {
+            if (a.flow > 0) {
+                result = result.concat(a.toMinCostFlow());
+            }
+        }
+        result = result.concat("\n");
+        return result;
+    }
+
+    public String minCostFlowAllArcs() {
+        int n = arcList.size();
+        String result = "List of arcs\n";
+        if (n > 2000) {
+            result = result.concat("To many arcs!! (>2000)\n");
+            return result;
+        }
+
+        ArrayList<Arc> ordArc = new ArrayList<>();
+        ordArc.addAll(arcList);
+        Collections.sort(ordArc);
+
+        for (Arc a : ordArc) {
+            result = result.concat(a.toEmptyMinCostFlow());
         }
         result = result.concat("\n");
         return result;
@@ -343,7 +406,7 @@ public class Graph {
         this.previously();
         LinkedList<Node> q = new LinkedList<>();
         Node n;
-
+        
         q.add(t);
         t.previously = true;
         t.distance = 0;
@@ -353,20 +416,75 @@ public class Graph {
             for (Arc a : n.in) {
                 if (!a.tail.previously) {
                     a.tail.previously = true;
-                    a.tail.distance = n.distance + 1;
+                    a.tail.distance=n.distance+1;
                     q.add(a.tail);
                 }
             }
         }
     }
-    
-    public String massBalance(){
-        String result="";
-        
-        for (Node n:list){
-            result=result+"\nNodo n. "+n.number+" - mass balance = "+n.massBalance;
+
+    public String massBalance() {
+        String result = "";
+
+        for (Node n : list) {
+            result = result + "\nNodo n. " + n.number + " - mass balance = " + n.massBalance;
         }
         return result;
     }
+
+    void renumber() {
+        int next = 0;
+        for (Node n : list) {
+            n.number = ++next;
+        }
+    }
+
+    void setSourceResidualFlow() {
+        int flow = 0;
+        for (Arc a : s.out) {
+            flow += a.residualForwardCapacity;
+        }
+        sourceFlow = flow;
+    }
+
+    public boolean isNegCycle() {
+        return negCycle;
+    }
+
+    public void setNegCycle(boolean negCycle) {
+        this.negCycle = negCycle;
+    }
+
+    public String totalCost() {
+        String result = "";
+        int sum = 0;
+
+        for (Arc a : arcList) {
+            sum += a.flow * a.cost;
+        }
+        result = "\nTotal cost = " + sum;
+
+        return result;
+    }
+    
+        public String minCostFlowResults() {
+        String result = "\nFlows Paths:\n";
+        
+        for(Path p:paths){
+           result = result.concat(p.toString()); 
+        }
+        
+        result = result.concat( "\n");
+        return result;
+    }
+        
+        public String excessInNodes(){
+            String result = "\nMass balance excess of nodes - e(i) = {  ";
+            for(Node n:list){
+                result=result.concat(n.getValue()+"  ");
+            }
+            result=result.concat("}");
+            return result;
+        }
 
 }

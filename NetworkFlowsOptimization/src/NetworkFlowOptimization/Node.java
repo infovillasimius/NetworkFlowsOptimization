@@ -27,7 +27,7 @@ public class Node implements Comparable<Node> {
     int distance;                                       //distanza iniziale settata a +infinito
 
     private final int id;                               //identificativo univoco del nodo
-    private final int value;                            //valore associato al nodo
+    private int value;                            //valore associato al nodo
     int number;
     int order;
     int period;
@@ -65,7 +65,7 @@ public class Node implements Comparable<Node> {
         this.previously = false;
     }
 
-    public Node(int value, int month) {
+    public Node(int value, int period) {
         this.activeReverseArc = 0;
         this.activeForwardArc = 0;
         this.massBalance = 0;
@@ -75,7 +75,7 @@ public class Node implements Comparable<Node> {
         this.necessary = false;
         id = counter++;
         this.value = value;
-        this.period = month;
+        this.period = period;
         in = new ArrayList<>();
         out = new ArrayList<>();
         pred = null;
@@ -87,6 +87,10 @@ public class Node implements Comparable<Node> {
 
     public int getValue() {
         return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 
     @Override
@@ -140,7 +144,14 @@ public class Node implements Comparable<Node> {
         for (Arc a : out) {
             balance -= a.flow;
         }
-        massBalance=balance;
+        massBalance = balance;
+    }
+
+    public boolean equals2(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        return false;
     }
 
 }

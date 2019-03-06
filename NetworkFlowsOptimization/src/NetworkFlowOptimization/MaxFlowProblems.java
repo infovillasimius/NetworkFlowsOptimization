@@ -26,6 +26,8 @@ import java.util.logging.Logger;
  */
 public class MaxFlowProblems extends javax.swing.JPanel {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Creates new form MinCostFlowProblems
      */
@@ -150,21 +152,22 @@ public class MaxFlowProblems extends javax.swing.JPanel {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, scroll)
                     .add(layout.createSequentialGroup()
-                        .add(icon)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(title)
+                            .add(icon))
+                        .add(55, 55, 55)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(layout.createSequentialGroup()
-                                .add(title)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 98, Short.MAX_VALUE)
+                                .add(0, 0, Short.MAX_VALUE)
                                 .add(graphType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 450, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                             .add(layout.createSequentialGroup()
                                 .add(12, 122, Short.MAX_VALUE)
                                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                                         .add(adjMatrix)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .add(arcsList)
                                         .add(18, 18, 18)
+                                        .add(arcsList)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .add(reloadGraph)
                                         .add(18, 18, 18)
                                         .add(calculate)
@@ -197,13 +200,12 @@ public class MaxFlowProblems extends javax.swing.JPanel {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(graphType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(title))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(icon)
                     .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(title)
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, graphType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(reloadGraph)
                             .add(calculate)
@@ -223,9 +225,10 @@ public class MaxFlowProblems extends javax.swing.JPanel {
                             .add(percArcsLabel)
                             .add(randomSeed, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(randomSeedLabel)
-                            .add(flowArcs))))
+                            .add(flowArcs)))
+                    .add(icon))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(scroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
+                .add(scroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -268,10 +271,10 @@ public class MaxFlowProblems extends javax.swing.JPanel {
                 }
                 break;
             case 1:
-                graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, 0, 1, maxCap, cycle, result);
+                graph = GraphMaker.randomGraph(nodesLocal, arcPercentLocal, seedLocal, 0, 1, maxCap, cycle, 0);
                 break;
             default:
-                graph = GraphMaker.cycleGraphMaker(seedLocal, 0, 10);//GraphMaker.cycleGraphMaker(seedLocal, minLocal, maxLocal);
+                graph = GraphMaker.exampleGraph(seedLocal, 0, 10);
                 break;
         }
 
@@ -287,9 +290,9 @@ public class MaxFlowProblems extends javax.swing.JPanel {
         result = result.concat("LABELING ALGORITHM\nExecution time = " + (double) stop / 1000000 + " milliseconds\n");
 
         if (flowArcs.isSelected()) {
-            result = result.concat(graph.maxFlowArcs());
+            result = result.concat(graph.maxFlowArcsResults());
         } else {
-            result = result.concat(graph.maxFlow());
+            result = result.concat(graph.maxFlowResults());
         }
 
         text.setText(text.getText().concat(result));
@@ -299,9 +302,9 @@ public class MaxFlowProblems extends javax.swing.JPanel {
         result = "\nPREFLOW-PUSH ALGORITHM\nExecution time = " + (double) stop / 1000000 + " milliseconds\n";
 
         if (flowArcs.isSelected()) {
-            result = result.concat(graph.maxFlowArcs());
+            result = result.concat(graph.maxFlowArcsResults());
         } else {
-            result = result.concat(graph.maxFlow());
+            result = result.concat(graph.maxFlowResults());
         }
 
         text.setText(text.getText().concat(result));

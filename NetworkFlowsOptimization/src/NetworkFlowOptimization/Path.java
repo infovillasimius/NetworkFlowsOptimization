@@ -17,8 +17,8 @@
 package NetworkFlowOptimization;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 /**
  *
@@ -26,19 +26,21 @@ import java.util.LinkedList;
  */
 public class Path implements Cloneable {
 
-    LinkedList<Node> nodes;
+    ArrayList<Node> nodes;
     ArrayList<Arc> arcList;
     ArrayList<Boolean> reverse;
     HashSet<Node> map;
     int minFlow;
     int sum;
     boolean cycle;
+    int flow;
 
     public Path(Node s) {
+        this.nodes = new ArrayList<>();
         this.cycle = false;
         this.minFlow = Integer.MAX_VALUE;
         this.sum = 0;
-        this.nodes = new LinkedList<>();
+        
         nodes.add(s);
         this.arcList = new ArrayList<>();
         this.reverse = new ArrayList<>();
@@ -46,6 +48,7 @@ public class Path implements Cloneable {
     }
 
     public Path() {
+        this.nodes = new ArrayList<>();
 
     }
 
@@ -93,31 +96,20 @@ public class Path implements Cloneable {
         minFlow=0;
     }
 
+   
     @Override
-    public Path clone() {
-        Path path = new Path();
-
-        @SuppressWarnings("unchecked")
-        LinkedList<Node> n = (LinkedList<Node>) this.nodes.clone();
-        path.nodes = n;
-
-        @SuppressWarnings("unchecked")
-        ArrayList<Arc> a = (ArrayList<Arc>) this.arcList.clone();
-        path.arcList = a;
-
-        @SuppressWarnings("unchecked")
-        ArrayList<Boolean> b = (ArrayList<Boolean>) this.reverse.clone();
-        path.reverse = b;
-
-        @SuppressWarnings("unchecked")
-        HashSet<Node> m = (HashSet<Node>) this.map.clone();
-        path.map = m;
-
-        path.minFlow = this.minFlow;
-        path.sum = this.sum;
-        path.cycle = this.cycle;
-
-        return path;
+    @SuppressWarnings("unchecked")
+    public String toString() {
+        String result="Path: ( ";
+        ArrayList<Node> ordered= (ArrayList<Node>) nodes.clone();
+        Collections.reverse(ordered);
+        for(Node n:ordered){
+            result=result.concat(n.number+" ");
+        }
+        result=result.concat(") - Flow: "+flow+"\n");
+        return result;
     }
+    
+    
 
 }

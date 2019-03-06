@@ -29,12 +29,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="scroll" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="icon" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="title" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="98" max="32767" attributes="0"/>
+                          <Component id="title" min="-2" max="-2" attributes="0"/>
+                          <Component id="icon" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Component id="graphType" min="-2" pref="450" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -42,9 +44,9 @@
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="adjMatrix" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="arcsList" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="arcsList" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                       <Component id="reloadGraph" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="calculate" min="-2" max="-2" attributes="0"/>
@@ -91,14 +93,13 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="graphType" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="title" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="icon" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="title" min="-2" max="-2" attributes="0"/>
-                          <Component id="graphType" alignment="1" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="reloadGraph" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="calculate" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -123,9 +124,10 @@
                           <Component id="flowArcs" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+                  <Component id="icon" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="scroll" pref="465" max="32767" attributes="0"/>
+              <Component id="scroll" pref="470" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
