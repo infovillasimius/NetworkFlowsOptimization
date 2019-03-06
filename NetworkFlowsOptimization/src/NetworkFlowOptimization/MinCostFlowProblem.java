@@ -41,6 +41,11 @@ public class MinCostFlowProblem {
         return 0;
     }
 
+    /**
+     *  Successive Shortest Path Algorithm
+     * @param graph
+     * @return
+     */
     public static long successiveShortestPath(Graph graph) {
         int times = 0;
 
