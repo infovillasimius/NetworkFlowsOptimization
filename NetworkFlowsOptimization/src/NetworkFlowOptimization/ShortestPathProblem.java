@@ -200,9 +200,9 @@ public class ShortestPathProblem {
     }
 
     public static String labelCorrecting(Graph graph) {
-        ArrayList<Node> list = graph.getList();
+        graph.initialize();
         ArrayList<Arc> arcList = graph.getArcList();
-        int minDist = -list.size() * graph.getC();
+        int minDist = -graph.nodesNumber() * graph.getC();
         int dist = 0;
         boolean optCond = false;
         Node nCycle = null;
