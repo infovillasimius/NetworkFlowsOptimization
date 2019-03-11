@@ -172,7 +172,7 @@ public class GraphMaker {
         
         
         
-        int[] v = {11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -11};
+        int[] v = {7, 0, -1, 0, 2, 0, 0, 0, 0, 0, -2, 0, 0, 1, 0, -7};
         ArrayList<Node> list = new ArrayList<>();
         ArrayList<Arc> arcList = new ArrayList<>();
 

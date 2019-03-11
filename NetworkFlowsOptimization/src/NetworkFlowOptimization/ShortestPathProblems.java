@@ -78,11 +78,12 @@ public class ShortestPathProblems extends javax.swing.JPanel {
 
         icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/NetworkFlowOptimization/Logo_UniCa_64.png"))); // NOI18N
 
+        reloadGraph.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         reloadGraph.setText("Reload graph");
         reloadGraph.setEnabled(false);
 
         back.setInheritsPopupMenu(true);
-        back.setLabel("Back");
+        back.setText("Back");
         back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backActionPerformed(evt);
@@ -96,8 +97,10 @@ public class ShortestPathProblems extends javax.swing.JPanel {
             }
         });
 
+        arcsList.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         arcsList.setText("Arcs List");
 
+        adjMatrix.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         adjMatrix.setText("Adjacency Matrix");
 
         graphType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Personnel planning problem (Clark and Hastings [1977])", "Fixed graph with random arc costs", "Random graph", "Load graph" }));
@@ -112,7 +115,9 @@ public class ShortestPathProblems extends javax.swing.JPanel {
         nodes.setText("20");
         nodes.setToolTipText("Preferred number of nodes desired in the random graph");
         nodes.setEnabled(false);
+        nodes.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
 
+        nodesLabel.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         nodesLabel.setLabelFor(nodes);
         nodesLabel.setText("Number of nodes");
         nodesLabel.setToolTipText("");
@@ -122,11 +127,14 @@ public class ShortestPathProblems extends javax.swing.JPanel {
         percArcs.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         percArcs.setText("10");
         percArcs.setEnabled(false);
+        percArcs.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
 
+        percArcsLabel.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         percArcsLabel.setLabelFor(percArcs);
         percArcsLabel.setText("% arcs (1..100)");
         percArcsLabel.setEnabled(false);
 
+        cycles.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         cycles.setText("Graph with cycles");
         cycles.setEnabled(false);
 
@@ -135,7 +143,9 @@ public class ShortestPathProblems extends javax.swing.JPanel {
         maxArcCost.setText("10");
         maxArcCost.setToolTipText("");
         maxArcCost.setEnabled(false);
+        maxArcCost.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
 
+        maxArcCostLabel.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         maxArcCostLabel.setLabelFor(maxArcCost);
         maxArcCostLabel.setText("Max arc cost");
         maxArcCostLabel.setEnabled(false);
@@ -144,7 +154,9 @@ public class ShortestPathProblems extends javax.swing.JPanel {
         randomSeed.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         randomSeed.setText("0");
         randomSeed.setEnabled(false);
+        randomSeed.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
 
+        randomSeedLabel.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         randomSeedLabel.setLabelFor(randomSeed);
         randomSeedLabel.setText("Random seed");
         randomSeedLabel.setEnabled(false);
@@ -153,7 +165,9 @@ public class ShortestPathProblems extends javax.swing.JPanel {
         minArcCost.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         minArcCost.setText("0");
         minArcCost.setEnabled(false);
+        minArcCost.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
 
+        minArcCostLabel.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         minArcCostLabel.setLabelFor(minArcCost);
         minArcCostLabel.setText("Minimun arc cost");
         minArcCostLabel.setEnabled(false);
@@ -165,54 +179,47 @@ public class ShortestPathProblems extends javax.swing.JPanel {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, scroll)
+                    .add(scroll)
                     .add(layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(title)
                             .add(icon))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 99, Short.MAX_VALUE)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 67, Short.MAX_VALUE)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                                .add(adjMatrix)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(arcsList)
+                                .add(18, 18, 18)
+                                .add(reloadGraph)
+                                .add(18, 18, 18)
+                                .add(calculate)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(back))
                             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(adjMatrix)
                                     .add(layout.createSequentialGroup()
-                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                            .add(layout.createSequentialGroup()
-                                                .add(randomSeedLabel)
-                                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                                .add(randomSeed, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                            .add(cycles))
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                            .add(nodesLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .add(percArcsLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 121, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                        .add(randomSeedLabel)
                                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                            .add(percArcs)
-                                            .add(nodes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                                    .add(layout.createSequentialGroup()
-                                        .add(23, 23, 23)
-                                        .add(calculate)
-                                        .add(18, 18, 18)
-                                        .add(back))
-                                    .add(layout.createSequentialGroup()
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                            .add(maxArcCostLabel)
-                                            .add(minArcCostLabel))
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                            .add(maxArcCost, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
-                                            .add(minArcCost)))))
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                .add(layout.createSequentialGroup()
-                                    .add(12, 12, 12)
-                                    .add(arcsList)
-                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .add(reloadGraph)
-                                    .add(211, 211, 211))
-                                .add(graphType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 450, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))))
+                                        .add(randomSeed, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                    .add(cycles))
+                                .add(18, 18, 18)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(nodesLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 97, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                    .add(percArcsLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 88, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(org.jdesktop.layout.GroupLayout.TRAILING, nodes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                    .add(org.jdesktop.layout.GroupLayout.TRAILING, percArcs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(minArcCostLabel)
+                                    .add(maxArcCostLabel))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(org.jdesktop.layout.GroupLayout.TRAILING, minArcCost, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                    .add(org.jdesktop.layout.GroupLayout.TRAILING, maxArcCost, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                            .add(graphType, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -248,7 +255,7 @@ public class ShortestPathProblems extends javax.swing.JPanel {
                             .add(maxArcCostLabel)))
                     .add(icon))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(scroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                .add(scroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents

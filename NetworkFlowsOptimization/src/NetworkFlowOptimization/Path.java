@@ -40,7 +40,7 @@ public class Path implements Cloneable {
         this.cycle = false;
         this.minFlow = Integer.MAX_VALUE;
         this.sum = 0;
-        
+
         nodes.add(s);
         this.arcList = new ArrayList<>();
         this.reverse = new ArrayList<>();
@@ -49,6 +49,7 @@ public class Path implements Cloneable {
 
     public Path() {
         this.nodes = new ArrayList<>();
+        this.arcList = new ArrayList<>();
 
     }
 
@@ -93,23 +94,42 @@ public class Path implements Cloneable {
             }
             i++;
         }
-        minFlow=0;
+        minFlow = 0;
     }
 
-   
+    public ArrayList<Node> getNodes() {
+        ArrayList<Node> getNodes=new ArrayList<>();
+        getNodes.addAll(nodes);
+        Collections.reverse(getNodes);
+        return getNodes;
+    }
+
+    public ArrayList<Arc> getArcList() {
+        ArrayList<Arc> getArcs=new ArrayList<>();
+        getArcs.addAll(arcList);
+        Collections.reverse(getArcs);
+        return getArcs;
+    }
+    
+    
+
     @Override
     @SuppressWarnings("unchecked")
     public String toString() {
-        String result="Path: ( ";
-        ArrayList<Node> ordered= (ArrayList<Node>) nodes.clone();
-        Collections.reverse(ordered);
-        for(Node n:ordered){
-            result=result.concat(n.number+" ");
+        String result;
+
+        if (cycle) {
+            result = "Cycle: ( ";
+        } else {
+            result = "Path: ( ";
         }
-        result=result.concat(") - Flow: "+flow+"\n");
+        ArrayList<Node> ordered = (ArrayList<Node>) nodes.clone();
+        Collections.reverse(ordered);
+        for (Node n : ordered) {
+            result = result.concat(n.number + " ");
+        }
+        result = result.concat(") - Flow: " + flow + "\n");
         return result;
     }
-    
-    
 
 }

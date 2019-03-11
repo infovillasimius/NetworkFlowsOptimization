@@ -32,6 +32,7 @@ public class Graph {
     private ArrayList<Node> ordered;
     private final Node s;
     private final Node t;
+    int maxC = Integer.MIN_VALUE;
     private final boolean isOrdered;
     private final boolean negCost;
     private boolean negCycle;
@@ -120,13 +121,16 @@ public class Graph {
     }
 
     public int getC() {
-        int c = 0;
+        if (maxC > Integer.MIN_VALUE) {
+            return maxC;
+        }
+
         for (Arc a : arcList) {
-            if (c < Math.abs(a.getCost())) {
-                c = Math.abs(a.getCost());
+            if (maxC < Math.abs(a.getCost())) {
+                maxC = Math.abs(a.getCost());
             }
         }
-        return c;
+        return maxC;
     }
 
     public int nodesNumber() {
@@ -204,11 +208,6 @@ public class Graph {
         return false;
     }
 
-    /**
-     * reinizializzazione nodi
-     *
-     * @param list
-     */
     private void initialize(ArrayList<Node> list) {
         for (Node i : list) {
             i.previously = false;
@@ -218,6 +217,10 @@ public class Graph {
             i.predArc = null;
         }
         list.get(0).distance = 0;
+    }
+
+    public void initialize() {
+        initialize(list);
     }
 
     public static void previously(ArrayList<Node> list) {
@@ -406,7 +409,7 @@ public class Graph {
         this.previously();
         LinkedList<Node> q = new LinkedList<>();
         Node n;
-        
+
         q.add(t);
         t.previously = true;
         t.distance = 0;
@@ -416,7 +419,7 @@ public class Graph {
             for (Arc a : n.in) {
                 if (!a.tail.previously) {
                     a.tail.previously = true;
-                    a.tail.distance=n.distance+1;
+                    a.tail.distance = n.distance + 1;
                     q.add(a.tail);
                 }
             }
@@ -466,25 +469,28 @@ public class Graph {
 
         return result;
     }
-    
-        public String minCostFlowResults() {
-        String result = "\nFlows Paths:\n";
-        
-        for(Path p:paths){
-           result = result.concat(p.toString()); 
+
+    public String minCostFlowResults() {
+        if (paths.isEmpty()) {
+            return "";
         }
-        
-        result = result.concat( "\n");
+        String result = "\nFlows Paths / Cycles:\n";
+
+        for (Path p : paths) {
+            result = result.concat(p.toString());
+        }
+
+        result = result.concat("\n");
         return result;
     }
-        
-        public String excessInNodes(){
-            String result = "\nMass balance excess of nodes - e(i) = {  ";
-            for(Node n:list){
-                result=result.concat(n.getValue()+"  ");
-            }
-            result=result.concat("}");
-            return result;
+
+    public String excessInNodes() {
+        String result = "\nMass balance excess of nodes - e(i) = {  ";
+        for (Node n : list) {
+            result = result.concat(n.getValue() + "  ");
         }
+        result = result.concat("}");
+        return result;
+    }
 
 }
