@@ -56,6 +56,11 @@ public class RadixHeap<E> {
         }
     }
 
+    /**
+     * Store an Element
+     * @param n Element to store
+     * @param d Key for the Element
+     */
     public void store(E n, int d) {
 
         int bucket = index(d);
@@ -74,6 +79,10 @@ public class RadixHeap<E> {
         }
     }
 
+    /**
+     * Get the first Element in the Heap
+     * @return the first Element in the Heap
+     */
     public E next() {
         while (h[pointer] == null) {
             pointer = (pointer + 1) % b;

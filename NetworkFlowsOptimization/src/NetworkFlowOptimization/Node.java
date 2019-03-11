@@ -18,16 +18,20 @@ package NetworkFlowOptimization;
 
 import java.util.ArrayList;
 
+/**
+ * Node Class
+ * @author antonello.meloni
+ */
 public class Node implements Comparable<Node> {
 
     public static final int INFINITY = Integer.MAX_VALUE/2;      //valore arbitrario associato a infinito
 
-    private static int counter = 0;                     //contatore dei nodi generati
+    private static int counter = 0;                             //contatore dei nodi generati
 
-    int distance;                                       //distanza iniziale settata a +infinito
+    int distance;                                               //distanza iniziale settata a +infinito
 
-    private final int id;                               //identificativo univoco del nodo
-    private int value;                            //valore associato al nodo
+    private final int id;                                       //identificativo univoco del nodo
+    private int value;                                          //valore associato al nodo
     int number;
     int order;
     int period;
@@ -40,7 +44,7 @@ public class Node implements Comparable<Node> {
     int activeReverseArc;
 
     Node pred;                                          //nodo predecessore
-    Arc predArc;
+    Arc predArc;                                        //arco predecessore
 
     ArrayList<Arc> in;                                  //Lista degli archi entranti
     ArrayList<Arc> out;                                 //Lista degli archi uscenti

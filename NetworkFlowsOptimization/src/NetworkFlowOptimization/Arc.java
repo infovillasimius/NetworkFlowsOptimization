@@ -16,6 +16,11 @@
  */
 package NetworkFlowOptimization;
 
+/**
+ * Arc class
+ *
+ * @author antonello.meloni
+ */
 public class Arc implements Comparable<Arc> {
 
     int capacity;
@@ -82,26 +87,6 @@ public class Arc implements Comparable<Arc> {
         return (this.tail.number - o.tail.number) * 1000000 + (this.head.number - o.head.number);
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public int getMinFlow() {
-        return minFlow;
-    }
-
-    public int getFlow() {
-        return flow;
-    }
-
-    public int getResidualForwardCapacity() {
-        return residualForwardCapacity;
-    }
-
-    public int getResidualReverseCapacity() {
-        return residualReverseCapacity;
-    }
-
     public int getCost() {
         return cost;
     }
@@ -112,14 +97,6 @@ public class Arc implements Comparable<Arc> {
 
     public Node getHead() {
         return head;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public void setMinFlow(int minFlow) {
-        this.minFlow = minFlow;
     }
 
     public void setFlow(int flow) {
@@ -139,17 +116,4 @@ public class Arc implements Comparable<Arc> {
         this.tail.massBalance -= delta;
         this.head.massBalance += delta;
     }
-
-    public void setResidualForwardCapacity(int residualForwardCapacity) {
-        this.residualForwardCapacity = residualForwardCapacity;
-    }
-
-    public void setResidualReverseCapacity(int residualReverseCapacity) {
-        this.residualReverseCapacity = residualReverseCapacity;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
-
 }

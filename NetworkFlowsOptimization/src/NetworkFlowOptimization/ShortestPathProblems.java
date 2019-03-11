@@ -331,7 +331,7 @@ public class ShortestPathProblems extends javax.swing.JPanel {
         text.setText(text.getText().concat(result));
         result = ShortestPathProblem.labelCorrecting(graph);
         text.setText(text.getText().concat(result));
-        result = ShortestPathProblem.modifiedLabelCorrecting(graph);
+        result = ShortestPathProblem.modifiedFIFOLabelCorrecting(graph);
         text.setText(text.getText().concat(result));
         result = ShortestPathProblem.dequeueLabelCorrecting(graph);
         text.setText(text.getText().concat(result));

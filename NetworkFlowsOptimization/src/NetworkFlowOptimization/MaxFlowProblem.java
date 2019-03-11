@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
- *
+ * Maximum Flow Problem Algorithms
  * @author anto
  */
 public class MaxFlowProblem {
@@ -28,6 +28,11 @@ public class MaxFlowProblem {
     private MaxFlowProblem() {
     }
 
+    /**
+     * Labeling Algorithm
+     * @param graph  a graph with n nodes and m arcs
+     * @return long - execution time in nanonseconds
+     */
     public static long labeling(Graph graph) {
         graph.setResidual();
         ArrayList<Node> list = graph.getList();
@@ -123,6 +128,11 @@ public class MaxFlowProblem {
         }
     }
 
+    /**
+     * Preflow push Algorithm
+     * @param graph  a graph with n nodes and m arcs
+     * @return long - execution time in nanoseconds
+     */
     public static long preflowPush(Graph graph) {
         //ArrayList<Node> list = graph.getList();
         Node t=graph.getSink();

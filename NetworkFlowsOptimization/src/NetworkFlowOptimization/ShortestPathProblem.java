@@ -22,19 +22,19 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 /**
- *
+ * Shortest Path Problem Algorithms
  * @author anto
  */
 public class ShortestPathProblem {
 
     private ShortestPathProblem() {
     }
-    
+
     /**
-     * Implementazione algoritmo Dinamico
+     * Dynamic Algorithm
      *
-     * @param graph
-     * @return 
+     * @param graph a graph with n nodes and m arcs
+     * @return a string with the results
      */
     public static String dynamic(Graph graph) {
         ArrayList<Node> list = graph.getOrdered();
@@ -53,14 +53,14 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Dynamic Algorithm ", start, stop, null);
+        return printResults(graph, "Dynamic Algorithm ", stop, null);
     }
 
     /**
-     * Implementazione algoritmo Dijkstra
+     * Dijkstra Algorithm
      *
-     * @param graph
-     * @return 
+     * @param graph a graph with n nodes and m arcs
+     * @return a string with the results
      */
     public static String dijkstra(Graph graph) {
         if (graph.isNegCost()) {
@@ -90,9 +90,15 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Dijkstra Algorithm ", start, stop, null);
+        return printResults(graph, "Dijkstra Algorithm ", stop, null);
     }
 
+    /**
+     * Dial implementation of Dijkstra Algorithm
+     *
+     * @param graph a graph with n nodes and m arcs
+     * @return a string with the results
+     */
     public static String dialDijkstra(Graph graph) {
         if (graph.isNegCost()) {
             return "Dial-Dijkstra Algorithm (Negative arc cost detected) \n\n";
@@ -121,9 +127,15 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Dial-Dijkstra Algorithm ", start, stop, null);
+        return printResults(graph, "Dial-Dijkstra Algorithm ", stop, null);
     }
 
+    /**
+     * Radix-Heap implementation of Dijkstra Algorithm
+     *
+     * @param graph a graph with n nodes and m arcs
+     * @return a string with the results
+     */
     public static String RadixHeapDijkstra(Graph graph) {
         if (graph.isNegCost()) {
             return "RadixHeap-Dijkstra Algorithm (Negative arc cost detected) \n\n";
@@ -159,13 +171,13 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "RadixHeap-Dijkstra Algorithm ", start, stop, null);
+        return printResults(graph, "RadixHeap-Dijkstra Algorithm ", stop, null);
     }
 
     /**
-     * Implementazione algoritmo Dijkstra con heap
-     *
-     * @param graph
+     * Heap implementation of Dijkstra Algorithm
+     * @param graph a graph with n nodes and m arcs
+     * @return a string with the results
      */
     public static String heapDijkstra(Graph graph) {
         if (graph.isNegCost()) {
@@ -196,9 +208,15 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Heap-Dijkstra Algorithm ", start, stop, null);
+        return printResults(graph, "Heap-Dijkstra Algorithm ", stop, null);
     }
 
+    /**
+     * Label Correcting Algorithm
+     *
+     * @param graph a graph with n nodes and m arcs
+     * @return a string with the results
+     */
     public static String labelCorrecting(Graph graph) {
         graph.initialize();
         ArrayList<Arc> arcList = graph.getArcList();
@@ -227,10 +245,16 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Label Correcting Algorithm", start, stop, nCycle);
+        return printResults(graph, "Label Correcting Algorithm", stop, nCycle);
     }
 
-    public static String modifiedLabelCorrecting(Graph graph) {
+    /**
+     * Modified (FiFo) Label Correcting Algorithm
+     *
+     * @param graph a graph with n nodes and m arcs
+     * @return a string with the results
+     */
+    public static String modifiedFIFOLabelCorrecting(Graph graph) {
         ArrayList<Node> list = graph.getList();
         Node s = graph.getSource();
         int minDist = -list.size() * graph.getC();
@@ -263,13 +287,14 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Modified Label Correcting (FIFO) Algorithm ", start, stop, nCycle);
+        return printResults(graph, "Modified Label Correcting (FIFO) Algorithm ", stop, nCycle);
     }
 
     /**
+     * Dequeue Label Correcting Algorithm
      *
-     * @param graph
-     * @return 
+     * @param graph a graph with n nodes and m arcs
+     * @return a string with the results
      */
     public static String dequeueLabelCorrecting(Graph graph) {
         ArrayList<Node> list = graph.getList();
@@ -308,18 +333,10 @@ public class ShortestPathProblem {
             }
         }
         long stop = System.nanoTime() - start;
-        return printResults(graph, "Deque Label Correcting Algorithm ", start, stop, nCycle);
+        return printResults(graph, "Deque Label Correcting Algorithm ", stop, nCycle);
     }
 
-    /**
-     * Stampa risultati e verifica presenza cicli negativi
-     *
-     * @param graph
-     * @param name
-     * @param start
-     * @param stop
-     */
-    public static String printResults(Graph graph, String name, long start, long stop, Node nCycle) {
+    private static String printResults(Graph graph, String name, long stop, Node nCycle) {
         String result = name + "\n";
         result = result.concat("Execution time = " + (double) stop / 1000000 + " milliseconds\n");
         Node n;

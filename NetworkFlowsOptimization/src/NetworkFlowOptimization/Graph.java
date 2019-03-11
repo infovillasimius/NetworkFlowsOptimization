@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 /**
- *
+ *  Graph class
  * @author anto
  */
 public class Graph {

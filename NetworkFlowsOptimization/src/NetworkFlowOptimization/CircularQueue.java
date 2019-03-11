@@ -17,9 +17,9 @@
 package NetworkFlowOptimization;
 
 /**
- *
+ * Circular Queue for Dijkstra Algorithm
  * @author anto
- * @param <E>
+ * @param <E> The type of the element to store
  */
 public class CircularQueue<E> {
 
@@ -27,12 +27,21 @@ public class CircularQueue<E> {
     private final int C;
     private int pointer;
 
+    /**
+     * Get a circular queue of size n
+     * @param n The size of the queue
+     */
     public CircularQueue(int n) {
         this.t = new Object[n];
         this.C = n;
         this.pointer = 0;
     }
 
+    /**
+     *
+     * @param n The element to store
+     * @param d The key of the element (distance)
+     */
     public void store(E n, int d) {
         if (t[d % (C)] == null) {
             t[d % (C)] = new Element<>(n);
@@ -47,6 +56,10 @@ public class CircularQueue<E> {
         }
     }
 
+    /**
+     * Get the next element in the queue
+     * @return the next element in the queue
+     */
     public E next() {
         
         while (t[pointer] == null) {

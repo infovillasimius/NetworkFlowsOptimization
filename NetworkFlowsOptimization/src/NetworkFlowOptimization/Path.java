@@ -35,83 +35,25 @@ public class Path implements Cloneable {
     boolean cycle;
     int flow;
 
-    public Path(Node s) {
-        this.nodes = new ArrayList<>();
-        this.cycle = false;
-        this.minFlow = Integer.MAX_VALUE;
-        this.sum = 0;
-
-        nodes.add(s);
-        this.arcList = new ArrayList<>();
-        this.reverse = new ArrayList<>();
-        this.map = new HashSet<>();
-    }
-
     public Path() {
         this.nodes = new ArrayList<>();
         this.arcList = new ArrayList<>();
 
     }
 
-    public int add(Arc arc, Node node) {
-        if (!map.contains(node) && !cycle) {
-            nodes.add(node);
-            map.add(node);
-            arcList.add(arc);
-            if (arc.head.equals(node)) {
-                reverse.add(Boolean.FALSE);
-                sum += arc.cost;
-                if (minFlow > arc.residualForwardCapacity) {
-                    minFlow = arc.residualForwardCapacity;
-                }
-            } else {
-                reverse.add(Boolean.TRUE);
-                sum -= arc.cost;
-                if (minFlow > arc.residualReverseCapacity) {
-                    minFlow = arc.residualReverseCapacity;
-                }
-            }
-        } else if (sum < 0) {
-            cycle = true;
-            return -1;
-        } else {
-            cycle = true;
-            return 1;
-        }
-        return 0;
-    }
-
-    public void flow() {
-        if (sum >= 0 || !cycle) {
-            return;
-        }
-        int i = 0;
-        for (Arc a : arcList) {
-            if (!reverse.get(i)) {
-                a.setFlow(a.flow + minFlow);
-            } else {
-                a.setFlow(a.flow - minFlow);
-            }
-            i++;
-        }
-        minFlow = 0;
-    }
-
     public ArrayList<Node> getNodes() {
-        ArrayList<Node> getNodes=new ArrayList<>();
+        ArrayList<Node> getNodes = new ArrayList<>();
         getNodes.addAll(nodes);
         Collections.reverse(getNodes);
         return getNodes;
     }
 
     public ArrayList<Arc> getArcList() {
-        ArrayList<Arc> getArcs=new ArrayList<>();
+        ArrayList<Arc> getArcs = new ArrayList<>();
         getArcs.addAll(arcList);
         Collections.reverse(getArcs);
         return getArcs;
     }
-    
-    
 
     @Override
     @SuppressWarnings("unchecked")

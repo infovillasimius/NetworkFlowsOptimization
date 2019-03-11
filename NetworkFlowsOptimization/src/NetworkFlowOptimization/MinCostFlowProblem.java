@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- *
+ * Minimun Cost Flow Problem Algorithms
  * @author antonello.meloni
  */
 public class MinCostFlowProblem {
@@ -29,7 +29,7 @@ public class MinCostFlowProblem {
     /**
      * Cycle Canceling algorithm (Min cost flow)
      *
-     * @param graph
+     * @param graph  a graph with n nodes and m arcs
      * @return
      */
     public static long cycleCanceling(Graph graph) {
@@ -63,7 +63,7 @@ public class MinCostFlowProblem {
     /**
      * Successive Shortest Path Algorithm
      *
-     * @param graph
+     * @param graph a graph with n nodes and m arcs
      * @return
      */
     public static long successiveShortestPath(Graph graph) {
