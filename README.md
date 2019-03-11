@@ -34,7 +34,7 @@ Minimum Cost Flow Problem Algorithms
 
 _______________________________
 
-Options to test program:
+Options to test the program:
 
 Select problem, then select graph from list (example graph - random graph - load graph).
 
