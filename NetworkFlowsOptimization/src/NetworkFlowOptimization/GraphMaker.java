@@ -26,7 +26,7 @@ import java.util.Scanner;
 import javax.swing.JFileChooser;
 
 /**
- *
+ * Graph Factory
  * @author anto
  */
 public class GraphMaker {
@@ -37,9 +37,9 @@ public class GraphMaker {
     }
 
     /**
-     * Costruzione grafo a partire dai vincoli
+     * Graph builder for a specific Personnel planning problem (Clarc and Hastings [1977]) 
      *
-     * @return
+     * @return a graph
      */
     public static Graph sppGraphMaker() {
         ArrayList<Node> list = new ArrayList<>();
@@ -159,6 +159,13 @@ public class GraphMaker {
         }
     }
 
+    /**
+     * Example Graph builder
+     * @param seed Initial seed for Random
+     * @param min  Min arc cost 
+     * @param max  Max arc cost
+     * @return a graph
+     */
     public static Graph exampleGraph(int seed, int min, int max) {
         if (max < 0) {
             max = -max;
@@ -223,7 +230,19 @@ public class GraphMaker {
         return graph;
     }
 
-    public static Graph randomGraph(int n, int perc, int seed, int minCost, int maxCost, int maxCapacity, boolean cycle, int flow) {
+    /**
+     * Random graph builder
+     * @param n Desired number of nodes
+     * @param perc Percentage of arcs in the graph
+     * @param seed Initial seed for Random
+     * @param minCost Min arc cost
+     * @param maxCost Max arc cost
+     * @param maxCapacity Max arc capacity
+     * @param cycle Graph with cycles
+     * @param mass Mass balance excess
+     * @return a graph
+     */
+    public static Graph randomGraph(int n, int perc, int seed, int minCost, int maxCost, int maxCapacity, boolean cycle, int mass) {
         ArrayList<Node> list = new ArrayList<>();
         ArrayList<Arc> arcList = new ArrayList<>();
 
@@ -301,8 +320,8 @@ public class GraphMaker {
             i.in = newList;
         }
         
-        ordered.get(0).setValue(flow);
-        ordered.get(ordered.size()-1).setValue(-flow);
+        ordered.get(0).setValue(mass);
+        ordered.get(ordered.size()-1).setValue(-mass);
         return new Graph(ordered, arcList, ordered.get(0), ordered.get(ordered.size() - 1));
     }
 
@@ -352,6 +371,11 @@ public class GraphMaker {
         }
     }
 
+    /**
+     * Load Graph from file
+     * @return a graph
+     * @throws IOException 
+     */
     public static Graph loadGraph() throws IOException {
         ArrayList<Node> list = new ArrayList<>();
         ArrayList<Arc> arcList = new ArrayList<>();

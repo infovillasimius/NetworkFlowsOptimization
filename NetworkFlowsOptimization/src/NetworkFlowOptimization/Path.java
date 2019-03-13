@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 /**
- *
+ * Path / Cycle class for Min Cost Flow Problems
  * @author antonello.meloni
  */
 public class Path implements Cloneable {
@@ -35,12 +35,19 @@ public class Path implements Cloneable {
     boolean cycle;
     int flow;
 
+    /**
+     * New path
+     */
     public Path() {
         this.nodes = new ArrayList<>();
         this.arcList = new ArrayList<>();
 
     }
 
+    /**
+     * Get Nodes
+     * @return ArrayList reverse ordered List of nodes
+     */
     public ArrayList<Node> getNodes() {
         ArrayList<Node> getNodes = new ArrayList<>();
         getNodes.addAll(nodes);
@@ -48,6 +55,10 @@ public class Path implements Cloneable {
         return getNodes;
     }
 
+    /**
+     * Get arcs
+     * @return ArrayList reverse ordered List of arcs
+     */
     public ArrayList<Arc> getArcList() {
         ArrayList<Arc> getArcs = new ArrayList<>();
         getArcs.addAll(arcList);

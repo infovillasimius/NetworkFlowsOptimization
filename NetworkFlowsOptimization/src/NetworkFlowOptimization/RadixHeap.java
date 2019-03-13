@@ -33,6 +33,10 @@ public class RadixHeap<E> {
     private final Object[] h;
     private int pointer;
 
+    /**
+     * New Radix-Heap
+     * @param n int The number of elements
+     */
     public RadixHeap(int n) {
         this.base = 0;
         if (n<=0) n=8;
@@ -154,9 +158,9 @@ public class RadixHeap<E> {
     /**
      * Update Element from distance oldD to distance d
      *
-     * @param n
-     * @param d
-     * @param oldD
+     * @param n E The element
+     * @param d int New distance
+     * @param oldD int Old distance
      */
     public void update(E n, int d, int oldD) {
         int oldBucket = index(oldD);
@@ -188,7 +192,7 @@ public class RadixHeap<E> {
         Element<T> next;
         int d;
 
-        public Element(T value, int d) {
+        Element(T value, int d) {
             this.next = null;
             this.value = value;
             this.d = d;

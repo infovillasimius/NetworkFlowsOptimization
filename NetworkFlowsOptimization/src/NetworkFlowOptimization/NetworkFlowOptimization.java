@@ -31,7 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- *
+ * Main Class + GUI
  * @author anto
  */
 public class NetworkFlowOptimization {

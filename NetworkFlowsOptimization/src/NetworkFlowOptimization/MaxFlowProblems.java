@@ -21,7 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * MaxFlowProblems GUI
  * @author anto
  */
 public class MaxFlowProblems extends javax.swing.JPanel {

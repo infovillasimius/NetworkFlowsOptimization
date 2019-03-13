@@ -21,7 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * MinCostFlowProblems GUI
  * @author anto
  */
 public class MinCostFlowProblems extends javax.swing.JPanel {

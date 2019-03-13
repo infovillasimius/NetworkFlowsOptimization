@@ -38,7 +38,7 @@ public class CircularQueue<E> {
     }
 
     /**
-     *
+     * Store a new element
      * @param n The element to store
      * @param d The key of the element (distance)
      */
@@ -58,7 +58,7 @@ public class CircularQueue<E> {
 
     /**
      * Get the next element in the queue
-     * @return the next element in the queue
+     * @return E (the next element in the queue)
      */
     public E next() {
         

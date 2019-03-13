@@ -32,6 +32,12 @@ public class Arc implements Comparable<Arc> {
     Node tail;          //nodo coda
     Node head;          //nodo testa
 
+    /**
+     * New Arc
+     * @param cost int Arc cost
+     * @param tail Node Arc tail
+     * @param head Node Arc head
+     */
     public Arc(int cost, Node tail, Node head) {
         this.capacity = 0;
         this.minFlow = 0;
@@ -43,6 +49,13 @@ public class Arc implements Comparable<Arc> {
         this.head = head;
     }
 
+    /**
+     * New Arc
+     * @param cost int (Arc cost)
+     * @param tail Node (Arc tail)
+     * @param head Node (Arc head)
+     * @param capacity int (Arc capacity)
+     */
     public Arc(int cost, Node tail, Node head, int capacity) {
         this.capacity = capacity;
         this.minFlow = 0;
@@ -54,6 +67,11 @@ public class Arc implements Comparable<Arc> {
         this.head = head;
     }
 
+    /**
+     * New Arc
+     * @param tail Node (Arc tail)
+     * @param head Node (Arc head)
+     */
     public Arc(Node tail, Node head) {
         this.capacity = 0;
         this.minFlow = 0;
@@ -65,14 +83,26 @@ public class Arc implements Comparable<Arc> {
         this.head = head;
     }
 
+    /**
+     * Arc to String for MaxFlow Problem 
+     * @return String
+     */
     public String toFlow() {
         return "(" + tail.number + ", " + head.number + ") => flow=" + flow + ", capacity=" + capacity + "\n";
     }
 
+    /**
+     * Arc to String for MinCostFlow Problem results
+     * @return String
+     */
     public String toMinCostFlow() {
         return "(" + tail.number + ", " + head.number + ") => flow=" + flow + ", cost per unit=" + cost + ", capacity=" + capacity + "\n";
     }
 
+    /**
+     * Arc to String for MinCostFlow Problem initial graph
+     * @return String 
+     */
     public String toEmptyMinCostFlow() {
         return "(" + tail.number + ", " + head.number + ") => cost per unit=" + cost + ", capacity=" + capacity + "\n";
     }
@@ -87,18 +117,34 @@ public class Arc implements Comparable<Arc> {
         return (this.tail.number - o.tail.number) * 1000000 + (this.head.number - o.head.number);
     }
 
+    /**
+     * Get arc cost
+     * @return int (Arc cost)
+     */
     public int getCost() {
         return cost;
     }
 
+    /**
+     * Get arc tail
+     * @return Node (Arc tail)
+     */
     public Node getTail() {
         return tail;
     }
 
+    /**
+     * Get arc head
+     * @return Node (Arc head)
+     */
     public Node getHead() {
         return head;
     }
 
+    /**
+     *  Set arc flow and update residual capacities
+     * @param flow Flow to set
+     */
     public void setFlow(int flow) {
         if (flow < 0) {
             return;

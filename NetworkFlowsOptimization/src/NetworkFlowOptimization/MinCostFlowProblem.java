@@ -30,7 +30,7 @@ public class MinCostFlowProblem {
      * Cycle Canceling algorithm (Min cost flow)
      *
      * @param graph  a graph with n nodes and m arcs
-     * @return
+     * @return long - execution time in nanonseconds
      */
     public static long cycleCanceling(Graph graph) {
         graph.resetFlows();
@@ -64,7 +64,7 @@ public class MinCostFlowProblem {
      * Successive Shortest Path Algorithm
      *
      * @param graph a graph with n nodes and m arcs
-     * @return
+     * @return long - execution time in nanonseconds 
      */
     public static long successiveShortestPath(Graph graph) {
         graph.resetFlows();

@@ -21,7 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * ShortestPathProblems GUI
  * @author anto
  */
 public class ShortestPathProblems extends javax.swing.JPanel {

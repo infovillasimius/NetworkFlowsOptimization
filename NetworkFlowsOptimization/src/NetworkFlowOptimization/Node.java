@@ -50,9 +50,8 @@ public class Node implements Comparable<Node> {
     ArrayList<Arc> out;                                 //Lista degli archi uscenti
 
     /**
-     * Constructor
-     *
-     * @param value
+     * New Node
+     * @param value int Node value (mass excess for min cost flow problems)
      */
     public Node(int value) {
         this.activeReverseArc = 0;
@@ -69,6 +68,11 @@ public class Node implements Comparable<Node> {
         this.previously = false;
     }
 
+    /**
+     * New node
+     * @param value int Node value (mass excess for min cost flow problems)
+     * @param period int (parameter for a specific Personnel planning problem (Clarc and Hastings [1977]))
+     */
     public Node(int value, int period) {
         this.activeReverseArc = 0;
         this.activeForwardArc = 0;
@@ -85,14 +89,26 @@ public class Node implements Comparable<Node> {
         pred = null;
     }
 
+    /**
+     * Get Id
+     * @return int Node Id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Get node value
+     * @return int Value
+     */
     public int getValue() {
         return value;
     }
 
+    /**
+     * Set node value
+     * @param value int new node value
+     */
     public void setValue(int value) {
         this.value = value;
     }
@@ -140,6 +156,9 @@ public class Node implements Comparable<Node> {
         return this.distance - o.distance;
     }
 
+    /**
+     * Balance mass (in/out)
+     */
     public void balanceMass() {
         int balance = 0;
         for (Arc a : in) {
@@ -151,6 +170,11 @@ public class Node implements Comparable<Node> {
         massBalance = balance;
     }
 
+    /**
+     * Special pourpose equals
+     * @param obj
+     * @return boolean
+     */
     public boolean equals2(Object obj) {
         if (this == obj) {
             return true;

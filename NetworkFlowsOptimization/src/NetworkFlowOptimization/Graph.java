@@ -22,7 +22,8 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 /**
- *  Graph class
+ * Graph class
+ *
  * @author anto
  */
 public class Graph {
@@ -43,6 +44,11 @@ public class Graph {
 
     ;
 
+    /**
+     * New graph from nodes and arcs lists
+     * @param list ArrayList List of nodes
+     * @param arcList ArrayList List of arcs
+     */
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList) {
         this.paths = new ArrayList<>();
         this.sourceFlow = 0;
@@ -61,6 +67,12 @@ public class Graph {
         this.negCost = this.negCost();
     }
 
+    /**
+     * New graph from nodes and arcs lists
+     * @param list ArrayList List of nodes
+     * @param arcList ArrayList List of arcs
+     * @param spp boolean for special problem graph
+     */
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList, boolean spp) {
         this.paths = new ArrayList<>();
         this.sourceFlow = 0;
@@ -76,6 +88,13 @@ public class Graph {
         this.negCost = false;
     }
 
+    /**
+     * New graph from nodes and arcs lists, source and sink
+     * @param list ArrayList List of nodes
+     * @param arcList ArrayList List of arcs
+     * @param source Node source
+     * @param sink Node sink
+     */
     public Graph(ArrayList<Node> list, ArrayList<Arc> arcList, Node source, Node sink) {
         this.paths = new ArrayList<>();
         this.sourceFlow = 0;
@@ -99,6 +118,10 @@ public class Graph {
         this.negCost = this.negCost();
     }
 
+    /**
+     * Get new list of reinitialised nodes
+     * @return ArrayList of nodes
+     */
     public ArrayList<Node> getList() {
         ArrayList<Node> list2 = new ArrayList<>();
         list2.addAll(list);
@@ -106,20 +129,36 @@ public class Graph {
         return list2;
     }
 
+    /**
+     * Get new list of arcs
+     * @return ArrayList of arcs
+     */
     public ArrayList<Arc> getArcList() {
         ArrayList<Arc> arcList2 = new ArrayList<>();
         arcList2.addAll(arcList);
         return arcList2;
     }
 
+    /**
+     * Get Source node
+     * @return Node Source
+     */
     public Node getSource() {
         return s;
     }
 
+    /**
+     * Get Sink node
+     * @return Node Sink
+     */
     public Node getSink() {
         return t;
     }
 
+    /**
+     * Get max Cost
+     * @return int maximum cost from all arcs
+     */
     public int getC() {
         if (maxC > Integer.MIN_VALUE) {
             return maxC;
@@ -133,14 +172,26 @@ public class Graph {
         return maxC;
     }
 
+    /**
+     * Get nodes number
+     * @return int
+     */
     public int nodesNumber() {
         return list.size();
     }
 
+    /**
+     * Get arcs number
+     * @return int
+     */
     public int arcsNumber() {
         return arcList.size();
     }
 
+    /**
+     * Get topologically ordered nodes list (if possible)
+     * @return
+     */
     public ArrayList<Node> getOrdered() {
         if (isOrdered) {
             ArrayList<Node> newOrdered = new ArrayList<>();
@@ -151,14 +202,25 @@ public class Graph {
         return null;
     }
 
+    /**
+     * Is the graph topologically ordered?
+     * @return boolean
+     */
     public boolean isIsOrdered() {
         return isOrdered;
     }
 
+    /**
+     * Does the graph contain an arc with negative cost?
+     * @return boolean
+     */
     public boolean isNegCost() {
         return negCost;
     }
 
+    /**
+     *  Reinitialise boolean attribute (previously)
+     */
     public void previously() {
         for (Node i : list) {
             i.previously = false;
@@ -219,16 +281,27 @@ public class Graph {
         list.get(0).distance = 0;
     }
 
+    /**
+     * Reinitialise nodes for shortest path algorithms
+     */
     public void initialize() {
         initialize(list);
     }
 
+    /**
+     * Reinitialise boolean attribute (previously) for nodes in list
+     * @param list
+     */
     public static void previously(ArrayList<Node> list) {
         for (Node i : list) {
             i.previously = false;
         }
     }
 
+    /**
+     * Get adjacency matrix
+     * @return String The Adjacency matrix
+     */
     public String adjMatrix() {
         int n = list.size();
         renumber();
@@ -257,6 +330,10 @@ public class Graph {
         return result;
     }
 
+    /**
+     * Get costs
+     * @return String A list of arc costs
+     */
     public String arcCosts() {
         int n = arcList.size();
         ArrayList<Arc> ordArc = new ArrayList<>();
@@ -276,6 +353,9 @@ public class Graph {
         return result;
     }
 
+    /**
+     * Set residual graph values
+     */
     public void setResidual() {
         for (Arc a : arcList) {
             a.residualForwardCapacity = a.capacity - a.flow;
@@ -283,6 +363,10 @@ public class Graph {
         }
     }
 
+    /**
+     * Get Max Flow Results (all arcs)
+     * @return String with Results for Max Flow Problem Algorithms
+     */
     public String maxFlowArcsResults() {
         String result = "Flow out of source node \n";
         int maxFlowS = 0;
@@ -318,6 +402,10 @@ public class Graph {
         return result;
     }
 
+    /**
+     * Get Max Flow Results 
+     * @return String with Results for Max Flow Problem Algorithms
+     */
     public String maxFlowResults() {
         String result = "Flow exiting the source = \t\t";
         int maxFlowS = 0;
@@ -334,6 +422,10 @@ public class Graph {
         return result;
     }
 
+    /**
+     * Get Max Flow all arcs
+     * @return String with all arc of initial graph for Max Flow Problem Algorithms
+     */
     public String maxFlowAllArcs() {
         int n = arcList.size();
         String result = "List of arcs\n";
@@ -353,6 +445,10 @@ public class Graph {
         return result;
     }
 
+    /**
+     * Get Min Cost Flow Results (all arcs)
+     * @return String with Results for Min Cost Flow Problem Algorithms
+     */
     public String minCostFlowArcsResult() {
         int n = arcList.size();
         String result = "List of arcs\n";
@@ -374,6 +470,10 @@ public class Graph {
         return result;
     }
 
+    /**
+     * Get Min Cost Flow all arcs
+     * @return String with all arcs of initial graph for Min Cost Flow Problem Algorithms
+     */
     public String minCostFlowAllArcs() {
         int n = arcList.size();
         String result = "List of arcs\n";
@@ -393,6 +493,9 @@ public class Graph {
         return result;
     }
 
+    /**
+     * Reset to zero the flows of all arcs 
+     */
     public void resetFlows() {
         for (Node n : list) {
             n.massBalance = 0;
@@ -405,6 +508,9 @@ public class Graph {
         this.setResidual();
     }
 
+    /**
+     * Reverse Breadth First Search
+     */
     public void reverseBreadthFirstSearch() {
         this.previously();
         LinkedList<Node> q = new LinkedList<>();
@@ -426,15 +532,6 @@ public class Graph {
         }
     }
 
-    public String massBalance() {
-        String result = "";
-
-        for (Node n : list) {
-            result = result + "\nNodo n. " + n.number + " - mass balance = " + n.massBalance;
-        }
-        return result;
-    }
-
     void renumber() {
         int next = 0;
         for (Node n : list) {
@@ -450,14 +547,26 @@ public class Graph {
         sourceFlow = flow;
     }
 
+    /**
+     * Is there a negative cycle in the graph?
+     * @return boolean
+     */
     public boolean isNegCycle() {
         return negCycle;
     }
 
+    /**
+     * Set if there is a negative cycle in the graph
+     * @param negCycle boolean
+     */
     public void setNegCycle(boolean negCycle) {
         this.negCycle = negCycle;
     }
 
+    /**
+     * Perform the calculation of the total cost in min cost flow problem
+     * @return int Total cost
+     */
     public String totalCost() {
         String result = "";
         int sum = 0;
@@ -470,6 +579,10 @@ public class Graph {
         return result;
     }
 
+    /**
+     * Result of min cost flow algorithms
+     * @return String results
+     */
     public String minCostFlowResults() {
         if (paths.isEmpty()) {
             return "";
@@ -484,6 +597,10 @@ public class Graph {
         return result;
     }
 
+    /**
+     * Mass excess of graph nodes
+     * @return String
+     */
     public String excessInNodes() {
         String result = "\nMass balance excess of nodes - e(i) = {  ";
         for (Node n : list) {
