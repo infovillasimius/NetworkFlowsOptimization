@@ -22,6 +22,7 @@ import java.util.LinkedList;
 
 /**
  * Minimun Cost Flow Problem Algorithms
+ *
  * @author antonello.meloni
  */
 public class MinCostFlowProblem {
@@ -29,7 +30,7 @@ public class MinCostFlowProblem {
     /**
      * Cycle Canceling algorithm (Min cost flow)
      *
-     * @param graph  a graph with n nodes and m arcs
+     * @param graph a graph with n nodes and m arcs
      * @return long - execution time in nanonseconds
      */
     public static long cycleCanceling(Graph graph) {
@@ -48,7 +49,7 @@ public class MinCostFlowProblem {
         graph.renumber();
         long start = System.nanoTime();
         while (graph.isNegCycle()) {
-            n = cycleCancelingFifoLabelCorrecting(graph);
+            n = modifiedFifoLabelCorrecting(graph);
 
             if (graph.isNegCycle()) {
                 flowNegCycle(n, graph);
@@ -64,7 +65,7 @@ public class MinCostFlowProblem {
      * Successive Shortest Path Algorithm
      *
      * @param graph a graph with n nodes and m arcs
-     * @return long - execution time in nanonseconds 
+     * @return long - execution time in nanonseconds
      */
     public static long successiveShortestPath(Graph graph) {
         graph.resetFlows();
@@ -86,7 +87,7 @@ public class MinCostFlowProblem {
 
         while (flow > 0 && !negCyclePresent) {
             times++;
-            negCyclePresent = modifiedDequeueLabelCorrecting(fGraph);
+            negCyclePresent = newPathSearch(fGraph);
             flow = fGraph.sourceFlow;
         }
         long stop = System.nanoTime() - start;
@@ -154,7 +155,55 @@ public class MinCostFlowProblem {
         return fGraph;
     }
 
-    private static boolean modifiedDequeueLabelCorrecting(Graph graph) {
+    private static boolean newPathSearch(Graph graph) {
+        Node nCycle = modifiedDequeueLabelCorrecting(graph);
+        Node n=nCycle;
+        ArrayList<Arc> arcs = new ArrayList<>();
+        int minResCap = Integer.MAX_VALUE;
+        graph.previously();
+
+        Path path = new Path();
+        graph.paths.add(path);
+
+        while (n.pred != null && !n.previously) {
+            arcs.add(n.predArc);
+            path.nodes.add(n);
+            if (n.predArc.head.equals2(n)) {
+                if (minResCap > n.predArc.residualForwardCapacity) {
+                    minResCap = n.predArc.residualForwardCapacity;
+                }
+            } else {
+                if (minResCap > n.predArc.residualReverseCapacity) {
+                    minResCap = n.predArc.residualReverseCapacity;
+                }
+            }
+
+            n.previously = true;
+            n = n.pred;
+            if (n.previously) {
+                graph.setNegCycle(true);
+                path.nodes.add(n);
+                return true;
+            }
+        }
+
+        n = nCycle;
+
+        for (Arc a : arcs) {
+            if (n.predArc.head.equals2(n)) {
+                a.setFlow(a.flow + minResCap);
+            } else {
+                a.setFlow(a.flow - minResCap);
+            }
+            n = n.pred;
+        }
+        graph.sourceFlow -= minResCap;
+        path.flow = minResCap;
+        path.nodes.remove(path.nodes.get(0));
+        return false;
+    }
+
+    private static Node modifiedDequeueLabelCorrecting(Graph graph) {
         graph.initialize();
         Node s = graph.getSource();
         int minDist = -graph.nodesNumber() * graph.getC();
@@ -206,63 +255,21 @@ public class MinCostFlowProblem {
             if (dist < minDist) {
                 LIST.clear();
                 nCycle = n;
-            }
-        }
-
-        n = nCycle;
-
-        ArrayList<Arc> arcs = new ArrayList<>();
-        int minResCap = Integer.MAX_VALUE;
-        graph.previously();
-
-        Path path = new Path();
-        graph.paths.add(path);
-
-        while (n.pred != null && !n.previously) {
-            arcs.add(n.predArc);
-            path.nodes.add(n);
-            if (n.predArc.head.equals2(n)) {
-                if (minResCap > n.predArc.residualForwardCapacity) {
-                    minResCap = n.predArc.residualForwardCapacity;
-                }
-            } else {
-                if (minResCap > n.predArc.residualReverseCapacity) {
-                    minResCap = n.predArc.residualReverseCapacity;
-                }
-            }
-
-            n.previously = true;
-            n = n.pred;
-            if (n.previously) {
                 graph.setNegCycle(true);
-                path.nodes.add(n);
-                return true;
+                return nCycle;
             }
         }
-
-        n = nCycle;
-
-        for (Arc a : arcs) {
-            if (n.predArc.head.equals2(n)) {
-                a.setFlow(a.flow + minResCap);
-            } else {
-                a.setFlow(a.flow - minResCap);
-            }
-            n=n.pred;
-        }
-        graph.sourceFlow -= minResCap;
-        path.flow = minResCap;
-        path.nodes.remove(path.nodes.get(0));
-        return false;
+        graph.setNegCycle(false);
+        return nCycle;
     }
 
-    private static Node cycleCancelingFifoLabelCorrecting(Graph graph) {
+    private static Node modifiedFifoLabelCorrecting(Graph graph) {
         graph.initialize();
         Node s = graph.getSource();
         int minDist = -graph.nodesNumber() * graph.getC();
         Node n;
         Node nCycle = graph.getSink();
-        int dist = 0;
+        int dist;
         LinkedList<Node> LIST = new LinkedList<>();
         LIST.add(s);
 
@@ -272,7 +279,6 @@ public class MinCostFlowProblem {
 
             for (Arc i : n.out) {
                 dist = i.tail.distance + i.getCost();
-                //System.out.println("Mindist="+minDist+" dist="+dist);
                 if (i.head.distance > dist && i.residualForwardCapacity > 0) {
                     i.head.distance = dist;
                     i.head.pred = i.tail;
@@ -293,7 +299,6 @@ public class MinCostFlowProblem {
 
             for (Arc i : n.in) {
                 dist = i.head.distance - i.getCost();
-                //System.out.println("Mindist="+minDist+" dist="+dist);
                 if (i.tail.distance > dist && i.residualReverseCapacity > 0) {
                     i.tail.distance = dist;
                     i.tail.pred = i.head;
@@ -311,7 +316,7 @@ public class MinCostFlowProblem {
                 return nCycle;
             }
         }
-        
+
         graph.setNegCycle(false);
         return nCycle;
     }
@@ -319,8 +324,6 @@ public class MinCostFlowProblem {
     private static void flowNegCycle(Node nCycle, Graph graph) {
         Node n;
         n = nCycle;
-
-        ArrayList<Arc> arcs = new ArrayList<>();
         int minResCap = Integer.MAX_VALUE;
         graph.previously();
 
@@ -329,29 +332,24 @@ public class MinCostFlowProblem {
         graph.paths.add(path);
 
         while (!n.previously) {
-            //System.out.println(n.toString());
             n.previously = true;
             n = n.pred;
-        }      
+        }
         graph.previously();
-        
-        while (!n.previously) {
-            arcs.add(n.predArc);
+
+        while (!n.previously) {           
             path.arcList.add(n.predArc);
             path.nodes.add(n);
             n.previously = true;
             n = n.pred;
-        }  
+        }
         path.nodes.add(n);
-        
-        
-        ArrayList<Node> nodes=path.getNodes();
+
+        ArrayList<Node> nodes = path.getNodes();
         Iterator<Node> iterator = nodes.iterator();
-        
-        for(Arc a:path.getArcList()){
-            //System.out.println(n.toString());
-            //System.out.print(a.toMinCostFlow());
-            n=iterator.next();
+
+        for (Arc a : path.getArcList()) {
+            n = iterator.next();
             if (a.tail.equals2(n)) {
                 if (minResCap > a.residualForwardCapacity) {
                     minResCap = a.residualForwardCapacity;
@@ -362,24 +360,15 @@ public class MinCostFlowProblem {
                 }
             }
         }
-
-        //int cycleCost = 0;
-        iterator=nodes.iterator();
+        iterator = nodes.iterator();
         for (Arc a : path.getArcList()) {
-            n=iterator.next();
-            //System.out.println(n.toString());
-            //System.out.print(a.toMinCostFlow());
+            n = iterator.next();
             if (a.tail.equals2(n)) {
                 a.setFlow(a.flow + minResCap);
-                //cycleCost += a.cost;
             } else {
                 a.setFlow(a.flow - minResCap);
-                //cycleCost -= a.cost;
             }
-            //System.out.print(a.toMinCostFlow());
-
         }
-        //System.out.println("Cycle cost " + cycleCost);
         path.flow = minResCap;
     }
 }

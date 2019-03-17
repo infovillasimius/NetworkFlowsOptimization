@@ -32,14 +32,19 @@ public class RadixHeap<E> {
     private final int[] range;
     private final Object[] h;
     private int pointer;
+    private int size;
 
     /**
      * New Radix-Heap
+     *
      * @param n int The number of elements
      */
     public RadixHeap(int n) {
+        this.size = 0;
         this.base = 0;
-        if (n<=0) n=8;
+        if (n <= 0) {
+            n = 8;
+        }
         this.b = (int) Math.ceil(Math.log10(n) / Math.log10(2));
         this.w = new int[b];
         this.min = new int[b];
@@ -62,6 +67,7 @@ public class RadixHeap<E> {
 
     /**
      * Store an Element
+     *
      * @param n Element to store
      * @param d Key for the Element
      */
@@ -81,13 +87,18 @@ public class RadixHeap<E> {
                 min[bucket] = d;
             }
         }
+        size++;
     }
 
     /**
      * Get the first Element in the Heap
+     *
      * @return the first Element in the Heap
      */
     public E next() {
+        if (size < 1) {
+            return null;
+        }
         while (h[pointer] == null) {
             pointer = (pointer + 1) % b;
         }
@@ -103,6 +114,7 @@ public class RadixHeap<E> {
         } else {
             redist();
         }
+        size--;
         return r.value;
 
     }
@@ -141,11 +153,11 @@ public class RadixHeap<E> {
         this.range[pointer] += w[pointer];
         w[pointer] = 0;
         w[pointer - 1] = range[pointer] - range[pointer - 1];
-        w[0]=1;
-        w[1]=1;
+        w[0] = 1;
+        w[1] = 1;
         while (chain.next != null) {
-            
-            Element<E> next =  chain.next;
+
+            Element<E> next = chain.next;
             chain.next = null;
             store(chain.value, chain.d);
             chain = next;

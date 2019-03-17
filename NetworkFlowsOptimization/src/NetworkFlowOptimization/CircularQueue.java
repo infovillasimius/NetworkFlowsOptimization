@@ -18,6 +18,7 @@ package NetworkFlowOptimization;
 
 /**
  * Circular Queue for Dijkstra Algorithm
+ *
  * @author anto
  * @param <E> The type of the element to store
  */
@@ -26,12 +27,15 @@ public class CircularQueue<E> {
     private final Object[] t;
     private final int C;
     private int pointer;
+    private int size;
 
     /**
      * Get a circular queue of size n
+     *
      * @param n The size of the queue
      */
     public CircularQueue(int n) {
+        this.size = 0;
         this.t = new Object[n];
         this.C = n;
         this.pointer = 0;
@@ -39,6 +43,7 @@ public class CircularQueue<E> {
 
     /**
      * Store a new element
+     *
      * @param n The element to store
      * @param d The key of the element (distance)
      */
@@ -48,36 +53,41 @@ public class CircularQueue<E> {
         } else {
             @SuppressWarnings("unchecked")
             Element<E> a = (Element<E>) t[d % (C)];
-            
+
             @SuppressWarnings("unchecked")
             Element<E> b = new Element<>(n);
-            b.next=a;
+            b.next = a;
             t[d % (C)] = b;
         }
+        size++;
     }
 
     /**
      * Get the next element in the queue
+     *
      * @return E (the next element in the queue)
      */
     public E next() {
-        
+        if (size < 1) {
+            return null;
+        }
         while (t[pointer] == null) {
             pointer = (pointer + 1) % C;
         }
         @SuppressWarnings("unchecked")
-        Element<E> r =(Element<E>) t[pointer];
+        Element<E> r = (Element<E>) t[pointer];
         if (r.next == null) {
             t[pointer] = null;
         } else {
             @SuppressWarnings("unchecked")
-            Element<E> next =(Element<E>)t[pointer];
+            Element<E> next = (Element<E>) t[pointer];
             next = next.next;
-            t[pointer]=next;
+            t[pointer] = next;
         }
+        size--;
         return r.value;
     }
-    
+
     private class Element<E> {
 
         E value;
@@ -89,8 +99,5 @@ public class CircularQueue<E> {
         }
 
     }
-    
 
 }
-
-
