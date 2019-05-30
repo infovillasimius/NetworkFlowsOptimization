@@ -21,6 +21,7 @@ import java.util.LinkedList;
 
 /**
  * Maximum Flow Problem Algorithms
+ *
  * @author anto
  */
 public class MaxFlowProblem {
@@ -30,7 +31,8 @@ public class MaxFlowProblem {
 
     /**
      * Labeling Algorithm
-     * @param graph  a graph with n nodes and m arcs
+     *
+     * @param graph a graph with n nodes and m arcs
      * @return long - execution time in nanonseconds
      */
     public static long labeling(Graph graph) {
@@ -41,24 +43,18 @@ public class MaxFlowProblem {
         Node t = graph.getSink();
         Node i;
         t.previously = true;
-
         long start = System.nanoTime();
-
         while (t.previously) {
-
             for (Node n : list) {
                 n.previously = false;
                 n.pred = null;
                 n.predArc = null;
             }
-
             s.previously = true;
             LIST.clear();
             LIST.add(s);
-
             while (!LIST.isEmpty() && !t.previously) {
                 i = LIST.poll();
-
                 for (Arc a : i.out) {
                     if (a.residualForwardCapacity > 0 && !a.head.previously) {
                         a.head.pred = i;
@@ -74,21 +70,15 @@ public class MaxFlowProblem {
                         a.tail.predArc = a;
                         a.tail.previously = true;
                         LIST.add(a.tail);
-
                     }
                 }
-
                 if (t.previously) {
                     augment(t);
                 }
             }
-
         }
-
         long stop = System.nanoTime() - start;
-
         return stop;
-
     }
 
     private static void augment(Node t) {
@@ -96,7 +86,6 @@ public class MaxFlowProblem {
         Arc a;
         int minR = t.predArc.residualForwardCapacity;
         int r;
-
         while (n.pred != null) {
             a = n.predArc;
             if (n.pred.equals(a.tail)) {
@@ -108,11 +97,8 @@ public class MaxFlowProblem {
                 minR = r;
             }
             n = n.pred;
-
         }
-
         n = t;
-
         while (n.pred != null) {
             a = n.predArc;
             if (n.pred.equals(a.tail)) {
@@ -130,12 +116,13 @@ public class MaxFlowProblem {
 
     /**
      * Preflow push Algorithm
-     * @param graph  a graph with n nodes and m arcs
+     *
+     * @param graph a graph with n nodes and m arcs
      * @return long - execution time in nanoseconds
      */
     public static long preflowPush(Graph graph) {
         //ArrayList<Node> list = graph.getList();
-        Node t=graph.getSink();
+        Node t = graph.getSink();
         Node n;
         graph.activeNodesList.clear();
         preprocess(graph);
@@ -159,17 +146,16 @@ public class MaxFlowProblem {
             graph.activeNodesList.add(a.head);
         }
         s.distance = graph.nodesNumber();
-
     }
 
     private static void pushRelabel(Node i, Graph graph) {
         Arc a;
-        Node s=graph.getSource();
-        Node t=graph.getSink();
+        Node s = graph.getSource();
+        Node t = graph.getSink();
         int d = Node.INFINITY;
         int counter;
-        int inSize=i.in.size();
-        int outSize=i.out.size();
+        int inSize = i.in.size();
+        int outSize = i.out.size();
         while (i.massBalance > 0) {
             while (i.massBalance > 0 && i.activeForwardArc < outSize) {
                 a = i.out.get(i.activeForwardArc);
@@ -182,7 +168,6 @@ public class MaxFlowProblem {
                     i.activeForwardArc++;
                 }
             }
-
             if (i.activeForwardArc >= outSize) {
                 i.activeForwardArc = 0;
             }
@@ -192,7 +177,7 @@ public class MaxFlowProblem {
             while (i.massBalance > 0 && i.activeReverseArc < inSize) {
                 a = i.in.get(i.activeReverseArc);
                 if (a.residualReverseCapacity > 0 && a.tail.distance < a.head.distance) {
-                    a.setFlow(a.flow - Math.min(a.residualReverseCapacity, i.massBalance)); 
+                    a.setFlow(a.flow - Math.min(a.residualReverseCapacity, i.massBalance));
                     if (a.tail.massBalance > 0) {
                         graph.activeNodesList.add(a.tail);
                     }
@@ -206,27 +191,24 @@ public class MaxFlowProblem {
             if (i.massBalance <= 0) {
                 return;
             }
-            counter=0;
+            counter = 0;
             for (Arc aa : i.out) {
                 if (aa.residualForwardCapacity > 0 && d > aa.head.distance && !aa.head.equals2(s)) {
                     d = aa.head.distance;
-                    i.activeForwardArc=counter;
+                    i.activeForwardArc = counter;
                 }
                 counter++;
             }
-            counter=0;
+            counter = 0;
             for (Arc aa : i.in) {
                 if (aa.residualReverseCapacity > 0 && d > aa.tail.distance) {
                     d = aa.tail.distance;
-                    i.activeReverseArc=counter;
-                    i.activeForwardArc=outSize;
+                    i.activeReverseArc = counter;
+                    i.activeForwardArc = outSize;
                 }
             }
-
             i.distance = d + 1;
             d = Node.INFINITY;
-
         }
     }
-
 }

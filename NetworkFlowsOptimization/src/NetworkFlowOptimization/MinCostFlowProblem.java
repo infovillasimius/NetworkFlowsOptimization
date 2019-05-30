@@ -39,18 +39,15 @@ public class MinCostFlowProblem {
         int times = 0;
         Graph fGraph = getGraphForFeasibleSolution(graph);
         MaxFlowProblem.labeling(fGraph);
-
         if (!isFeasible(fGraph)) {
             return -1;
         }
-
         graph.setNegCycle(true);
         Node n;
         graph.renumber();
         long start = System.nanoTime();
         while (graph.isNegCycle()) {
             n = modifiedFifoLabelCorrecting(graph);
-
             if (graph.isNegCycle()) {
                 flowNegCycle(n, graph);
                 times++;
@@ -71,10 +68,8 @@ public class MinCostFlowProblem {
         graph.resetFlows();
         graph.paths.clear();
         int times = 0;
-
         Graph fGraph = getGraphForFeasibleSolution(graph);
         MaxFlowProblem.labeling(fGraph);
-
         if (!isFeasible(fGraph)) {
             return -1;
         }
@@ -82,9 +77,7 @@ public class MinCostFlowProblem {
         fGraph.setSourceResidualFlow();
         int flow = fGraph.sourceFlow;
         boolean negCyclePresent = false;
-
         long start = System.nanoTime();
-
         while (flow > 0 && !negCyclePresent) {
             times++;
             negCyclePresent = newPathSearch(fGraph);
@@ -93,13 +86,11 @@ public class MinCostFlowProblem {
         long stop = System.nanoTime() - start;
         graph.times = times;
         graph.paths.clear();
-
         graph.paths.addAll(fGraph.paths);
         return stop;
     }
 
     private static boolean isFeasible(Graph graph) {
-
         if (!graph.getSource().out.stream().noneMatch((a) -> (a.capacity - a.flow != 0))) {
             return false;
         }
@@ -113,29 +104,24 @@ public class MinCostFlowProblem {
         ArrayList<Arc> arcList = graph.getArcList();
         int b = 0;
         int neg = 0;
-
         for (Node n : list) {
             b += n.getValue();
             if (n.getValue() < 0) {
                 neg += n.getValue();
             }
         }
-
         if (b != 0) {
             return null;
         }
-
         Node s = new Node(-neg);
         Node t = new Node(neg);
         Arc a = null;
-
         for (Node n : list) {
             if (n.getValue() > 0) {
                 a = new Arc(0, s, n, n.getValue());
                 s.out.add(a);
                 n.in.add(a);
                 arcList.add(a);
-
             } else if (n.getValue() < 0) {
                 a = new Arc(0, n, t, -n.getValue());
                 n.out.add(a);
@@ -143,28 +129,27 @@ public class MinCostFlowProblem {
                 arcList.add(a);
             }
         }
-
         ordered.add(s);
         ordered.addAll(list);
         ordered.add(t);
-
         GraphMaker.number(ordered);
-
         fGraph = new Graph(ordered, arcList, s, t);
-
         return fGraph;
     }
 
+    /**
+     * Discovers new shortest paths
+     * @param graph
+     * @return boolean False if these is no new path
+     */
     private static boolean newPathSearch(Graph graph) {
         Node nCycle = modifiedDequeueLabelCorrecting(graph);
         Node n=nCycle;
         ArrayList<Arc> arcs = new ArrayList<>();
         int minResCap = Integer.MAX_VALUE;
         graph.previously();
-
         Path path = new Path();
         graph.paths.add(path);
-
         while (n.pred != null && !n.previously) {
             arcs.add(n.predArc);
             path.nodes.add(n);
@@ -177,7 +162,6 @@ public class MinCostFlowProblem {
                     minResCap = n.predArc.residualReverseCapacity;
                 }
             }
-
             n.previously = true;
             n = n.pred;
             if (n.previously) {
@@ -186,9 +170,7 @@ public class MinCostFlowProblem {
                 return true;
             }
         }
-
         n = nCycle;
-
         for (Arc a : arcs) {
             if (n.predArc.head.equals2(n)) {
                 a.setFlow(a.flow + minResCap);
@@ -203,6 +185,11 @@ public class MinCostFlowProblem {
         return false;
     }
 
+    /**
+     * Discover neg cycles in the residual graph
+     * @param graph
+     * @return 
+     */
     private static Node modifiedDequeueLabelCorrecting(Graph graph) {
         graph.initialize();
         Node s = graph.getSource();
@@ -212,11 +199,9 @@ public class MinCostFlowProblem {
         int dist = 0;
         LinkedList<Node> LIST = new LinkedList<>();
         LIST.add(s);
-
         while (!LIST.isEmpty()) {
             n = LIST.pollFirst();
             n.contained = false;
-
             for (Arc i : n.out) {
                 dist = i.tail.distance + i.getCost();
                 if (i.head.distance > dist && i.residualForwardCapacity > 0) {
@@ -234,7 +219,6 @@ public class MinCostFlowProblem {
                     }
                 }
             }
-
             for (Arc i : n.in) {
                 dist = i.head.distance - i.getCost();
                 if (i.tail.distance > dist && i.residualReverseCapacity > 0) {
@@ -263,6 +247,11 @@ public class MinCostFlowProblem {
         return nCycle;
     }
 
+    /**
+     * Discover neg cycles in the residual graph
+     * @param graph
+     * @return 
+     */
     private static Node modifiedFifoLabelCorrecting(Graph graph) {
         graph.initialize();
         Node s = graph.getSource();
@@ -272,11 +261,9 @@ public class MinCostFlowProblem {
         int dist;
         LinkedList<Node> LIST = new LinkedList<>();
         LIST.add(s);
-
         while (!LIST.isEmpty()) {
             n = LIST.pollFirst();
             n.contained = false;
-
             for (Arc i : n.out) {
                 dist = i.tail.distance + i.getCost();
                 if (i.head.distance > dist && i.residualForwardCapacity > 0) {
@@ -289,14 +276,12 @@ public class MinCostFlowProblem {
                     }
                 }
             }
-
             if (n.distance < minDist) {
                 LIST.clear();
                 nCycle = n;
                 graph.setNegCycle(true);
                 return nCycle;
             }
-
             for (Arc i : n.in) {
                 dist = i.head.distance - i.getCost();
                 if (i.tail.distance > dist && i.residualReverseCapacity > 0) {
@@ -316,27 +301,27 @@ public class MinCostFlowProblem {
                 return nCycle;
             }
         }
-
         graph.setNegCycle(false);
         return nCycle;
     }
 
+    /**
+     * Flows units along the neg cycle
+     * @param nCycle
+     * @param graph 
+     */
     private static void flowNegCycle(Node nCycle, Graph graph) {
-        Node n;
-        n = nCycle;
+        Node n = nCycle;
         int minResCap = Integer.MAX_VALUE;
         graph.previously();
-
         Path path = new Path();
         path.cycle = true;
         graph.paths.add(path);
-
         while (!n.previously) {
             n.previously = true;
             n = n.pred;
         }
         graph.previously();
-
         while (!n.previously) {           
             path.arcList.add(n.predArc);
             path.nodes.add(n);
@@ -344,10 +329,8 @@ public class MinCostFlowProblem {
             n = n.pred;
         }
         path.nodes.add(n);
-
         ArrayList<Node> nodes = path.getNodes();
         Iterator<Node> iterator = nodes.iterator();
-
         for (Arc a : path.getArcList()) {
             n = iterator.next();
             if (a.tail.equals2(n)) {
